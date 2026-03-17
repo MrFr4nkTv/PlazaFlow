@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PlazaFlow - Checkout &amp; Pay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Nunito:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF6B6B", // Coral Red
+                        "plaza-bg": "#FFF9F5", // Cream
+                        "plaza-surface": "#FFFFFF", // White
+                        "plaza-text": "#2D232E", // Deep Plum
+                        "plaza-muted": "#9CA3AF", // Cool Grey
+                        "plaza-secondary": "#FFD93D", // Sunny Yellow
+                        "plaza-success": "#6BCB77", // Leaf Green
+                        "plaza-highlight": "#FEE2E2", // Pale Coral
+                    },
+                    fontFamily: {
+                        "heading": ["Fredoka", "sans-serif"],
+                        "body": ["Nunito", "sans-serif"],
+                        "display": ["Manrope", "sans-serif"], // Fallback from system config
+                    },
+                    borderRadius: {
+                        "card": "24px",
+                        "pill": "9999px",
+                        "xl": "1.5rem", 
+                        "2xl": "1.75rem",
+                        "3xl": "2rem",
+                    },
+                    boxShadow: {
+                        "soft": "0 4px 20px rgba(0,0,0,0.04)",
+                        "primary": "0 8px 16px rgba(255, 107, 107, 0.2)",
+                        "glow": "0 0 15px rgba(255, 107, 107, 0.5)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom slider styles for the 'Slide to Pay' functionality */
+        .slide-track {
+            background: linear-gradient(90deg, #FEE2E2 0%, #FFF9F5 100%);
+        }
+        
+        .slide-thumb {
+            transition: transform 0.1s ease-out;
+            cursor: grab;
+        }
+
+        .slide-thumb:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+
+        /* Hide scrollbar for horizontal scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-plaza-bg text-plaza-text font-body antialiased min-h-screen flex flex-col items-center justify-center p-0 sm:p-4">
+<!-- Mobile Container -->
+<div class="w-full max-w-md h-screen sm:h-[844px] sm:rounded-[32px] bg-plaza-bg sm:shadow-2xl overflow-hidden flex flex-col relative border-0 sm:border border-plaza-muted/20">
+<!-- Header -->
+<header class="flex items-center justify-between px-6 pt-12 pb-4 bg-plaza-bg z-10">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-soft text-plaza-text hover:bg-plaza-highlight transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<h1 class="font-heading font-bold text-2xl tracking-wide text-plaza-text">Checkout</h1>
+<div class="w-10"></div> <!-- Spacer for optical centering -->
+</header>
+<!-- Main Content (Scrollable) -->
+<main class="flex-1 overflow-y-auto overflow-x-hidden pb-32 no-scrollbar">
+<!-- Section: Payment Method -->
+<section class="mt-4 px-6">
+<h2 class="font-heading font-semibold text-lg mb-4 text-plaza-text">How do you want to pay?</h2>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-6 -mx-6 px-6 snap-x">
+<!-- Apple Pay (Active) -->
+<div class="snap-center shrink-0 w-[160px] h-[100px] bg-black rounded-card p-4 flex flex-col justify-between relative ring-4 ring-primary shadow-primary cursor-pointer group transition-transform hover:scale-[1.02]">
+<div class="absolute top-2 right-2 text-white">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<div class="text-white font-bold text-lg tracking-tight flex items-center gap-1">
+<span class="material-symbols-outlined">ios</span> Pay
+                        </div>
+<div class="text-gray-400 text-xs font-mono">•••• 4288</div>
+</div>
+<!-- Card (Inactive) -->
+<div class="snap-center shrink-0 w-[160px] h-[100px] bg-white rounded-card p-4 flex flex-col justify-between shadow-soft border border-transparent hover:border-gray-100 cursor-pointer transition-transform hover:scale-[1.02]">
+<div class="text-plaza-text font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">credit_card</span> Card
+                        </div>
+<div class="text-plaza-muted text-xs">Visa, MC, Amex</div>
+</div>
+<!-- Cash (Inactive) -->
+<div class="snap-center shrink-0 w-[160px] h-[100px] bg-white rounded-card p-4 flex flex-col justify-between shadow-soft border border-transparent hover:border-gray-100 cursor-pointer transition-transform hover:scale-[1.02]">
+<div class="text-plaza-text font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-plaza-secondary">payments</span> Cash
+                        </div>
+<div class="text-plaza-muted text-xs">Pay at counter</div>
+</div>
+</div>
+</section>
+<!-- Section: Tip Selector -->
+<section class="mt-2 px-6">
+<h2 class="font-heading font-semibold text-lg mb-4 text-plaza-text flex items-center gap-2">
+                    Show some love <span class="text-xl">❤️</span>
+</h2>
+<div class="grid grid-cols-4 gap-3">
+<!-- 10% -->
+<button class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
+<span class="text-2xl mb-1 group-hover:scale-110 transition-transform">😐</span>
+<span class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">10%</span>
+</button>
+<!-- 15% (Active) -->
+<button class="flex flex-col items-center justify-center h-20 bg-plaza-secondary rounded-2xl border-2 border-plaza-secondary shadow-md transform scale-105 transition-all relative">
+<div class="absolute -top-3 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">POPULAR</div>
+<span class="text-2xl mb-1">🙂</span>
+<span class="font-heading font-bold text-sm text-plaza-text">15%</span>
+</button>
+<!-- 20% -->
+<button class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
+<span class="text-2xl mb-1 group-hover:scale-110 transition-transform">🤩</span>
+<span class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">20%</span>
+</button>
+<!-- Other -->
+<button class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
+<span class="material-symbols-outlined text-plaza-muted mb-1 group-hover:text-plaza-text">edit</span>
+<span class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">Other</span>
+</button>
+</div>
+</section>
+<!-- Section: Order Summary -->
+<section class="mt-8 px-6">
+<div class="bg-white rounded-card p-6 shadow-soft space-y-3">
+<div class="flex justify-between items-center text-plaza-muted text-sm font-medium">
+<span>Subtotal</span>
+<span>$34.50</span>
+</div>
+<div class="flex justify-between items-center text-plaza-muted text-sm font-medium">
+<span>Tax (7%)</span>
+<span>$2.40</span>
+</div>
+<div class="flex justify-between items-center text-plaza-text text-sm font-bold">
+<span class="flex items-center gap-1">Tip (15%) <span class="text-plaza-secondary">🙂</span></span>
+<span>$5.17</span>
+</div>
+<div class="border-t border-dashed border-gray-200 my-4"></div>
+<div class="flex justify-between items-end">
+<span class="font-heading text-lg font-bold text-plaza-text">Total</span>
+<div class="text-right">
+<span class="block text-3xl font-heading font-bold text-plaza-text tracking-tight">$42.07</span>
+<span class="text-xs text-plaza-muted font-medium">Earn 42 points</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Terms Text -->
+<p class="text-center text-xs text-plaza-muted mt-6 px-10 leading-relaxed">
+                By sliding, you agree to our Terms of Service. 
+                <br/>No refunds on eaten tacos. 🌮
+            </p>
+</main>
+<!-- Sticky Bottom Bar -->
+<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-plaza-bg via-plaza-bg to-transparent h-32 flex items-end justify-center pointer-events-none">
+<div class="w-full pointer-events-auto">
+<!-- Slide to Pay Component -->
+<div class="relative h-16 w-full rounded-pill bg-white shadow-lg overflow-hidden flex items-center p-1.5 group select-none">
+<!-- Background Track Text -->
+<div class="absolute inset-0 flex items-center justify-center z-0">
+<span class="font-heading font-bold text-lg text-plaza-muted/50 tracking-wide animate-pulse">Slide to Feed 🌮</span>
+</div>
+<!-- Gradient Track Reveal (Optional visual effect) -->
+<div class="absolute top-0 left-0 bottom-0 w-1/2 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-active:opacity-100 transition-opacity"></div>
+<!-- Draggable Thumb -->
+<div class="slide-thumb h-14 w-20 bg-gradient-to-r from-primary to-[#FF8787] rounded-pill shadow-primary flex items-center justify-center z-10 relative">
+<span class="material-symbols-outlined text-white text-2xl animate-bounce" style="animation-direction: alternate; animation-duration: 0.8s;">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

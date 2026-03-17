@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Plazaflow Item Detail 390x844</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF7F50", // Coral
+                        "primary-dark": "#E66A3C", // Darker Coral for active states
+                        "primary-light": "#FFF0EB", // Very light coral background
+                        "success": "#00C853", 
+                        "success-light": "#E0F2F1",
+                        "background-light": "#FDFBF7", // Warmer paper white
+                        "background-dark": "#221510",
+                        "ink": "#1A1A1A", // Softer black
+                        "paper": "#FFFFFF",
+                        "muted": "#888888",
+                        "alert": "#D32F2F", // Strong red for important alerts
+                        "alert-light": "#FFEBEE",
+                        "process": "#3B82F6", // Blue for in-process
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                    boxShadow: {
+                        "soft": "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+                        "hard": "3px 3px 0px 0px #1A1A1A",
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0px",
+                        "lg": "12px",
+                        "xl": "16px",
+                        "2xl": "24px",
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .scroller::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scroller::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .scroller::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+        .scroller::-webkit-scrollbar-thumb:hover {
+            background: #d1d5db;
+        }
+        body {
+            height: 100vh;
+            height: 100dvh;
+        }
+        .app-container {
+            height: 100vh;
+            height: 100dvh;
+        }
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+    </style>
+<style>
+    body {width: 390px;
+        height: 844px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light font-body text-ink antialiased relative overflow-hidden flex justify-center">
+<div class="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="app-container relative z-20 w-full h-full bg-paper shadow-none flex flex-col overflow-hidden">
+<div class="shrink-0 border-b border-black/5 bg-paper px-6 py-4 relative z-10">
+<div class="flex items-center gap-3 mb-4 pb-4 border-b border-black/5">
+<div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden">
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[22px]" style="transform: rotate(90deg);">restaurant</span>
+</div>
+</div>
+<div>
+<span class="font-display font-bold text-xl tracking-tight text-ink">Plazaflow</span>
+<div class="text-xs font-medium text-muted">Unified Item Detail</div>
+</div>
+</div>
+<div class="flex items-start justify-between mb-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="bg-ink text-white font-mono text-sm font-bold px-3 py-1 rounded-lg">ORDER #1242</span>
+<span class="bg-primary-light text-primary-dark font-mono text-xs font-bold px-2 py-1 rounded-md uppercase">Web</span>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<span class="font-body text-muted text-sm font-medium">12:43 PM</span>
+<span class="w-1 h-1 rounded-full bg-muted"></span>
+<span class="font-body text-ink text-sm font-bold">Dave M.</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex items-center gap-1.5 bg-success-light text-success-dark px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-lg filled font-bold text-success">qr_code_2</span>
+<span class="font-mono text-sm font-bold text-success uppercase tracking-wide">PAID</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-1 scroller no-scrollbar">
+<span class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70">Table 4</span>
+<span class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70">4 Items</span>
+<span class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70">Dine In</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto scroller bg-background-light/30 flex flex-col">
+<div class="p-4 space-y-3 pb-24">
+<div class="bg-paper rounded-2xl p-4 shadow-soft group border border-black/5">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 bg-primary text-white flex items-center justify-center rounded-xl font-mono font-bold text-xl shadow-lg shadow-primary/30">1</div>
+<h3 class="font-display font-bold text-xl text-ink leading-tight">Double Cheeseburger</h3>
+</div>
+<span class="font-mono text-lg font-bold text-ink">$14.00</span>
+</div>
+<div class="pl-14 space-y-3">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-alert text-2xl shrink-0">block</span>
+<span class="font-bold text-lg text-alert">NO Pickles</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-2xl shrink-0 font-bold">add</span>
+<span class="font-bold text-lg text-ink">Add Bacon <span class="text-primary font-mono text-xs uppercase ml-1 bg-primary-light px-1.5 py-0.5 rounded">Extra Crisp</span></span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-2xl shrink-0 font-bold">add</span>
+<span class="font-bold text-lg text-ink">Extra Sauce <span class="text-muted font-mono text-xs uppercase ml-1 bg-gray-100 px-1.5 py-0.5 rounded">On Side</span></span>
+</div>
+<div class="bg-amber-50 rounded-xl p-3 mt-2 flex gap-3 items-start border border-amber-100">
+<span class="material-symbols-outlined text-amber-500 text-xl mt-0.5">edit_note</span>
+<span class="font-medium text-ink/80 italic text-lg">"Cut in half please"</span>
+</div>
+</div>
+</div>
+<div class="bg-paper rounded-2xl p-4 shadow-soft border border-black/5">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 bg-gray-100 text-ink/60 flex items-center justify-center rounded-xl font-mono font-bold text-xl">1</div>
+<h3 class="font-display font-bold text-xl text-ink leading-tight">Fries (Large)</h3>
+</div>
+<span class="font-mono text-lg font-bold text-ink">$6.50</span>
+</div>
+<div class="pl-14">
+<div class="flex items-center gap-2">
+<span class="font-semibold text-lg text-ink/70">Standard Salt</span>
+</div>
+</div>
+</div>
+<div class="bg-paper rounded-2xl p-4 shadow-soft border border-black/5">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 bg-gray-100 text-ink/60 flex items-center justify-center rounded-xl font-mono font-bold text-xl">2</div>
+<h3 class="font-display font-bold text-xl text-ink leading-tight">Vanilla Shake</h3>
+</div>
+<span class="font-mono text-lg font-bold text-ink">$12.00</span>
+</div>
+<div class="pl-14 space-y-2">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-alert text-2xl shrink-0">block</span>
+<span class="font-bold text-lg text-alert">NO Cherry</span>
+</div>
+</div>
+</div>
+<div class="px-4 py-4 mt-4 bg-white rounded-2xl border border-black/5 shadow-soft">
+<div class="flex justify-between items-center text-sm font-medium text-muted mb-1">
+<span>Subtotal</span>
+<span>$32.50</span>
+</div>
+<div class="flex justify-between items-center text-sm font-medium text-muted mb-3">
+<span>Tax</span>
+<span>$2.60</span>
+</div>
+<div class="border-t border-dashed border-gray-200 my-2"></div>
+<div class="flex justify-between items-center font-display font-bold text-2xl text-ink mt-2">
+<span>Total</span>
+<span>$35.10</span>
+</div>
+</div>
+</div>
+</div>
+<div class="shrink-0 bg-paper p-4 z-20 shadow-[0_-4px_20px_-2px_rgba(0,0,0,0.05)] border-t border-black/5">
+<div class="grid grid-cols-2 gap-3">
+<button class="h-14 flex items-center justify-center gap-2 bg-background-light text-ink rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all group">
+<span class="material-symbols-outlined text-2xl font-bold text-ink/40 group-hover:text-ink/60 transition-colors">timelapse</span>
+<span class="font-display font-bold text-sm uppercase leading-none text-left">In Process</span>
+</button>
+<button class="h-14 flex items-center justify-center gap-2 bg-primary text-white rounded-xl hover:bg-primary-dark active:scale-[0.98] transition-all shadow-lg shadow-primary/30">
+<span class="material-symbols-outlined text-2xl font-bold">check_circle</span>
+<span class="font-display font-bold text-sm uppercase leading-none text-left">Completed</span>
+</button>
+</div>
+</div>
+<div class="shrink-0 bg-paper z-30 pb-safe border-t border-black/5">
+<nav class="flex justify-between items-stretch h-16 sm:h-20 px-6">
+<button class="flex-1 flex flex-col items-center justify-center gap-1 text-primary relative group">
+<div class="bg-primary/10 p-1.5 rounded-xl group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-[24px] font-bold">receipt_long</span>
+</div>
+<span class="text-[10px] font-bold font-mono tracking-wider uppercase">Active</span>
+</button>
+<button class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group">
+<div class="group-hover:bg-primary/5 p-1.5 rounded-xl transition-colors">
+<span class="material-symbols-outlined text-[24px] font-medium">inventory_2</span>
+</div>
+<span class="text-[10px] font-bold font-mono tracking-wider uppercase">Stock</span>
+</button>
+<button class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group">
+<div class="group-hover:bg-primary/5 p-1.5 rounded-xl transition-colors">
+<span class="material-symbols-outlined text-[24px] font-medium">history</span>
+</div>
+<span class="text-[10px] font-bold font-mono tracking-wider uppercase">History</span>
+</button>
+</nav>
+</div>
+</div>
+</body></html>

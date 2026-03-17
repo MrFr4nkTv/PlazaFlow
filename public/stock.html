@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Plazaflow Unified Stock Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#FF6B6B",
+              "primary-dark": "#EE5A5A",
+              "surface-warm": "#FFF5F2",
+              "surface-card": "#FFFFFF",
+              "text-main": "#1F1F1F",
+              "text-muted": "#6B7280",
+              "accent-yellow": "#FFE066",
+              "alert-bg": "#FFE5E5",
+              "alert-text": "#D93025",
+            },
+            fontFamily: {
+              "display": ["Space Grotesk", "sans-serif"],
+              "body": ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              "xl": "16px",
+              "2xl": "24px",
+              "3xl": "32px",
+              "4xl": "40px",
+            },
+            boxShadow: {
+              "soft": "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+              "floating": "0 8px 30px -4px rgba(0, 0, 0, 0.08)",
+              "button": "0 4px 12px rgba(255, 107, 107, 0.25)",
+              "nav": "0 -4px 20px rgba(0,0,0,0.05)",
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .counter-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            transition: transform 0.1s active, background-color 0.2s;
+        }
+        .counter-btn:active {
+            transform: scale(0.92);
+        }
+        .item-row {
+            min-height: 200px;
+        }
+        .item-row.is-out {
+            opacity: 1;
+            background-color: #FFF5F5;
+            border: 2px solid #FED7D7;
+        }
+        .item-row.is-out .counter-display {
+            color: #E53E3E;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #9CA3AF;
+            transition: color 0.2s;
+            flex: 1;
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+        .nav-item.active {
+            color: #FF6B6B;
+        }
+        .nav-item.active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }body {
+            width: 390px;
+            min-height: 844px;height: 844px;overflow: hidden;margin: 0 auto;
+            position: relative;
+            background-color: #FFF5F2;box-shadow: 0 0 20px rgba(0,0,0,0.1);}main {
+            overflow-y: auto;
+            height: calc(100% - 90px);padding-bottom: 120px;}main::-webkit-scrollbar {
+            display: none;
+        }
+        main {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .safe-area-bottom {
+             padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-warm text-text-main font-body antialiased flex flex-col">
+<div class="sticky top-0 z-40 bg-surface-warm/95 backdrop-blur-sm pb-2">
+<header class="h-auto py-3 flex items-center justify-between px-6 shrink-0 pt-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden">
+<span class="material-symbols-outlined text-white text-[28px] z-10">restaurant</span>
+<div class="absolute inset-0 border-[3px] border-white/20 rounded-full scale-75"></div>
+</div>
+<div>
+<h1 class="text-xl font-display font-bold text-text-main leading-tight">Plazaflow</h1>
+<p class="text-sm font-medium text-text-muted leading-tight">Stock Control</p>
+</div>
+</div>
+<div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-gray-400">notifications</span>
+</div>
+</header>
+<div class="px-6 pb-2">
+<div class="relative group mt-2">
+<span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
+<span class="material-symbols-outlined text-2xl">search</span>
+</span>
+<input aria-label="Search items" class="w-full h-14 pl-12 pr-6 bg-white border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 text-lg placeholder-gray-400 font-medium transition-all text-text-main" placeholder="Search finished products..." type="text"/>
+</div>
+<div class="flex overflow-x-auto no-scrollbar gap-2 mt-4 pb-1">
+<button class="shrink-0 h-10 px-6 bg-text-main text-white font-bold text-sm rounded-full shadow-md transition-transform active:scale-95">
+                    All
+                </button>
+<button class="shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95">
+                    Mains
+                </button>
+<button class="shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95">
+                    Drinks
+                </button>
+<button class="shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95">
+                    Desserts
+                </button>
+</div>
+</div>
+</div>
+<main class="flex-1 px-6 pt-2 space-y-6">
+<section>
+<div class="flex items-center justify-between mb-4 mt-2">
+<h2 class="text-xl font-display font-bold text-text-main">Mains</h2>
+<span class="text-sm font-medium text-text-muted">8 items</span>
+</div>
+<div class="flex flex-col gap-4">
+<div class="item-row bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-auto gap-4">
+<div class="flex justify-between items-start">
+<div>
+<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Double Smash Burger</span>
+<span class="text-sm text-text-muted font-medium">Kitchen • #MN-204</span>
+</div>
+<div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
+<span class="material-symbols-outlined text-lg">check</span>
+</div>
+</div>
+<div class="flex items-center justify-between bg-surface-warm/50 p-1.5 rounded-[20px] border border-surface-warm mt-auto">
+<button class="counter-btn bg-white text-text-main shadow-sm border border-gray-100 active:bg-gray-50">
+<span class="material-symbols-outlined font-bold text-2xl">remove</span>
+</button>
+<div class="flex flex-col items-center min-w-[60px]">
+<span class="text-3xl font-display font-bold text-text-main tabular-nums tracking-tight">42</span>
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">In Stock</span>
+</div>
+<button class="counter-btn bg-primary text-white shadow-button hover:bg-primary-dark active:shadow-none">
+<span class="material-symbols-outlined font-bold text-2xl">add</span>
+</button>
+</div>
+</div>
+<div class="item-row bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-auto gap-4">
+<div class="flex justify-between items-start">
+<div>
+<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Spicy Chicken Deluxe</span>
+<span class="text-sm text-text-muted font-medium">Kitchen • #MN-108</span>
+</div>
+<div class="px-2 py-1 rounded-lg bg-orange-100 flex items-center justify-center text-orange-700 text-xs font-bold shrink-0">
+                            LOW
+                        </div>
+</div>
+<div class="flex items-center justify-between bg-surface-warm/50 p-1.5 rounded-[20px] border border-surface-warm mt-auto">
+<button class="counter-btn bg-white text-text-main shadow-sm border border-gray-100 active:bg-gray-50">
+<span class="material-symbols-outlined font-bold text-2xl">remove</span>
+</button>
+<div class="flex flex-col items-center min-w-[60px]">
+<span class="text-3xl font-display font-bold text-orange-500 tabular-nums tracking-tight">08</span>
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Low Stock</span>
+</div>
+<button class="counter-btn bg-primary text-white shadow-button hover:bg-primary-dark active:shadow-none">
+<span class="material-symbols-outlined font-bold text-2xl">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center justify-between mb-4 mt-2">
+<h2 class="text-xl font-display font-bold text-text-main">Drinks</h2>
+<span class="text-sm font-medium text-text-muted">5 items</span>
+</div>
+<div class="flex flex-col gap-4">
+<div class="item-row is-out bg-white p-5 rounded-3xl shadow-none flex flex-col justify-between h-auto gap-4">
+<div class="flex justify-between items-start">
+<div class="opacity-60">
+<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1 line-through decoration-red-400 decoration-2">Strawberry Shake</span>
+<span class="text-sm text-text-muted font-medium">Bar • #DR-055</span>
+</div>
+<div class="px-2 py-1 rounded-lg bg-red-100 flex items-center justify-center text-red-700 text-xs font-bold gap-1 shrink-0">
+<span class="material-symbols-outlined text-sm">warning</span> OUT
+                        </div>
+</div>
+<div class="flex items-center justify-between bg-white/50 p-1.5 rounded-[20px] mt-auto">
+<button class="counter-btn bg-white text-gray-300 border border-gray-100" disabled="">
+<span class="material-symbols-outlined font-bold text-2xl">remove</span>
+</button>
+<div class="flex flex-col items-center counter-display min-w-[60px]">
+<span class="text-3xl font-display font-bold tabular-nums tracking-tight">0</span>
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Empty</span>
+</div>
+<button class="counter-btn bg-white text-gray-400 border border-gray-100 hover:text-primary hover:border-primary/30 transition-colors">
+<span class="material-symbols-outlined font-bold text-2xl">add</span>
+</button>
+</div>
+<button class="w-full py-3 rounded-xl bg-white border-2 border-primary/20 text-primary font-bold text-sm shadow-sm active:bg-primary/5 mt-2">
+                        Restock to Default (25)
+                    </button>
+</div>
+<div class="item-row bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-auto gap-4">
+<div class="flex justify-between items-start">
+<div>
+<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Craft Cola</span>
+<span class="text-sm text-text-muted font-medium">Bar • #DR-012</span>
+</div>
+<div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
+<span class="material-symbols-outlined text-lg">check</span>
+</div>
+</div>
+<div class="flex items-center justify-between bg-surface-warm/50 p-1.5 rounded-[20px] border border-surface-warm mt-auto">
+<button class="counter-btn bg-white text-text-main shadow-sm border border-gray-100 active:bg-gray-50">
+<span class="material-symbols-outlined font-bold text-2xl">remove</span>
+</button>
+<div class="flex flex-col items-center min-w-[60px]">
+<span class="text-3xl font-display font-bold text-text-main tabular-nums tracking-tight">124</span>
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">In Stock</span>
+</div>
+<button class="counter-btn bg-primary text-white shadow-button hover:bg-primary-dark active:shadow-none">
+<span class="material-symbols-outlined font-bold text-2xl">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<div class="h-8"></div>
+</main>
+<nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-8 py-3 flex justify-between items-end z-50 safe-area-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
+<button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0">
+<span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">dashboard</span>
+<span class="text-[10px] font-bold tracking-wide">Active</span>
+</button>
+<button class="nav-item active group flex flex-col items-center gap-1.5 w-16 !p-0">
+<div class="relative">
+<span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">inventory_2</span>
+<span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white"></span>
+</div>
+<span class="text-[10px] font-bold tracking-wide">Stock</span>
+</button>
+<button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0">
+<span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">history</span>
+<span class="text-[10px] font-bold tracking-wide">History</span>
+</button>
+</nav>
+
+</body></html>

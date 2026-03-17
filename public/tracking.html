@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PlazaFlow - Order Tracking</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313", 
+                        "background-light": "#f8f6f6", 
+                        "background-dark": "#221010",
+                        "plaza-cream": "#FFF9F5", 
+                        "plaza-text": "#2D232E",
+                        "plaza-green": "#6BCB77",
+                        "plaza-yellow": "#FFD93D",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "body": ["Nunito", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                    boxShadow: {
+                        "soft": "0 10px 40px -10px rgba(236, 19, 19, 0.15)",
+                        "soft-green": "0 10px 40px -10px rgba(107, 203, 119, 0.25)",
+                        "inner-light": "inset 0 2px 4px 0 rgba(255, 255, 255, 0.5)",
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slight': 'bounce-slight 2s infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                    },
+                    keyframes: {
+                        'bounce-slight': {
+                            '0%, 100%': { transform: 'translateY(-5%)' },
+                            '50%': { transform: 'translateY(0)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .squishy-card {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .squishy-card:active {
+            transform: scale(0.95);
+        }.progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }.confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #6BCB77;
+            animation: fall 3s linear forwards;
+            opacity: 0;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display selection:bg-primary selection:text-white transition-colors duration-500 overflow-hidden relative" id="main-body">
+<header class="flex items-center justify-between p-6 z-10 relative">
+<button class="w-12 h-12 rounded-full bg-white dark:bg-white/10 flex items-center justify-center shadow-sm text-plaza-text dark:text-white squishy-card hover:shadow-md transition-all">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="px-4 py-2 bg-white dark:bg-white/10 rounded-full shadow-sm">
+<span class="text-sm font-bold text-plaza-text dark:text-white tracking-wide uppercase">Order Status</span>
+</div>
+<button class="w-12 h-12 rounded-full bg-white dark:bg-white/10 flex items-center justify-center shadow-sm text-plaza-text dark:text-white squishy-card hover:shadow-md transition-all">
+<span class="material-symbols-outlined">receipt_long</span>
+</button>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center relative w-full max-w-md mx-auto px-6 z-10 -mt-8">
+<div class="relative w-64 h-64 mb-8 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full bg-primary/5 dark:bg-primary/20 animate-pulse-slow blur-xl transform scale-125 transition-colors duration-500" id="pulse-ring-1"></div>
+<div class="absolute inset-4 rounded-full bg-primary/10 dark:bg-primary/30 animate-pulse blur-lg transition-colors duration-500" id="pulse-ring-2"></div>
+<svg class="absolute inset-0 w-full h-full transform -rotate-90 drop-shadow-xl" viewBox="0 0 100 100">
+<circle class="text-white dark:text-white/10 opacity-60" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary transition-all duration-1000 ease-out" cx="50" cy="50" fill="none" id="progress-indicator" r="45" stroke="currentColor" stroke-dasharray="283" stroke-dashoffset="100" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-6 bg-white dark:bg-[#2A1515] rounded-full shadow-inner-light flex flex-col items-center justify-center overflow-hidden z-20 border-4 border-white dark:border-[#381E1E]">
+<div class="relative w-32 h-32 animate-bounce-slight flex items-center justify-center">
+<div class="transition-all duration-500 transform scale-100" id="status-icon">
+<span class="material-symbols-outlined text-7xl text-primary drop-shadow-sm">skillet</span>
+</div>
+</div>
+<div class="absolute bottom-6 px-3 py-1 bg-background-light dark:bg-white/10 rounded-full" id="time-badge">
+<span class="text-xs font-bold text-plaza-text dark:text-white/80">~5 min</span>
+</div>
+</div>
+<div class="absolute inset-0 animate-spin-slow pointer-events-none">
+<div class="absolute top-0 left-1/2 -ml-3 w-6 h-6 bg-primary rounded-full shadow-lg border-2 border-white dark:border-background-dark transform -translate-y-1/2 transition-colors duration-500" id="orbit-dot"></div>
+</div>
+</div>
+<div class="text-center space-y-1 mb-8 relative z-20">
+<h1 class="text-3xl font-extrabold text-plaza-text dark:text-white tracking-tight font-display transition-all duration-300" id="status-title">Cooking...</h1>
+<p class="text-lg text-slate-500 dark:text-slate-400 font-medium font-body transition-all duration-300" id="status-subtitle">Chef is working their magic</p>
+</div>
+<div class="w-full bg-white dark:bg-white/5 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-white/5 mb-4 flex items-center gap-4 relative overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-plaza-yellow rounded-l-2xl"></div>
+<div class="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-plaza-yellow shrink-0">
+<span class="material-symbols-outlined">layers</span>
+</div>
+<div class="flex-1">
+<h3 class="text-sm font-bold text-plaza-text dark:text-white font-display mb-1">Queue Position</h3>
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<div class="w-2 h-2 rounded-full bg-slate-200 dark:bg-white/20"></div>
+<div class="w-2 h-2 rounded-full bg-slate-200 dark:bg-white/20"></div>
+<div class="w-2 h-2 rounded-full bg-plaza-yellow animate-pulse"></div>
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400"><span class="text-plaza-text dark:text-white font-bold">3 orders</span> ahead of yours</span>
+</div>
+</div>
+</div>
+<div class="w-full bg-white dark:bg-white/5 rounded-[2rem] p-6 shadow-soft dark:shadow-none border border-slate-100 dark:border-white/5 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50" id="ticket-accent"></div>
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Order Ticket</span>
+<span class="text-3xl font-extrabold text-plaza-text dark:text-white font-display">#482</span>
+</div>
+<div class="h-12 w-[1px] bg-slate-100 dark:bg-white/10 mx-4"></div>
+<div class="flex-1 flex flex-col items-end">
+<div class="flex -space-x-2 mb-2">
+<div class="w-8 h-8 rounded-full bg-yellow-100 border-2 border-white dark:border-[#2A1515] flex items-center justify-center text-xs">🌮</div>
+<div class="w-8 h-8 rounded-full bg-red-100 border-2 border-white dark:border-[#2A1515] flex items-center justify-center text-xs">🥤</div>
+<div class="w-8 h-8 rounded-full bg-slate-100 border-2 border-white dark:border-[#2A1515] flex items-center justify-center text-xs font-bold text-slate-500">+1</div>
+</div>
+<span class="text-xs font-semibold text-primary" id="item-count">3 Items</span>
+</div>
+</div>
+</div>
+</main>
+<footer class="p-6 text-center z-10 relative pb-10">
+<a class="inline-flex items-center gap-2 text-slate-400 hover:text-primary transition-colors text-sm font-semibold py-2 px-4 rounded-full hover:bg-white/50 dark:hover:bg-white/5" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+            Need help with your order?
+        </a>
+<div class="mt-4 opacity-50 hover:opacity-100 transition-opacity">
+<button class="text-[10px] uppercase tracking-widest font-bold text-slate-300 border border-slate-200 rounded px-2 py-1" onclick="toggleOrderState()">Demo: Toggle State</button>
+</div>
+</footer>
+<div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none transition-colors duration-500" id="bg-blob"></div>
+<script>
+        let isReady = false;
+        function toggleOrderState() {
+            isReady = !isReady;
+            const body = document.getElementById('main-body');
+            const indicator = document.getElementById('progress-indicator');
+            const iconContainer = document.getElementById('status-icon');
+            const title = document.getElementById('status-title');
+            const subtitle = document.getElementById('status-subtitle');
+            const orbitDot = document.getElementById('orbit-dot');
+            const pulse1 = document.getElementById('pulse-ring-1');
+            const pulse2 = document.getElementById('pulse-ring-2');
+            const timeBadge = document.getElementById('time-badge');
+            const bgBlob = document.getElementById('bg-blob');
+            const ticketAccent = document.getElementById('ticket-accent');
+            const itemCount = document.getElementById('item-count');
+            if (isReady) {
+                // Change to Ready State (Green)
+                indicator.classList.remove('text-primary');
+                indicator.classList.add('text-plaza-green');
+                indicator.style.strokeDashoffset = '0'; // Full circle
+                orbitDot.classList.remove('bg-primary');
+                orbitDot.classList.add('bg-plaza-green');
+                pulse1.classList.remove('bg-primary/5', 'dark:bg-primary/20');
+                pulse1.classList.add('bg-plaza-green/10', 'dark:bg-plaza-green/20');
+                pulse2.classList.remove('bg-primary/10', 'dark:bg-primary/30');
+                pulse2.classList.add('bg-plaza-green/20', 'dark:bg-plaza-green/30');
+                bgBlob.classList.remove('from-primary/5');
+                bgBlob.classList.add('from-plaza-green/10');
+                ticketAccent.classList.remove('via-primary');
+                ticketAccent.classList.add('via-plaza-green');
+                itemCount.classList.remove('text-primary');
+                itemCount.classList.add('text-plaza-green');
+                // Update Icon
+                iconContainer.innerHTML = '<span class="material-symbols-outlined text-8xl text-plaza-green drop-shadow-sm">check_circle</span>';
+                // Update Text
+                title.textContent = "Order Ready!";
+                title.classList.remove('text-plaza-text', 'dark:text-white');
+                title.classList.add('text-plaza-green');
+                subtitle.textContent = "Pick up at the counter";
+                timeBadge.innerHTML = '<span class="text-xs font-bold text-plaza-green">Now</span>';
+                // Trigger Confetti
+                createConfetti();
+                // Simple vibration pattern if supported
+                if (navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+            } else {
+                // Revert to Cooking State (Red/Primary)
+                indicator.classList.add('text-primary');
+                indicator.classList.remove('text-plaza-green');
+                indicator.style.strokeDashoffset = '100'; // Partial circle
+                orbitDot.classList.add('bg-primary');
+                orbitDot.classList.remove('bg-plaza-green');
+                pulse1.classList.add('bg-primary/5', 'dark:bg-primary/20');
+                pulse1.classList.remove('bg-plaza-green/10', 'dark:bg-plaza-green/20');
+                pulse2.classList.add('bg-primary/10', 'dark:bg-primary/30');
+                pulse2.classList.remove('bg-plaza-green/20', 'dark:bg-plaza-green/30');
+                bgBlob.classList.add('from-primary/5');
+                bgBlob.classList.remove('from-plaza-green/10');
+                ticketAccent.classList.add('via-primary');
+                ticketAccent.classList.remove('via-plaza-green');
+                itemCount.classList.add('text-primary');
+                itemCount.classList.remove('text-plaza-green');
+                // Update Icon
+                iconContainer.innerHTML = '<span class="material-symbols-outlined text-7xl text-primary drop-shadow-sm">skillet</span>';
+                // Update Text
+                title.textContent = "Cooking...";
+                title.classList.add('text-plaza-text', 'dark:text-white');
+                title.classList.remove('text-plaza-green');
+                subtitle.textContent = "Chef is working their magic";
+                timeBadge.innerHTML = '<span class="text-xs font-bold text-plaza-text dark:text-white/80">~5 min</span>';
+            }
+        }
+        function createConfetti() {
+            const colors = ['#6BCB77', '#FFD93D', '#FF6B6B'];
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 4000);
+            }
+        }
+    </script>
+
+</body></html>

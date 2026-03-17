@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PlazaFlow - Cart Drawer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Nunito:wght@400;500;600;700&amp;family=Fredoka:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF6B6B", // Overriding to match PRD "Coral Red" despite the prompt template defaults, as per "Soft & Squishy" instructions
+                        "primary-dark": "#e55b5b",
+                        "background-light": "#FFF9F5", // Cream
+                        "background-dark": "#2D232E", // Deep Plum for dark mode
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#3D313F",
+                        "text-main": "#2D232E", // Deep Plum
+                        "text-muted": "#9CA3AF",
+                        "accent-yellow": "#FFD93D",
+                        "accent-green": "#6BCB77",
+                    },
+                    fontFamily: {
+                        "display": ["Fredoka", "Manrope", "sans-serif"], // Headings
+                        "body": ["Nunito", "sans-serif"], // Body text
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem", // 24px
+                        "xl": "2rem", 
+                        "pill": "9999px",
+                    },
+                    boxShadow: {
+                        "soft": "0 10px 40px -10px rgba(255, 107, 107, 0.15)",
+                        "inner-light": "inset 0 2px 4px 0 rgba(255, 255, 255, 0.5)",
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-body text-text-main dark:text-gray-100 antialiased min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
+<!-- Mobile Container/Simulator -->
+<div class="relative w-full max-w-md h-[850px] bg-background-light dark:bg-background-dark rounded-[3rem] shadow-2xl overflow-hidden border-[8px] border-white dark:border-gray-800 flex flex-col">
+<!-- Status Bar Area (Decorative) -->
+<div class="h-12 w-full flex items-center justify-between px-6 absolute top-0 left-0 z-20 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm">
+<span class="text-sm font-bold ml-2">9:41</span>
+<div class="flex gap-1.5 items-center">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px] rotate-90">battery_full</span>
+</div>
+</div>
+<!-- Main Content Area - Scrollable -->
+<div class="flex-1 overflow-y-auto no-scrollbar pt-14 pb-32">
+<!-- Header -->
+<div class="flex items-center justify-between px-6 py-4 sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+<h1 class="font-display font-bold text-3xl text-text-main dark:text-white tracking-tight">Your Tray</h1>
+<button class="flex items-center justify-center w-12 h-12 rounded-full bg-white dark:bg-surface-dark shadow-soft text-text-main dark:text-white hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Cart Items List -->
+<div class="px-5 space-y-4 mt-2">
+<!-- Item 1 -->
+<div class="group relative bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-soft flex gap-4 overflow-hidden transition-all hover:translate-x-[-4px]">
+<!-- Image -->
+<div class="w-[72px] h-[72px] shrink-0 rounded-2xl bg-gray-100 bg-cover bg-center" data-alt="Spicy Tuna Taco with fresh herbs and lime" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBx-8eeO0c8dItvmewO9godX25see_QtfGBTvw4D1nMDglSUPBA-bEiYcxTPeSna2EInyLp7lxQRFNuQAqv0VpOTFVJYwO-4A-CI3k_Y_Ay5xle-51pBUVDToKebShOnB2RIRaldd9L8UyTlNTpDq5VxRmHPChnD4KjouhJGXDSBwTdo3ODnWGhnvzg85fxjBra7I-k5aehQ_gWvgJL3UN-d0CJkngkmK1uw4uWgTXwaJ4Np3drI2Ht41X2XXvsKNbzWv3kbRy_x3k');"></div>
+<!-- Content -->
+<div class="flex-1 flex flex-col justify-center min-w-0">
+<div class="flex justify-between items-start">
+<h3 class="font-display font-bold text-lg leading-tight truncate pr-2">Spicy Tuna Taco</h3>
+<span class="font-display font-bold text-lg text-primary">$25.00</span>
+</div>
+<p class="text-sm text-text-muted dark:text-gray-400 truncate">No onions, Extra spicy mayo</p>
+<!-- Controls Row -->
+<div class="flex items-center justify-between mt-2">
+<button class="text-red-400 hover:text-red-600 dark:hover:text-red-300 p-1 -ml-1 rounded-full hover:bg-red-50 dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+<!-- Stepper -->
+<div class="flex items-center bg-background-light dark:bg-background-dark rounded-pill p-1 shadow-inner-light border border-gray-100 dark:border-gray-700">
+<button class="w-7 h-7 flex items-center justify-center rounded-full bg-white dark:bg-gray-700 text-text-main dark:text-white shadow-sm hover:scale-110 transition active:scale-90">
+<span class="material-symbols-outlined text-[16px] font-bold">remove</span>
+</button>
+<span class="w-8 text-center font-display font-bold text-sm">2</span>
+<button class="w-7 h-7 flex items-center justify-center rounded-full bg-primary text-white shadow-sm hover:scale-110 transition active:scale-90">
+<span class="material-symbols-outlined text-[16px] font-bold">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="group relative bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-soft flex gap-4 overflow-hidden">
+<div class="w-[72px] h-[72px] shrink-0 rounded-2xl bg-gray-100 bg-cover bg-center" data-alt="Golden fried churro bites with chocolate dip" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCtLZlRdzL5aOPNKF89FttVdy2jfNw8Wm8OKIsXg4Bif8ZVYQa4O4d-3NDLl_1bAlZGDygPSW2rIRA3F1l2vcYKPSVHErmgyAm_NzJciaq8duSbuR8J2ZtEdJvgGBj86sAXZpaGCBfCKygCNv1dgKDYg8W8YyPrpUXZFrvTA3mvq5Dwwj_4gKy-DhGOLEiEciVUX9uwdzCiqmaaHsGDtx3kV77yLqGu41Kb8Cyo4gTdY7i7pSSl7COPam8_zTUXUvbuy3B7NvFXp3E');"></div>
+<div class="flex-1 flex flex-col justify-center min-w-0">
+<div class="flex justify-between items-start">
+<h3 class="font-display font-bold text-lg leading-tight truncate pr-2">Churro Bites</h3>
+<span class="font-display font-bold text-lg text-primary">$6.00</span>
+</div>
+<p class="text-sm text-text-muted dark:text-gray-400 truncate">Chocolate dipping sauce</p>
+<div class="flex items-center justify-between mt-2">
+<button class="text-red-400 hover:text-red-600 dark:hover:text-red-300 p-1 -ml-1 rounded-full hover:bg-red-50 dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+<div class="flex items-center bg-background-light dark:bg-background-dark rounded-pill p-1 shadow-inner-light border border-gray-100 dark:border-gray-700">
+<button class="w-7 h-7 flex items-center justify-center rounded-full bg-white dark:bg-gray-700 text-text-main dark:text-white shadow-sm hover:scale-110 transition active:scale-90">
+<span class="material-symbols-outlined text-[16px] font-bold">remove</span>
+</button>
+<span class="w-8 text-center font-display font-bold text-sm">1</span>
+<button class="w-7 h-7 flex items-center justify-center rounded-full bg-primary text-white shadow-sm hover:scale-110 transition active:scale-90">
+<span class="material-symbols-outlined text-[16px] font-bold">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Upsell / "Goes great with" -->
+<div class="mt-8 pl-5">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-accent-yellow fill-current" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<h2 class="font-display font-bold text-lg text-text-main dark:text-white">Forgot a drink?</h2>
+</div>
+<div class="flex overflow-x-auto gap-4 pb-6 pr-5 no-scrollbar snap-x snap-mandatory">
+<!-- Upsell Card 1 -->
+<div class="snap-start shrink-0 w-32 bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center">
+<div class="w-16 h-16 rounded-xl bg-gray-50 mb-2 bg-cover bg-center" data-alt="Classic Cola with ice" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD78x9QmMr2NQINqKUQR3ksKn2p3qSacRTM4yf8wClelzgjYHt0-CfPiS9Hhx20VAtCtSFV4Zt3CCRmS0Fe3KUl1WTsJRrpMFJLQCbOX64c81BNq54w6-0iD3qn8Xbw_yRT97mcRFrhvael7X8GnFJUtBS_yzN2A3uJYB6F5jy1ElSEuX3bAhk-csTRGf0s3fBZiQMz9PB6wkIhBIqZe_5NNTcUwsoasNjSiuNaaj_eBdOfXO37CjxKROZsU9GQmhpUCBmKA51c0o0');"></div>
+<h4 class="font-display font-bold text-sm text-center mb-1 truncate w-full">Classic Cola</h4>
+<div class="flex items-center justify-between w-full mt-auto">
+<span class="text-xs font-bold text-text-muted">$2.50</span>
+<button class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+<!-- Upsell Card 2 -->
+<div class="snap-start shrink-0 w-32 bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center">
+<div class="w-16 h-16 rounded-xl bg-gray-50 mb-2 bg-cover bg-center" data-alt="Sparkling Lemonade with mint" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8KYq3QNI97J6R-HLJdth0r13TVlzbxc8YgTRo5fYVQpWw-N9LSfgr-pCNr_hyheu222EHkk25k35eGTK1xe7ssktKRcIIR23y4Bu1uhazQiklsHsDv9fTMWHrvLv98TJJHiFvSWfvESJewmBnXCgX-qXmIUR3eavlYybqpYhAYQ9MfiJ7JVHsjYKXHJk3keq7Eththb-Oqb5C5aj4qV7E-JhqpmIfg0BsIl_okWOLBDxWMqoF5Tx9Ezp9VGMwhw5ce-FivKifNlc');"></div>
+<h4 class="font-display font-bold text-sm text-center mb-1 truncate w-full">Lemonade</h4>
+<div class="flex items-center justify-between w-full mt-auto">
+<span class="text-xs font-bold text-text-muted">$3.00</span>
+<button class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+<!-- Upsell Card 3 -->
+<div class="snap-start shrink-0 w-32 bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center">
+<div class="w-16 h-16 rounded-xl bg-gray-50 mb-2 bg-cover bg-center" data-alt="Glass of water with ice" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAxD7A04QcCw6qTjI6SjN7UbQm6u4zKcfIdmllARUnacqF207aQTq6PWN9BY1bQzFF6xW6qb0VPQds4ZbZszxx6J9Z1SQ_DBirmhf0iBb6-gV_8ttuDyI9CPSUO6-6_hpE7NR-VH3SOXpjQoRiL95ddf-iRbjpqvL4SzDyFbG5XSizp2YVavFM_I37DZ3E_wKrhLFmz8IVVlfCzNMq77WhDpNiLdB6Akxy2izshLb9uTlmFwXoaWq-ConUyOpPnmGcbtU8uZFpinxM');"></div>
+<h4 class="font-display font-bold text-sm text-center mb-1 truncate w-full">Water</h4>
+<div class="flex items-center justify-between w-full mt-auto">
+<span class="text-xs font-bold text-text-muted">$1.50</span>
+<button class="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bill Breakdown -->
+<div class="px-6 mt-4 space-y-3 mb-8">
+<div class="flex justify-between items-center text-sm text-text-muted">
+<span>Subtotal</span>
+<span class="font-medium text-text-main dark:text-gray-200">$31.00</span>
+</div>
+<div class="flex justify-between items-center text-sm text-text-muted">
+<span>Tax (8%)</span>
+<span class="font-medium text-text-main dark:text-gray-200">$2.48</span>
+</div>
+<div class="flex justify-between items-center text-sm text-text-muted border-b border-dashed border-gray-300 dark:border-gray-700 pb-3">
+<span>Service Fee</span>
+<span class="font-medium text-text-main dark:text-gray-200">$1.00</span>
+</div>
+<div class="flex justify-between items-center pt-1">
+<span class="font-display font-bold text-lg text-text-main dark:text-white">Total</span>
+<span class="font-display font-extrabold text-2xl text-text-main dark:text-white">$34.48</span>
+</div>
+</div>
+</div>
+<!-- Sticky Footer CTA -->
+<div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-background-light via-background-light to-transparent dark:from-background-dark dark:via-background-dark pt-12 z-30">
+<button class="w-full bg-primary hover:bg-primary-dark text-white font-display font-bold text-lg py-4 rounded-pill shadow-[0_8px_20px_rgba(255,107,107,0.4)] hover:shadow-[0_12px_24px_rgba(255,107,107,0.5)] transition-all transform active:scale-[0.98] flex items-center justify-between px-6 group">
+<span class="flex items-center gap-2">
+                    Checkout 
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</span>
+<span class="bg-white/20 px-3 py-1 rounded-full text-base backdrop-blur-sm">$34.48</span>
+</button>
+</div>
+</div>
+</body></html>
