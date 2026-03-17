@@ -83,6 +83,7 @@
       min-height: max(884px, 100dvh);
     }
   </style>
+  <script src="../src/kds/admin.js" type="module"></script>
   </head>
 <body class="bg-background-light font-body text-ink antialiased relative overflow-hidden flex justify-center">
 <div class="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"></div>
@@ -112,7 +113,7 @@
 </div>
 </div>
 <div class="flex flex-col items-end gap-1">
-<div class="flex items-center gap-1.5 bg-success-light text-success-dark px-3 py-1.5 rounded-lg">
+<div class="payment-status-badge flex items-center gap-1.5 bg-success-light text-success-dark px-3 py-1.5 rounded-lg" data-status="PAID">
 <span class="material-symbols-outlined text-lg filled font-bold text-success">qr_code_2</span>
 <span class="font-mono text-sm font-bold text-success uppercase tracking-wide">PAID</span>
 </div>
@@ -201,11 +202,11 @@
 </div>
 <div class="shrink-0 bg-paper p-4 z-20 shadow-[0_-4px_20px_-2px_rgba(0,0,0,0.05)] border-t border-black/5">
 <div class="grid grid-cols-2 gap-3">
-<button class="h-14 flex items-center justify-center gap-2 bg-background-light text-ink rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all group">
+<button class="h-14 flex items-center justify-center gap-2 bg-background-light text-ink rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all group" id="btn-admin-process-order">
 <span class="material-symbols-outlined text-2xl font-bold text-ink/40 group-hover:text-ink/60 transition-colors">timelapse</span>
 <span class="font-display font-bold text-sm uppercase leading-none text-left">In Process</span>
 </button>
-<button class="h-14 flex items-center justify-center gap-2 bg-primary text-white rounded-xl hover:bg-primary-dark active:scale-[0.98] transition-all shadow-lg shadow-primary/30">
+<button class="h-14 flex items-center justify-center gap-2 bg-primary text-white rounded-xl hover:bg-primary-dark active:scale-[0.98] transition-all shadow-lg shadow-primary/30" id="btn-admin-complete-order">
 <span class="material-symbols-outlined text-2xl font-bold">check_circle</span>
 <span class="font-display font-bold text-sm uppercase leading-none text-left">Completed</span>
 </button>
@@ -213,19 +214,19 @@
 </div>
 <div class="shrink-0 bg-paper z-30 pb-safe border-t border-black/5">
 <nav class="flex justify-between items-stretch h-16 sm:h-20 px-6">
-<button class="flex-1 flex flex-col items-center justify-center gap-1 text-primary relative group">
+<button class="flex-1 flex flex-col items-center justify-center gap-1 text-primary relative group" id="nav-active-orders">
 <div class="bg-primary/10 p-1.5 rounded-xl group-hover:bg-primary/20 transition-colors">
 <span class="material-symbols-outlined text-[24px] font-bold">receipt_long</span>
 </div>
 <span class="text-[10px] font-bold font-mono tracking-wider uppercase">Active</span>
 </button>
-<button class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group">
+<button class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group" id="nav-stock">
 <div class="group-hover:bg-primary/5 p-1.5 rounded-xl transition-colors">
 <span class="material-symbols-outlined text-[24px] font-medium">inventory_2</span>
 </div>
 <span class="text-[10px] font-bold font-mono tracking-wider uppercase">Stock</span>
 </button>
-<button class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group">
+<button class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group" id="nav-history">
 <div class="group-hover:bg-primary/5 p-1.5 rounded-xl transition-colors">
 <span class="material-symbols-outlined text-[24px] font-medium">history</span>
 </div>

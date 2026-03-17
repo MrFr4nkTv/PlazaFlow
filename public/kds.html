@@ -69,14 +69,15 @@
       min-height: max(884px, 100dvh);
     }
   </style>
+  <script src="../src/kds/admin.js" type="module"></script>
   </head>
 <body class="bg-background text-ink antialiased font-body flex flex-col items-center justify-between px-6 py-8 relative overflow-hidden w-full max-w-[390px] mx-auto h-[844px]">
 <div class="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-primary-soft to-transparent -z-10 pointer-events-none"></div>
 <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
 <div class="absolute bottom-0 -left-20 w-80 h-80 bg-warning/10 rounded-full blur-3xl pointer-events-none"></div>
-<main class="w-full flex flex-col justify-center flex-grow z-10 gap-8">
-<div class="flex flex-col items-center justify-center text-center space-y-6 mt-4">
-<div class="w-24 h-24 bg-primary rounded-3xl text-white flex items-center justify-center shadow-float rotate-3 transform transition-transform hover:rotate-0 mb-2">
+<main class="flex-1 overflow-y-auto px-4 pb-24 no-scrollbar">
+<div class="grid grid-cols-1 gap-3 auto-rows-min" id="kds-order-list">
+<article class="bg-white rounded-xl shadow-sm border-2 border-primary overflow-hidden flex flex-col h-[180px] relative hover:shadow-md transition-all group w-full">3 transform transition-transform hover:rotate-0 mb-2">
 <span class="material-symbols-outlined text-[48px]">restaurant_menu</span>
 </div>
 <div class="space-y-2">

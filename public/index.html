@@ -65,6 +65,7 @@
       min-height: max(884px, 100dvh);
     }
   </style>
+  <script src="../src/client/app.js" type="module"></script>
   </head>
 <body class="bg-plaza-bg font-body text-plaza-text min-h-screen antialiased selection:bg-plaza-primary selection:text-white pb-32">
 <!-- Sticky Header -->
@@ -107,7 +108,7 @@
             </button>
 </nav>
 <!-- Feed List -->
-<div class="flex flex-col gap-5 pb-24">
+<div class="flex flex-col gap-5 pb-24" id="client-menu-grid">
 <!-- Card 1 -->
 <article class="group relative bg-white rounded-card p-3 shadow-soft flex items-start gap-4 h-[120px] active:scale-[0.98] transition-transform duration-200 cursor-pointer overflow-visible">
 <!-- Image -->
@@ -123,7 +124,7 @@
 <div class="font-heading font-bold text-lg text-plaza-text mt-auto">$6.50</div>
 </div>
 <!-- Add Button -->
-<button class="absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
+<button class="btn-add-item absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
 <span class="material-symbols-outlined font-bold text-[24px]">add</span>
 </button>
 </article>
@@ -145,7 +146,7 @@
 <div class="font-heading font-bold text-lg text-plaza-text mt-auto">$12.00</div>
 </div>
 <!-- Add Button -->
-<button class="absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
+<button class="btn-add-item absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
 <span class="material-symbols-outlined font-bold text-[24px]">add</span>
 </button>
 </article>
@@ -184,7 +185,7 @@
 <div class="font-heading font-bold text-lg text-plaza-text mt-auto">$5.50</div>
 </div>
 <!-- Add Button -->
-<button class="absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
+<button class="btn-add-item absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
 <span class="material-symbols-outlined font-bold text-[24px]">add</span>
 </button>
 </article>
@@ -203,7 +204,7 @@
 <div class="font-heading font-bold text-lg text-plaza-text mt-auto">$4.50</div>
 </div>
 <!-- Add Button -->
-<button class="absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
+<button class="btn-add-item absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
 <span class="material-symbols-outlined font-bold text-[24px]">add</span>
 </button>
 </article>
@@ -212,15 +213,15 @@
 <!-- Sticky Cart Bar -->
 <div class="fixed bottom-0 left-0 right-0 z-50 h-20 px-4 pb-4 pointer-events-none flex justify-center">
 <!-- The Floating Button Container -->
-<button class="pointer-events-auto w-full max-w-md h-[64px] rounded-full bg-gradient-to-r from-plaza-primary to-[#FF8E8E] text-white shadow-xl shadow-plaza-primary/30 flex items-center justify-between px-6 transform transition-transform hover:scale-[1.02] active:scale-[0.98]">
+<button class="pointer-events-auto w-full max-w-md h-[64px] rounded-full bg-gradient-to-r from-plaza-primary to-[#FF8E8E] text-white shadow-xl shadow-plaza-primary/30 flex items-center justify-between px-6 transform transition-transform hover:scale-[1.02] active:scale-[0.98]" id="btn-open-cart">
 <div class="flex items-center gap-2">
 <div class="bg-white/20 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm">
-<span class="font-heading font-bold text-sm">3</span>
+<span class="font-heading font-bold text-sm" id="cart-item-count">3</span>
 </div>
 <span class="font-body font-semibold text-lg">Items</span>
 </div>
 <div class="flex items-center gap-2">
-<span class="font-heading font-bold text-xl">$20.00</span>
+<span class="font-heading font-bold text-xl" id="cart-total-price">$20.00</span>
 <span class="material-symbols-outlined text-[24px]">chevron_right</span>
 </div>
 </button>

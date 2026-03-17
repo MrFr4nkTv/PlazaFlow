@@ -111,6 +111,7 @@
       min-height: max(884px, 100dvh);
     }
   </style>
+  <script src="../src/kds/admin.js" type="module"></script>
   </head>
 <body class="bg-surface-warm text-text-main font-body antialiased flex flex-col">
 <div class="sticky top-0 z-40 bg-surface-warm/95 backdrop-blur-sm pb-2">
@@ -267,18 +268,18 @@
 <div class="h-8"></div>
 </main>
 <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-8 py-3 flex justify-between items-end z-50 safe-area-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
-<button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0">
+<button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-active-orders">
 <span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">dashboard</span>
 <span class="text-[10px] font-bold tracking-wide">Active</span>
 </button>
-<button class="nav-item active group flex flex-col items-center gap-1.5 w-16 !p-0">
+<button class="nav-item active group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-stock">
 <div class="relative">
 <span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">inventory_2</span>
 <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white"></span>
 </div>
 <span class="text-[10px] font-bold tracking-wide">Stock</span>
 </button>
-<button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0">
+<button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-history">
 <span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">history</span>
 <span class="text-[10px] font-bold tracking-wide">History</span>
 </button>

@@ -69,6 +69,7 @@
       min-height: max(884px, 100dvh);
     }
   </style>
+  <script src="../src/kds/admin.js" type="module"></script>
   </head>
 <body class="text-ink font-body antialiased min-h-screen flex flex-col pb-32">
 <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -177,7 +178,7 @@
 <div class="bg-background-light/50 px-5 py-5 border-t border-gray-100">
 <div class="flex justify-between items-center mb-4">
 <h3 class="font-display text-xs font-bold text-gray-400 uppercase tracking-widest">Order Details</h3>
-<div class="flex items-center gap-1.5 text-success bg-white px-2.5 py-1 rounded-lg border border-gray-100 shadow-sm">
+<div class="payment-status-badge flex items-center gap-1.5 text-success bg-white px-2.5 py-1 rounded-lg border border-gray-100 shadow-sm" data-status="PAID">
 <span class="material-symbols-outlined text-[14px]">check_circle</span>
 <span class="font-bold text-[10px] tracking-wide">PAID</span>
 </div>
@@ -245,7 +246,7 @@
 <div class="bg-gray-50/50 px-5 py-5 border-t border-gray-100">
 <div class="flex justify-between items-center mb-4">
 <h3 class="font-display text-xs font-bold text-gray-400 uppercase tracking-widest">Order Details</h3>
-<div class="flex items-center gap-1.5 text-gray-400 bg-white px-2.5 py-1 rounded-lg border border-gray-100 shadow-sm">
+<div class="payment-status-badge flex items-center gap-1.5 text-gray-400 bg-white px-2.5 py-1 rounded-lg border border-gray-100 shadow-sm" data-status="UNPAID">
 <span class="material-symbols-outlined text-[14px]">pending</span>
 <span class="font-bold text-[10px] tracking-wide">UNPAID</span>
 </div>
@@ -296,7 +297,7 @@
 <div class="bg-gray-50/50 px-5 py-5 border-t border-gray-100">
 <div class="flex justify-between items-center mb-4">
 <h3 class="font-display text-xs font-bold text-gray-400 uppercase tracking-widest">Order Details</h3>
-<div class="flex items-center gap-1.5 text-success bg-white px-2.5 py-1 rounded-lg border border-gray-100 shadow-sm">
+<div class="payment-status-badge flex items-center gap-1.5 text-success bg-white px-2.5 py-1 rounded-lg border border-gray-100 shadow-sm" data-status="PAID">
 <span class="material-symbols-outlined text-[14px]">check_circle</span>
 <span class="font-bold text-[10px] tracking-wide">PAID</span>
 </div>
@@ -349,7 +350,7 @@
 <div class="bg-primary/5 px-5 py-5 border-t border-primary/10 pl-8">
 <div class="flex justify-between items-center mb-4">
 <h3 class="font-display text-xs font-bold text-gray-400 uppercase tracking-widest">Order Details</h3>
-<div class="flex items-center gap-1.5 text-gray-400 bg-white px-2.5 py-1 rounded-lg border border-gray-100 shadow-sm">
+<div class="payment-status-badge flex items-center gap-1.5 text-gray-400 bg-white px-2.5 py-1 rounded-lg border border-gray-100 shadow-sm" data-status="UNPAID">
 <span class="material-symbols-outlined text-[14px]">pending</span>
 <span class="font-bold text-[10px] tracking-wide">UNPAID</span>
 </div>
@@ -380,19 +381,19 @@
 </main>
 <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 shadow-nav z-50 pb-safe mx-auto max-w-[390px]">
 <div class="flex items-center justify-between px-10 pt-3 pb-6 h-[88px] max-w-lg mx-auto">
-<a class="flex flex-col items-center gap-1 group w-16" href="#">
+<a class="flex flex-col items-center gap-1 group w-16" href="#" id="nav-active-orders">
 <div class="h-7 w-12 flex items-center justify-center rounded-2xl bg-transparent text-gray-400 group-hover:text-primary group-hover:bg-primary/5 transition-all">
 <span class="material-symbols-outlined text-[24px]">grid_view</span>
 </div>
 <span class="text-[11px] font-bold text-gray-400 group-hover:text-primary transition-colors">Active</span>
 </a>
-<a class="flex flex-col items-center gap-1 group w-16" href="#">
+<a class="flex flex-col items-center gap-1 group w-16" href="#" id="nav-stock">
 <div class="h-7 w-12 flex items-center justify-center rounded-2xl bg-transparent text-gray-400 group-hover:text-primary group-hover:bg-primary/5 transition-all">
 <span class="material-symbols-outlined text-[24px]">inventory_2</span>
 </div>
 <span class="text-[11px] font-bold text-gray-400 group-hover:text-primary transition-colors">Stock</span>
 </a>
-<a class="flex flex-col items-center gap-1 group w-16" href="#">
+<a class="flex flex-col items-center gap-1 group w-16" href="#" id="nav-history">
 <div class="h-7 w-12 flex items-center justify-center rounded-2xl bg-primary/10 text-primary transition-all">
 <span class="material-symbols-outlined text-[24px] filled">history</span>
 </div>

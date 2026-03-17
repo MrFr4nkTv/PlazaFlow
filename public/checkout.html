@@ -74,13 +74,14 @@
       min-height: max(884px, 100dvh);
     }
   </style>
+  <script src="../src/client/app.js" type="module"></script>
   </head>
 <body class="bg-plaza-bg text-plaza-text font-body antialiased min-h-screen flex flex-col items-center justify-center p-0 sm:p-4">
 <!-- Mobile Container -->
 <div class="w-full max-w-md h-screen sm:h-[844px] sm:rounded-[32px] bg-plaza-bg sm:shadow-2xl overflow-hidden flex flex-col relative border-0 sm:border border-plaza-muted/20">
 <!-- Header -->
 <header class="flex items-center justify-between px-6 pt-12 pb-4 bg-plaza-bg z-10">
-<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-soft text-plaza-text hover:bg-plaza-highlight transition-colors">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-soft text-plaza-text hover:bg-plaza-highlight transition-colors" id="btn-back-checkout">
 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
 </button>
 <h1 class="font-heading font-bold text-2xl tracking-wide text-plaza-text">Checkout</h1>
@@ -182,7 +183,7 @@
 <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-plaza-bg via-plaza-bg to-transparent h-32 flex items-end justify-center pointer-events-none">
 <div class="w-full pointer-events-auto">
 <!-- Slide to Pay Component -->
-<div class="relative h-16 w-full rounded-pill bg-white shadow-lg overflow-hidden flex items-center p-1.5 group select-none">
+<div class="relative h-16 w-full rounded-pill bg-white shadow-lg overflow-hidden flex items-center p-1.5 group select-none" id="slide-pay-container">
 <!-- Background Track Text -->
 <div class="absolute inset-0 flex items-center justify-center z-0">
 <span class="font-heading font-bold text-lg text-plaza-muted/50 tracking-wide animate-pulse">Slide to Feed 🌮</span>
@@ -190,7 +191,7 @@
 <!-- Gradient Track Reveal (Optional visual effect) -->
 <div class="absolute top-0 left-0 bottom-0 w-1/2 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-active:opacity-100 transition-opacity"></div>
 <!-- Draggable Thumb -->
-<div class="slide-thumb h-14 w-20 bg-gradient-to-r from-primary to-[#FF8787] rounded-pill shadow-primary flex items-center justify-center z-10 relative">
+<div class="slide-thumb h-14 w-20 bg-gradient-to-r from-primary to-[#FF8787] rounded-pill shadow-primary flex items-center justify-center z-10 relative" id="btn-pay-checkout">
 <span class="material-symbols-outlined text-white text-2xl animate-bounce" style="animation-direction: alternate; animation-duration: 0.8s;">arrow_forward</span>
 </div>
 </div>

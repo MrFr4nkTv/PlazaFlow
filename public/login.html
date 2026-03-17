@@ -74,6 +74,7 @@
       min-height: max(884px, 100dvh);
     }
   </style>
+  <script src="../src/kds/admin.js" type="module"></script>
   </head>
 <body class="bg-background text-ink antialiased font-body h-full flex flex-col overflow-hidden selection:bg-primary selection:text-white relative">
 <header class="flex-none h-[60px] px-4 flex items-center justify-between z-50 bg-background/95 backdrop-blur-sm sticky top-0 border-b border-gray-100/50">
@@ -241,8 +242,9 @@
 </div>
 </div>
 <div class="p-2 border-t border-gray-100 bg-gray-50/30 grid grid-cols-2 gap-2 pl-4">
-<button class="h-8 rounded-lg bg-gray-100 text-ink-light hover:bg-gray-200 flex items-center justify-center">
-<span class="material-symbols-outlined text-[18px]">cached</span>
+<button class="w-full py-4 bg-primary text-white rounded-2xl font-display font-bold text-lg tracking-wide shadow-float hover:bg-primary-dark active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-4 h-14" id="btn-login" type="button">
+<span>Login</span>
+<span class="material-symbols-outlined text-xl">arrow_forward</span>
 </button>
 <button class="h-8 rounded-lg bg-gray-100 text-ink-light/50 cursor-not-allowed flex items-center justify-center">
 <span class="material-symbols-outlined text-[18px]">check</span>

@@ -74,6 +74,7 @@
       min-height: max(884px, 100dvh);
     }
   </style>
+  <script src="../src/client/app.js" type="module"></script>
   </head>
 <body class="bg-gray-800 font-body antialiased h-screen w-full overflow-hidden relative flex justify-center items-end sm:items-center">
 <!-- Background Context (Simulating the Feed screen behind) -->
@@ -88,7 +89,7 @@
 <div class="relative h-[240px] w-full">
 <img alt="Spicy Tuna Taco with fresh toppings" class="w-full h-full object-cover rounded-b-[40px]" data-alt="Close up of spicy tuna taco with garnish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMG2Lu0U6vzGd2kAFPQEWc_2ygzKZ_Ltwo4xUYwEgcyTseVfQJMt7Lg9f5gPj7tC8l-dPp49HJMifgYomld_1bdKm18Iyb2b0mQgZvTSlHfkM1e3mEojwU1i1z6WNwS00zvU77Ug9htFnADpefQAvEMVrYuYHmWWlr9lmkrzGBFyF2E49x5TMMw2PmL8b5qXqTuCyfMDaLISaohfeIWDWUqevLhjaEYyZxPc3hFneSOohhySptH57BDB9aIhRZDSfRbECPk_uIV9s"/>
 <!-- Floating Close Button -->
-<button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-soft active-bounce text-plaza-text z-10">
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-soft active-bounce text-plaza-text z-10" id="btn-close-item-detail">
 <span class="material-symbols-outlined font-bold text-[20px]">close</span>
 </button>
 </div>
@@ -198,9 +199,9 @@
 </button>
 </div>
 <!-- Primary CTA -->
-<button class="flex-1 h-[56px] bg-plaza-coral hover:bg-red-500 text-white rounded-pill flex items-center justify-between px-6 shadow-primary active-bounce transition-colors">
+<button class="flex-1 h-[56px] bg-plaza-coral hover:bg-red-500 text-white rounded-pill flex items-center justify-between px-6 shadow-primary active-bounce transition-colors" id="btn-confirm-add-item">
 <span class="font-heading font-bold text-lg">Add to Order</span>
-<span class="font-heading font-bold text-lg opacity-90">$12.50</span>
+<span class="font-heading font-bold text-lg opacity-90" id="item-detail-price">$12.50</span>
 </button>
 </div>
 </div>
