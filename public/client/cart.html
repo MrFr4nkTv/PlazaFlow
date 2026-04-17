@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>PlazaFlow - Bandeja de Pedido</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link rel="stylesheet" href="./css/style-client.css">
+<link rel="stylesheet" href="../css/style-client.css">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Nunito:wght@400;500;600;700&amp;family=Fredoka:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -59,11 +59,10 @@
       min-height: max(884px, 100dvh);
     }
   </style>
-  <script src="../src/client/app.js" type="module"></script>
+  <script src="../../src/client/app.js" type="module"></script>
   </head>
-<body class="bg-background-light dark:bg-background-dark font-body text-text-main dark:text-gray-100 antialiased min-h-screen flex flex-col items-center justify-center p-4 sm:p-8">
-<!-- Mobile Container/Simulator -->
-<div class="relative w-full max-w-md h-[850px] bg-background-light dark:bg-background-dark rounded-[3rem] shadow-2xl overflow-hidden border-[8px] border-white dark:border-gray-800 flex flex-col">
+<body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased">
+<div class="w-full max-w-md mx-auto flex-1 flex flex-col bg-background-light dark:bg-background-dark shadow-xl overflow-hidden relative">
 <!-- Status Bar Area (Decorative) -->
 <div class="h-12 w-full flex items-center justify-between px-6 absolute top-0 left-0 z-20 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm">
 <span class="text-sm font-bold ml-2">9:41</span>
@@ -87,7 +86,7 @@
 <!-- Item 1 -->
 <div class="group relative bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-soft flex gap-4 overflow-hidden transition-all hover:translate-x-[-4px]">
 <!-- Image -->
-<div class="w-[72px] h-[72px] shrink-0 rounded-2xl bg-gray-100 bg-cover bg-center" data-alt="Spicy Tuna Taco with fresh herbs and lime" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBx-8eeO0c8dItvmewO9godX25see_QtfGBTvw4D1nMDglSUPBA-bEiYcxTPeSna2EInyLp7lxQRFNuQAqv0VpOTFVJYwO-4A-CI3k_Y_Ay5xle-51pBUVDToKebShOnB2RIRaldd9L8UyTlNTpDq5VxRmHPChnD4KjouhJGXDSBwTdo3ODnWGhnvzg85fxjBra7I-k5aehQ_gWvgJL3UN-d0CJkngkmK1uw4uWgTXwaJ4Np3drI2Ht41X2XXvsKNbzWv3kbRy_x3k');"></div>
+<div class="w-[72px] h-[72px] shrink-0 rounded-2xl bg-gray-200 animate-pulse"></div>
 <!-- Content -->
 <div class="flex-1 flex flex-col justify-center min-w-0">
 <div class="flex justify-between items-start">
@@ -115,7 +114,7 @@
 </div>
 <!-- Item 2 -->
 <div class="group relative bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-soft flex gap-4 overflow-hidden">
-<div class="w-[72px] h-[72px] shrink-0 rounded-2xl bg-gray-100 bg-cover bg-center" data-alt="Golden fried churro bites with chocolate dip" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCtLZlRdzL5aOPNKF89FttVdy2jfNw8Wm8OKIsXg4Bif8ZVYQa4O4d-3NDLl_1bAlZGDygPSW2rIRA3F1l2vcYKPSVHErmgyAm_NzJciaq8duSbuR8J2ZtEdJvgGBj86sAXZpaGCBfCKygCNv1dgKDYg8W8YyPrpUXZFrvTA3mvq5Dwwj_4gKy-DhGOLEiEciVUX9uwdzCiqmaaHsGDtx3kV77yLqGu41Kb8Cyo4gTdY7i7pSSl7COPam8_zTUXUvbuy3B7NvFXp3E');"></div>
+<div class="w-[72px] h-[72px] shrink-0 rounded-2xl bg-gray-200 animate-pulse"></div>
 <div class="flex-1 flex flex-col justify-center min-w-0">
 <div class="flex justify-between items-start">
 <h3 class="font-display font-bold text-lg leading-tight truncate pr-2">Orden de Cheetos</h3>
@@ -148,7 +147,7 @@
 <div class="flex overflow-x-auto gap-4 pb-6 pr-5 no-scrollbar snap-x snap-mandatory">
 <!-- Upsell Card 1 -->
 <div class="snap-start shrink-0 w-32 bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center">
-<div class="w-16 h-16 rounded-xl bg-gray-50 mb-2 bg-cover bg-center" data-alt="Classic Cola with ice" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD78x9QmMr2NQINqKUQR3ksKn2p3qSacRTM4yf8wClelzgjYHt0-CfPiS9Hhx20VAtCtSFV4Zt3CCRmS0Fe3KUl1WTsJRrpMFJLQCbOX64c81BNq54w6-0iD3qn8Xbw_yRT97mcRFrhvael7X8GnFJUtBS_yzN2A3uJYB6F5jy1ElSEuX3bAhk-csTRGf0s3fBZiQMz9PB6wkIhBIqZe_5NNTcUwsoasNjSiuNaaj_eBdOfXO37CjxKROZsU9GQmhpUCBmKA51c0o0');"></div>
+<div class="w-16 h-16 rounded-xl bg-gray-200 animate-pulse mb-2"></div>
 <h4 class="font-display font-bold text-sm text-center mb-1 truncate w-full">Coca-Cola</h4>
 <div class="flex items-center justify-between w-full mt-auto">
 <span class="text-xs font-bold text-text-muted">$2.50</span>
@@ -159,7 +158,7 @@
 </div>
 <!-- Upsell Card 2 -->
 <div class="snap-start shrink-0 w-32 bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center">
-<div class="w-16 h-16 rounded-xl bg-gray-50 mb-2 bg-cover bg-center" data-alt="Sparkling Lemonade with mint" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC8KYq3QNI97J6R-HLJdth0r13TVlzbxc8YgTRo5fYVQpWw-N9LSfgr-pCNr_hyheu222EHkk25k35eGTK1xe7ssktKRcIIR23y4Bu1uhazQiklsHsDv9fTMWHrvLv98TJJHiFvSWfvESJewmBnXCgX-qXmIUR3eavlYybqpYhAYQ9MfiJ7JVHsjYKXHJk3keq7Eththb-Oqb5C5aj4qV7E-JhqpmIfg0BsIl_okWOLBDxWMqoF5Tx9Ezp9VGMwhw5ce-FivKifNlc');"></div>
+<div class="w-16 h-16 rounded-xl bg-gray-200 animate-pulse mb-2"></div>
 <h4 class="font-display font-bold text-sm text-center mb-1 truncate w-full">Limonada</h4>
 <div class="flex items-center justify-between w-full mt-auto">
 <span class="text-xs font-bold text-text-muted">$3.00</span>
@@ -170,7 +169,7 @@
 </div>
 <!-- Upsell Card 3 -->
 <div class="snap-start shrink-0 w-32 bg-surface-light dark:bg-surface-dark p-3 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col items-center">
-<div class="w-16 h-16 rounded-xl bg-gray-50 mb-2 bg-cover bg-center" data-alt="Glass of water with ice" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAxD7A04QcCw6qTjI6SjN7UbQm6u4zKcfIdmllARUnacqF207aQTq6PWN9BY1bQzFF6xW6qb0VPQds4ZbZszxx6J9Z1SQ_DBirmhf0iBb6-gV_8ttuDyI9CPSUO6-6_hpE7NR-VH3SOXpjQoRiL95ddf-iRbjpqvL4SzDyFbG5XSizp2YVavFM_I37DZ3E_wKrhLFmz8IVVlfCzNMq77WhDpNiLdB6Akxy2izshLb9uTlmFwXoaWq-ConUyOpPnmGcbtU8uZFpinxM');"></div>
+<div class="w-16 h-16 rounded-xl bg-gray-200 animate-pulse mb-2"></div>
 <h4 class="font-display font-bold text-sm text-center mb-1 truncate w-full">Agua Natural</h4>
 <div class="flex items-center justify-between w-full mt-auto">
 <span class="text-xs font-bold text-text-muted">$1.50</span>

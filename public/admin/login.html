@@ -59,22 +59,19 @@
             scrollbar-width: none;
         }
     </style>
-<style>
-        body {min-height: 844px;
-          height: 100dvh;
-        }
-    </style>
+
 <style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
   </head>
-<body class="bg-background text-ink antialiased font-body flex flex-col items-center justify-between px-6 py-8 relative overflow-hidden w-full max-w-[390px] mx-auto h-[844px]">
-<div class="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-primary-soft to-transparent -z-10 pointer-events-none"></div>
-<div class="absolute -top-20 -right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-<div class="absolute bottom-0 -left-20 w-80 h-80 bg-warning/10 rounded-full blur-3xl pointer-events-none"></div>
-<main class="w-full flex flex-col justify-center flex-grow z-10 gap-8">
+<body class="min-h-screen flex flex-col items-center bg-gray-50 text-ink font-body antialiased">
+<div class="w-full max-w-7xl mx-auto flex-1 flex flex-col items-center justify-between px-6 py-8 relative overflow-hidden bg-background shadow-xl">
+<div class="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-primary-soft to-transparent z-0 pointer-events-none"></div>
+<div class="absolute -top-20 -right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none z-0"></div>
+<div class="absolute bottom-0 -left-20 w-80 h-80 bg-warning/10 rounded-full blur-3xl pointer-events-none z-0"></div>
+<main class="w-full max-w-md mx-auto flex flex-col justify-center flex-grow z-10 gap-8">
 <div class="flex flex-col items-center justify-center text-center space-y-6 mt-4">
 <div class="w-24 h-24 bg-primary rounded-3xl text-white flex items-center justify-center shadow-float rotate-3 transform transition-transform hover:rotate-0 mb-2">
 <span class="material-symbols-outlined text-[48px]">restaurant_menu</span>
@@ -122,6 +119,7 @@
 </main>
 <div class="w-full text-center py-4 safe-bottom z-10">
 <p class="text-xs font-mono text-ink-light/40">v2.4.0 • PlazaFlow KDS</p>
+</div>
 </div>
 
 </body></html>

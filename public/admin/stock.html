@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link rel="stylesheet" href="./css/style-kds.css">
+<link rel="stylesheet" href="../css/style-kds.css">
 <script>
       tailwind.config = {
         theme: {
@@ -85,26 +85,11 @@
             padding-top: 12px;
             padding-bottom: 12px;
         }
-        .nav-item.active {
-            color: #FF6B6B;
-        }
         .nav-item.active .material-symbols-outlined {
             font-variation-settings: 'FILL' 1;
-        }body {
-            width: 390px;
-            min-height: 844px;height: 844px;overflow: hidden;margin: 0 auto;
-            position: relative;
-            background-color: #FFF5F2;box-shadow: 0 0 20px rgba(0,0,0,0.1);}main {
-            overflow-y: auto;
-            height: calc(100% - 90px);padding-bottom: 120px;}main::-webkit-scrollbar {
+        }
+        main::-webkit-scrollbar {
             display: none;
-        }
-        main {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .safe-area-bottom {
-             padding-bottom: max(20px, env(safe-area-inset-bottom));
         }
     </style>
 <style>
@@ -112,9 +97,10 @@
       min-height: max(884px, 100dvh);
     }
   </style>
-  <script src="../src/kds/admin.js" type="module"></script>
+  <script src="../../src/kds/admin.js" type="module"></script>
   </head>
-<body class="bg-surface-warm text-text-main font-body antialiased flex flex-col">
+<body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased">
+<div class="w-full max-w-7xl mx-auto flex-1 flex flex-col bg-surface-warm shadow-xl overflow-hidden relative">
 <div class="sticky top-0 z-40 bg-surface-warm/95 backdrop-blur-sm pb-2">
 <header class="h-auto py-3 flex items-center justify-between px-6 shrink-0 pt-4">
 <div class="flex items-center gap-3">
@@ -154,115 +140,28 @@
 </div>
 </div>
 </div>
-<main class="flex-1 px-6 pt-2 space-y-6">
-<section>
+<main class="flex-1 px-6 pt-2 space-y-6" id="admin-stock-list">
+<section class="animate-pulse">
 <div class="flex items-center justify-between mb-4 mt-2">
-<h2 class="text-xl font-display font-bold text-text-main">Platos Fuertes</h2>
-<span class="text-sm font-medium text-text-muted">8 artículos</span>
+<div class="h-6 bg-gray-200 rounded w-32"></div>
+<div class="h-4 bg-gray-200 rounded w-16"></div>
 </div>
 <div class="flex flex-col gap-4">
-<div class="item-row bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-auto gap-4">
-<div class="flex justify-between items-start">
-<div>
-<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Taco de Asada Doble</span>
-<span class="text-sm text-text-muted font-medium">Cocina • #MN-204</span>
-</div>
-<div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
-<span class="material-symbols-outlined text-lg">check</span>
-</div>
-</div>
-<div class="flex items-center justify-between bg-surface-warm/50 p-1.5 rounded-[20px] border border-surface-warm mt-auto">
-<button class="counter-btn bg-white text-text-main shadow-sm border border-gray-100 active:bg-gray-50">
-<span class="material-symbols-outlined font-bold text-2xl">remove</span>
-</button>
-<div class="flex flex-col items-center min-w-[60px]">
-<span class="text-3xl font-display font-bold text-text-main tabular-nums tracking-tight">42</span>
-<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">En Stock</span>
-</div>
-<button class="counter-btn bg-primary text-white shadow-button hover:bg-primary-dark active:shadow-none">
-<span class="material-symbols-outlined font-bold text-2xl">add</span>
-</button>
-</div>
-</div>
-<div class="item-row bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-auto gap-4">
-<div class="flex justify-between items-start">
-<div>
-<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Taco de Barbacoa</span>
-<span class="text-sm text-text-muted font-medium">Cocina • #MN-108</span>
-</div>
-<div class="px-2 py-1 rounded-lg bg-orange-100 flex items-center justify-center text-orange-700 text-xs font-bold shrink-0">
-                            BAJO
-                        </div>
-</div>
-<div class="flex items-center justify-between bg-surface-warm/50 p-1.5 rounded-[20px] border border-surface-warm mt-auto">
-<button class="counter-btn bg-white text-text-main shadow-sm border border-gray-100 active:bg-gray-50">
-<span class="material-symbols-outlined font-bold text-2xl">remove</span>
-</button>
-<div class="flex flex-col items-center min-w-[60px]">
-<span class="text-3xl font-display font-bold text-orange-500 tabular-nums tracking-tight">08</span>
-<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Poco Stock</span>
-</div>
-<button class="counter-btn bg-primary text-white shadow-button hover:bg-primary-dark active:shadow-none">
-<span class="material-symbols-outlined font-bold text-2xl">add</span>
-</button>
-</div>
+<div class="bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-[150px] gap-4">
+<div class="h-5 bg-gray-200 rounded w-3/4 mb-1"></div>
+<div class="h-3 bg-gray-200 rounded w-1/2"></div>
 </div>
 </div>
 </section>
-<section>
+<section class="animate-pulse">
 <div class="flex items-center justify-between mb-4 mt-2">
-<h2 class="text-xl font-display font-bold text-text-main">Bebidas</h2>
-<span class="text-sm font-medium text-text-muted">5 artículos</span>
+<div class="h-6 bg-gray-200 rounded w-32"></div>
+<div class="h-4 bg-gray-200 rounded w-16"></div>
 </div>
 <div class="flex flex-col gap-4">
-<div class="item-row is-out bg-white p-5 rounded-3xl shadow-none flex flex-col justify-between h-auto gap-4">
-<div class="flex justify-between items-start">
-<div class="opacity-60">
-<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1 line-through decoration-red-400 decoration-2">Limonada Fresa</span>
-<span class="text-sm text-text-muted font-medium">Barra • #DR-055</span>
-</div>
-<div class="px-2 py-1 rounded-lg bg-red-100 flex items-center justify-center text-red-700 text-xs font-bold gap-1 shrink-0">
-<span class="material-symbols-outlined text-sm">warning</span> AGOTADO
-                        </div>
-</div>
-<div class="flex items-center justify-between bg-white/50 p-1.5 rounded-[20px] mt-auto">
-<button class="counter-btn bg-white text-gray-300 border border-gray-100" disabled="">
-<span class="material-symbols-outlined font-bold text-2xl">remove</span>
-</button>
-<div class="flex flex-col items-center counter-display min-w-[60px]">
-<span class="text-3xl font-display font-bold tabular-nums tracking-tight">0</span>
-<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Agotado</span>
-</div>
-<button class="counter-btn bg-white text-gray-400 border border-gray-100 hover:text-primary hover:border-primary/30 transition-colors">
-<span class="material-symbols-outlined font-bold text-2xl">add</span>
-</button>
-</div>
-<button class="w-full py-3 rounded-xl bg-white border-2 border-primary/20 text-primary font-bold text-sm shadow-sm active:bg-primary/5 mt-2">
-                        Reabastecer (25)
-                    </button>
-</div>
-<div class="item-row bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-auto gap-4">
-<div class="flex justify-between items-start">
-<div>
-<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Coca-Cola</span>
-<span class="text-sm text-text-muted font-medium">Barra • #DR-012</span>
-</div>
-<div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
-<span class="material-symbols-outlined text-lg">check</span>
-</div>
-</div>
-<div class="flex items-center justify-between bg-surface-warm/50 p-1.5 rounded-[20px] border border-surface-warm mt-auto">
-<button class="counter-btn bg-white text-text-main shadow-sm border border-gray-100 active:bg-gray-50">
-<span class="material-symbols-outlined font-bold text-2xl">remove</span>
-</button>
-<div class="flex flex-col items-center min-w-[60px]">
-<span class="text-3xl font-display font-bold text-text-main tabular-nums tracking-tight">124</span>
-<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">En Stock</span>
-</div>
-<button class="counter-btn bg-primary text-white shadow-button hover:bg-primary-dark active:shadow-none">
-<span class="material-symbols-outlined font-bold text-2xl">add</span>
-</button>
-</div>
+<div class="bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-[150px] gap-4">
+<div class="h-5 bg-gray-200 rounded w-3/4 mb-1"></div>
+<div class="h-3 bg-gray-200 rounded w-1/2"></div>
 </div>
 </div>
 </section>
@@ -285,5 +184,5 @@
 <span class="text-[10px] font-bold tracking-wide">Historial</span>
 </button>
 </nav>
-
+</div>
 </body></html>
