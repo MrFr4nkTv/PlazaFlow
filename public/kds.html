@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>PlazaFlow - Admin Login</title>
+<title>Plazaflow - Tablero KDS</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -23,6 +23,8 @@
                         "warning": "#FF9F43",      
                         "warning-light": "#FFF3E0",
                         "card-border": "#E2E8F0",
+                        "process": "#FF9F43", // Orange for In Process
+                        "completed": "#FF6B6B", // Coral for Completed
                     },
                     fontFamily: {
                         "display": ["Space Grotesk", "sans-serif"],
@@ -60,69 +62,213 @@
         }
     </style>
 <style>
-        body {min-height: 844px;
-          height: 100dvh;
-        }
+        body {
+            width: 390px;
+            height: 844px;
+            overflow: hidden;
+            margin: 0 auto;
+            border: 1px solid #eee;}
     </style>
 <style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
-  <script src="../src/kds/admin.js" type="module"></script>
   </head>
-<body class="bg-background text-ink antialiased font-body flex flex-col items-center justify-between px-6 py-8 relative overflow-hidden w-full max-w-[390px] mx-auto h-[844px]">
-<div class="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-primary-soft to-transparent -z-10 pointer-events-none"></div>
-<div class="absolute -top-20 -right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-<div class="absolute bottom-0 -left-20 w-80 h-80 bg-warning/10 rounded-full blur-3xl pointer-events-none"></div>
+<body class="bg-background text-ink antialiased font-body h-full flex flex-col overflow-hidden selection:bg-primary selection:text-white relative">
+<header class="flex-none h-[60px] px-4 flex items-center justify-between z-50 bg-background/95 backdrop-blur-sm sticky top-0 border-b border-gray-100/50">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-primary rounded-full text-white flex items-center justify-center shadow-md shadow-primary/20 shrink-0">
+<span class="material-symbols-outlined text-[18px]">restaurant</span>
+</div>
+<div class="flex flex-col justify-center">
+<h1 class="font-display font-bold text-lg tracking-tight text-ink leading-tight">Plazaflow</h1>
+</div>
+</div>
+</header>
+<div class="flex-none px-4 py-3">
+<div class="flex gap-2 bg-white p-1 rounded-xl shadow-sm border border-gray-100 overflow-x-auto no-scrollbar">
+<button class="flex-1 h-9 bg-primary text-white rounded-lg flex items-center justify-center gap-1.5 shadow-md min-w-[80px]">
+<span class="font-display text-sm font-bold">Nuevos</span>
+<span class="bg-white/20 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">3</span>
+</button>
+<button class="flex-1 h-9 text-ink-light hover:bg-gray-50 rounded-lg flex items-center justify-center gap-1.5 min-w-[80px]">
+<span class="font-display text-sm font-medium">En Proceso</span>
+<span class="bg-gray-100 text-ink-light text-[10px] font-bold px-1.5 py-0.5 rounded-full">12</span>
+</button>
+<button class="flex-1 h-9 text-ink-light hover:bg-gray-50 rounded-lg flex items-center justify-center min-w-[60px]">
+<span class="font-display text-sm font-medium">Listos</span>
+</button>
+</div>
+</div>
 <main class="flex-1 overflow-y-auto px-4 pb-24 no-scrollbar">
-<div class="grid grid-cols-1 gap-3 auto-rows-min" id="kds-order-list">
-<article class="bg-white rounded-xl shadow-sm border-2 border-primary overflow-hidden flex flex-col h-[180px] relative hover:shadow-md transition-all group w-full">3 transform transition-transform hover:rotate-0 mb-2">
-<span class="material-symbols-outlined text-[48px]">restaurant_menu</span>
+<div class="grid grid-cols-1 gap-3 auto-rows-min">
+<article class="bg-white rounded-xl shadow-sm border-2 border-primary overflow-hidden flex flex-col h-[180px] relative hover:shadow-md transition-all group w-full">
+<div class="bg-primary-soft px-3 py-2 border-b border-primary/10 flex justify-between items-start">
+<div class="flex flex-col">
+<span class="font-display font-bold text-lg text-primary leading-none">#35</span>
+<span class="font-body text-[10px] font-bold text-primary/80 uppercase tracking-wide mt-0.5">Mesa 12</span>
 </div>
-<div class="space-y-2">
-<h2 class="font-display font-bold text-3xl text-ink tracking-tight">PlazaFlow</h2>
-<p class="text-ink-light text-base font-medium">KDS Admin Portal</p>
-</div>
-</div>
-<div class="bg-surface/80 p-6 rounded-[32px] shadow-soft border border-white/60 backdrop-blur-md w-full">
-<form class="space-y-5">
-<div class="space-y-2">
-<label class="block font-display font-bold text-ink text-sm uppercase tracking-wide ml-1" for="email">Admin Email</label>
-<div class="relative group">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-ink-light/50 group-focus-within:text-primary transition-colors text-2xl">mail</span>
-</div>
-<input class="block w-full pl-12 pr-4 py-4 bg-background border-2 border-transparent focus:border-primary focus:ring-0 focus:bg-white rounded-2xl text-lg font-medium text-ink placeholder-ink-light/40 transition-all outline-none shadow-inner-soft h-14" id="email" placeholder="admin@restaurant.com" type="email"/>
+<div class="flex flex-col items-end">
+<span class="font-mono font-bold text-xs text-primary">16:00</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-success-light text-success border border-success/20 tracking-wider uppercase mt-0.5">
+                        PAGADO
+                    </span>
 </div>
 </div>
-<div class="space-y-2">
-<div class="flex justify-between items-center ml-1">
-<label class="block font-display font-bold text-ink text-sm uppercase tracking-wide" for="password">Password</label>
-<a class="text-xs font-bold text-primary hover:text-primary-dark transition-colors" href="#">Forgot?</a>
+<div class="p-2 flex-1 overflow-y-auto no-scrollbar">
+<div class="flex gap-2 items-start mb-1">
+<div class="bg-primary/10 text-primary font-display font-bold text-xs w-5 h-5 rounded flex-shrink-0 flex items-center justify-center">4</div>
+<div class="flex flex-col flex-1">
+<span class="font-display font-bold text-ink text-xs leading-tight">Tostitos con Carne</span>
+<div class="flex flex-wrap gap-1 mt-0.5">
+<span class="text-[9px] font-medium text-primary bg-primary-soft px-1 py-0.5 rounded">Guacamole Extra</span>
 </div>
-<div class="relative group">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-<span class="material-symbols-outlined text-ink-light/50 group-focus-within:text-primary transition-colors text-2xl">lock</span>
 </div>
-<input class="block w-full pl-12 pr-12 py-4 bg-background border-2 border-transparent focus:border-primary focus:ring-0 focus:bg-white rounded-2xl text-lg font-medium text-ink placeholder-ink-light/40 transition-all outline-none shadow-inner-soft h-14" id="password" placeholder="••••••••" type="password"/>
-<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-ink-light/50 hover:text-ink transition-colors" type="button">
-<span class="material-symbols-outlined text-2xl">visibility</span>
+</div>
+</div>
+<div class="p-2 border-t border-gray-100 bg-gray-50/30 grid grid-cols-2 gap-2">
+<button class="h-8 rounded-lg bg-process text-white hover:bg-orange-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">cached</span>
+</button>
+<button class="h-8 rounded-lg bg-completed text-white hover:bg-red-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">check</span>
 </button>
 </div>
+</article>
+<article class="bg-surface rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[180px] relative hover:shadow-md transition-all group w-full">
+<div class="absolute top-0 left-0 w-1 h-full bg-warning"></div>
+<div class="bg-white px-3 py-2 border-b border-gray-100 flex justify-between items-start pl-4">
+<div class="flex flex-col">
+<span class="font-display font-bold text-lg text-ink leading-none">#39</span>
+<span class="font-body text-[10px] font-medium text-ink-light mt-0.5">Barra 2</span>
 </div>
-<button class="w-full py-4 bg-primary text-white rounded-2xl font-display font-bold text-lg tracking-wide shadow-float hover:bg-primary-dark active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-4 h-14" type="button">
-<span>Login</span>
-<span class="material-symbols-outlined text-xl">arrow_forward</span>
+<div class="flex flex-col items-end">
+<span class="font-mono font-bold text-xs text-warning">04:20</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-warning-light text-warning border border-warning/20 tracking-wider uppercase mt-0.5">
+                        LLEVAR
+                    </span>
+</div>
+</div>
+<div class="p-2 flex-1 overflow-y-auto no-scrollbar pl-4">
+<div class="flex gap-2 items-start mb-1">
+<div class="bg-gray-100 text-ink-light font-display font-bold text-xs w-5 h-5 rounded flex-shrink-0 flex items-center justify-center">1</div>
+<div class="flex flex-col flex-1">
+<span class="font-display font-bold text-ink text-xs leading-tight">Taco de Asada</span>
+<span class="text-[9px] text-ink-light bg-gray-50 px-1 py-0.5 rounded w-fit mt-0.5">Término Medio</span>
+</div>
+</div>
+<div class="flex gap-2 items-start">
+<div class="bg-gray-100 text-ink-light font-display font-bold text-xs w-5 h-5 rounded flex-shrink-0 flex items-center justify-center">1</div>
+<div class="flex flex-col flex-1">
+<span class="font-display font-bold text-ink text-xs leading-tight">Tortilla Harina</span>
+</div>
+</div>
+</div>
+<div class="p-2 border-t border-gray-100 bg-gray-50/30 grid grid-cols-2 gap-2 pl-4">
+<button class="h-8 rounded-lg bg-process text-white hover:bg-orange-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">cached</span>
 </button>
-</form>
+<button class="h-8 rounded-lg bg-completed text-white hover:bg-red-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
 </div>
-<div class="text-center">
-<p class="text-ink-light font-medium text-sm">Need help? <a class="text-primary font-bold hover:underline" href="#">Contact Support</a></p>
+</article>
+<article class="bg-surface rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[180px] relative hover:shadow-md transition-all group w-full">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary/40"></div>
+<div class="bg-white px-3 py-2 border-b border-gray-100 flex justify-between items-start pl-4">
+<div class="flex flex-col">
+<span class="font-display font-bold text-lg text-ink leading-none">#42</span>
+<span class="font-body text-[10px] font-medium text-ink-light mt-0.5">Mesa 04</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono font-bold text-xs text-ink animate-pulse">00:45</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-success-light text-success border border-success/20 tracking-wider uppercase mt-0.5">
+                        PAGADO
+                    </span>
+</div>
+</div>
+<div class="p-2 flex-1 overflow-y-auto no-scrollbar pl-4">
+<div class="flex gap-2 items-start mb-1">
+<div class="bg-primary/10 text-primary font-display font-bold text-xs w-5 h-5 rounded flex-shrink-0 flex items-center justify-center">2</div>
+<div class="flex flex-col flex-1">
+<span class="font-display font-bold text-ink text-xs leading-tight">Taco Barbacoa</span>
+<div class="flex flex-wrap gap-1 mt-0.5">
+<span class="text-[9px] font-medium text-warning bg-warning-light px-1 py-0.5 rounded">Sin cebolla</span>
+<span class="text-[9px] font-medium text-ink-light bg-gray-50 px-1 py-0.5 rounded">+ Limón</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2 items-start">
+<div class="bg-gray-100 text-ink-light font-display font-bold text-xs w-5 h-5 rounded flex-shrink-0 flex items-center justify-center">1</div>
+<div class="flex flex-col flex-1">
+<span class="font-display font-bold text-ink text-xs leading-tight">Agua Natural</span>
+</div>
+</div>
+</div>
+<div class="p-2 border-t border-gray-100 bg-gray-50/30 grid grid-cols-2 gap-2 pl-4">
+<button class="h-8 rounded-lg border border-process text-process bg-white hover:bg-orange-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">cached</span>
+</button>
+<button class="h-8 rounded-lg bg-completed text-white hover:bg-red-500 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+</div>
+</article>
+<article class="bg-surface rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[180px] relative hover:shadow-md transition-all group w-full">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary/20"></div>
+<div class="bg-white px-3 py-2 border-b border-gray-100 flex justify-between items-start pl-4">
+<div class="flex flex-col">
+<span class="font-display font-bold text-lg text-ink leading-none">#43</span>
+<span class="font-body text-[10px] font-medium text-ink-light mt-0.5">Mesa 12</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-mono font-bold text-xs text-ink-light">00:12</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-warning-light text-warning border border-warning/20 tracking-wider uppercase mt-0.5">
+                        LLEVAR
+                    </span>
+</div>
+</div>
+<div class="p-2 flex-1 overflow-y-auto no-scrollbar pl-4">
+<div class="flex gap-2 items-start mb-1">
+<div class="bg-primary/10 text-primary font-display font-bold text-xs w-5 h-5 rounded flex-shrink-0 flex items-center justify-center">2</div>
+<div class="flex flex-col flex-1">
+<span class="font-display font-bold text-ink text-xs leading-tight">Orden Cheetos</span>
+<div class="flex flex-wrap gap-1 mt-0.5">
+<span class="text-[9px] font-medium text-ink-light bg-gray-50 px-1 py-0.5 rounded">+ Queso</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-2 border-t border-gray-100 bg-gray-50/30 grid grid-cols-2 gap-2 pl-4">
+<button class="h-8 rounded-lg bg-gray-100 text-ink-light hover:bg-gray-200 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">cached</span>
+</button>
+<button class="h-8 rounded-lg bg-gray-100 text-ink-light/50 cursor-not-allowed flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</button>
+</div>
+</article>
 </div>
 </main>
-<div class="w-full text-center py-4 safe-bottom z-10">
-<p class="text-xs font-mono text-ink-light/40">v2.4.0 • PlazaFlow KDS</p>
+<nav class="flex-none bg-white border-t border-gray-100 h-[70px] flex px-4 justify-around items-center z-50 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)] safe-bottom pb-2 absolute bottom-0 w-full">
+<a class="flex flex-col items-center justify-center gap-0.5 text-primary group w-16" href="#">
+<div class="bg-primary-soft p-1.5 rounded-xl group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
 </div>
-
+<span class="text-[10px] font-bold font-display">Tablero</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-ink-light/50 hover:text-primary group w-16 transition-colors" href="#">
+<div class="p-1.5 rounded-xl group-hover:bg-primary-soft transition-colors">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<span class="text-[10px] font-bold font-display">Inventario</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-0.5 text-ink-light/50 hover:text-primary group w-16 transition-colors" href="#">
+<div class="p-1.5 rounded-xl group-hover:bg-primary-soft transition-colors">
+<span class="material-symbols-outlined text-[20px]">history</span>
+</div>
+<span class="text-[10px] font-bold font-display">Historial</span>
+</a>
+</nav>
 </body></html>

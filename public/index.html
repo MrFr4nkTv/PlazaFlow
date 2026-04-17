@@ -3,7 +3,7 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>PlazaFlow - The Feed</title>
+<title>PlazaFlow - El Menú</title>
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -13,6 +13,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Custom CSS -->
+<link rel="stylesheet" href="./css/style-client.css">
 <!-- Theme Configuration -->
 <script>
         tailwind.config = {
@@ -88,23 +90,23 @@
 <nav class="sticky top-16 z-40 bg-plaza-bg py-2 mb-4 -mx-4 px-4 overflow-x-auto no-scrollbar flex items-center gap-3">
 <!-- Active Pill -->
 <button class="flex-shrink-0 h-10 px-6 rounded-pill bg-plaza-primary text-white font-heading font-medium text-sm shadow-md shadow-plaza-primary/30 transform active:scale-95 transition-all">
-                All
+                Todos
             </button>
 <!-- Inactive Pills -->
 <button class="flex-shrink-0 h-10 px-6 rounded-pill bg-white text-plaza-text font-heading font-medium text-sm shadow-sm border border-transparent hover:border-plaza-highlight active:scale-95 transition-all flex items-center gap-2">
-<span>🔥</span> Popular
+<span>🔥</span> Populares
             </button>
 <button class="flex-shrink-0 h-10 px-6 rounded-pill bg-white text-plaza-text font-heading font-medium text-sm shadow-sm border border-transparent hover:border-plaza-highlight active:scale-95 transition-all flex items-center gap-2">
 <span>🌮</span> Tacos
             </button>
 <button class="flex-shrink-0 h-10 px-6 rounded-pill bg-white text-plaza-text font-heading font-medium text-sm shadow-sm border border-transparent hover:border-plaza-highlight active:scale-95 transition-all flex items-center gap-2">
-<span>🥗</span> Healthy
+<span>🥗</span> Extras
             </button>
 <button class="flex-shrink-0 h-10 px-6 rounded-pill bg-white text-plaza-text font-heading font-medium text-sm shadow-sm border border-transparent hover:border-plaza-highlight active:scale-95 transition-all flex items-center gap-2">
-<span>🥤</span> Drinks
+<span>🥤</span> Bebidas
             </button>
 <button class="flex-shrink-0 h-10 px-6 rounded-pill bg-white text-plaza-text font-heading font-medium text-sm shadow-sm border border-transparent hover:border-plaza-highlight active:scale-95 transition-all flex items-center gap-2">
-<span>🍰</span> Sweet
+<span>🍰</span> Sabritas
             </button>
 </nav>
 <!-- Feed List -->
@@ -118,10 +120,10 @@
 <!-- Content -->
 <div class="flex-1 py-1 flex flex-col justify-between h-full pr-10">
 <div>
-<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text mb-1">Spicy Tuna Taco</h3>
-<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">Fresh tuna with spicy mayo, sesame seeds and cilantro.</p>
+<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text mb-1">Taco de Carne Asada</h3>
+<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">Carne de res asada con pico de gallo y salsa casera.</p>
 </div>
-<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$6.50</div>
+<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$30.00</div>
 </div>
 <!-- Add Button -->
 <button class="btn-add-item absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
@@ -138,12 +140,12 @@
 <div class="flex-1 py-1 flex flex-col justify-between h-full pr-10">
 <div>
 <div class="flex items-center gap-1 mb-1">
-<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text">Smash Burger</h3>
+<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text">Combinación Asada</h3>
 <span class="bg-plaza-secondary text-[10px] font-bold px-1.5 py-0.5 rounded-full text-plaza-text/80">HOT</span>
 </div>
-<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">Double beef patty, cheese, house pickles on brioche.</p>
+<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">Doble porción de carne, frijoles y orden de guacamole.</p>
 </div>
-<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$12.00</div>
+<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$120.00</div>
 </div>
 <!-- Add Button -->
 <button class="btn-add-item absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
@@ -160,10 +162,10 @@
 <!-- Content -->
 <div class="flex-1 py-1 flex flex-col justify-between h-full pr-10">
 <div>
-<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text mb-1">Avocado Power Bowl</h3>
-<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">Quinoa base, roasted chickpeas, kale and lemon tahini.</p>
+<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text mb-1">Tostitos con Carne Asada</h3>
+<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">Base de Tostitos bañada en salsa, frijoles puercos y carne selecta.</p>
 </div>
-<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$14.50</div>
+<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$90.00</div>
 </div>
 <!-- Add Button (Simulating 'Added' state for variety) -->
 <button class="absolute -bottom-2 -right-2 w-10 h-10 bg-white border-2 border-plaza-primary rounded-full text-plaza-primary shadow-lg shadow-plaza-primary/20 flex items-center justify-center hover:scale-110 active:scale-90 transition-all z-10">
@@ -179,10 +181,10 @@
 <!-- Content -->
 <div class="flex-1 py-1 flex flex-col justify-between h-full pr-10">
 <div>
-<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text mb-1">Iced Matcha Latte</h3>
-<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">Ceremonial grade matcha with oat milk and honey.</p>
+<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text mb-1">Coca-Cola 600ml</h3>
+<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">Bebida refrescante clásica bien fría.</p>
 </div>
-<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$5.50</div>
+<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$30.00</div>
 </div>
 <!-- Add Button -->
 <button class="btn-add-item absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
@@ -198,10 +200,10 @@
 <!-- Content -->
 <div class="flex-1 py-1 flex flex-col justify-between h-full pr-10">
 <div>
-<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text mb-1">Mini Churros</h3>
-<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">6pcs cinnamon sugar dusted churros with dark chocolate dip.</p>
+<h3 class="font-heading font-bold text-lg leading-tight text-plaza-text mb-1">Orden de Cheetos</h3>
+<p class="font-body text-sm text-plaza-muted font-medium leading-snug line-clamp-2">Botana clásica preparada al gusto con salsa y limón.</p>
 </div>
-<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$4.50</div>
+<div class="font-heading font-bold text-lg text-plaza-text mt-auto">$20.00</div>
 </div>
 <!-- Add Button -->
 <button class="btn-add-item absolute -bottom-2 -right-2 w-10 h-10 bg-plaza-primary rounded-full text-white shadow-lg shadow-plaza-primary/40 flex items-center justify-center hover:bg-plaza-primary/90 hover:scale-110 active:scale-90 transition-all z-10">
@@ -218,7 +220,7 @@
 <div class="bg-white/20 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm">
 <span class="font-heading font-bold text-sm" id="cart-item-count">3</span>
 </div>
-<span class="font-body font-semibold text-lg">Items</span>
+<span class="font-body font-semibold text-lg">Pedidos</span>
 </div>
 <div class="flex items-center gap-2">
 <span class="font-heading font-bold text-xl" id="cart-total-price">$20.00</span>

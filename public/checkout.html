@@ -3,8 +3,9 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>PlazaFlow - Checkout &amp; Pay</title>
+<title>PlazaFlow - Finalizar Compra</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="./css/style-client.css">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Nunito:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -84,14 +85,14 @@
 <button class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-soft text-plaza-text hover:bg-plaza-highlight transition-colors" id="btn-back-checkout">
 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
 </button>
-<h1 class="font-heading font-bold text-2xl tracking-wide text-plaza-text">Checkout</h1>
+<h1 class="font-heading font-bold text-2xl tracking-wide text-plaza-text">Caja</h1>
 <div class="w-10"></div> <!-- Spacer for optical centering -->
 </header>
 <!-- Main Content (Scrollable) -->
 <main class="flex-1 overflow-y-auto overflow-x-hidden pb-32 no-scrollbar">
 <!-- Section: Payment Method -->
 <section class="mt-4 px-6">
-<h2 class="font-heading font-semibold text-lg mb-4 text-plaza-text">How do you want to pay?</h2>
+<h2 class="font-heading font-semibold text-lg mb-4 text-plaza-text">¿Cómo deseas pagar?</h2>
 <div class="flex gap-4 overflow-x-auto no-scrollbar pb-6 -mx-6 px-6 snap-x">
 <!-- Apple Pay (Active) -->
 <div class="snap-center shrink-0 w-[160px] h-[100px] bg-black rounded-card p-4 flex flex-col justify-between relative ring-4 ring-primary shadow-primary cursor-pointer group transition-transform hover:scale-[1.02]">
@@ -106,23 +107,23 @@
 <!-- Card (Inactive) -->
 <div class="snap-center shrink-0 w-[160px] h-[100px] bg-white rounded-card p-4 flex flex-col justify-between shadow-soft border border-transparent hover:border-gray-100 cursor-pointer transition-transform hover:scale-[1.02]">
 <div class="text-plaza-text font-bold text-lg flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">credit_card</span> Card
+<span class="material-symbols-outlined text-primary">credit_card</span> Tarjeta
                         </div>
-<div class="text-plaza-muted text-xs">Visa, MC, Amex</div>
+<div class="text-plaza-muted text-xs">Débito o Crédito</div>
 </div>
 <!-- Cash (Inactive) -->
 <div class="snap-center shrink-0 w-[160px] h-[100px] bg-white rounded-card p-4 flex flex-col justify-between shadow-soft border border-transparent hover:border-gray-100 cursor-pointer transition-transform hover:scale-[1.02]">
 <div class="text-plaza-text font-bold text-lg flex items-center gap-2">
-<span class="material-symbols-outlined text-plaza-secondary">payments</span> Cash
+<span class="material-symbols-outlined text-plaza-secondary">payments</span> Efectivo
                         </div>
-<div class="text-plaza-muted text-xs">Pay at counter</div>
+<div class="text-plaza-muted text-xs">Pagar en caja</div>
 </div>
 </div>
 </section>
 <!-- Section: Tip Selector -->
 <section class="mt-2 px-6">
 <h2 class="font-heading font-semibold text-lg mb-4 text-plaza-text flex items-center gap-2">
-                    Show some love <span class="text-xl">❤️</span>
+                    ¡Añadir Propina! <span class="text-xl">❤️</span>
 </h2>
 <div class="grid grid-cols-4 gap-3">
 <!-- 10% -->
@@ -144,7 +145,7 @@
 <!-- Other -->
 <button class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
 <span class="material-symbols-outlined text-plaza-muted mb-1 group-hover:text-plaza-text">edit</span>
-<span class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">Other</span>
+<span class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">Otra</span>
 </button>
 </div>
 </section>
@@ -153,30 +154,30 @@
 <div class="bg-white rounded-card p-6 shadow-soft space-y-3">
 <div class="flex justify-between items-center text-plaza-muted text-sm font-medium">
 <span>Subtotal</span>
-<span>$34.50</span>
+<span>$80.00</span>
 </div>
 <div class="flex justify-between items-center text-plaza-muted text-sm font-medium">
-<span>Tax (7%)</span>
-<span>$2.40</span>
+<span>Impuestos (8%)</span>
+<span>$6.40</span>
 </div>
 <div class="flex justify-between items-center text-plaza-text text-sm font-bold">
-<span class="flex items-center gap-1">Tip (15%) <span class="text-plaza-secondary">🙂</span></span>
-<span>$5.17</span>
+<span class="flex items-center gap-1">Propina (15%) <span class="text-plaza-secondary">🙂</span></span>
+<span>$12.96</span>
 </div>
 <div class="border-t border-dashed border-gray-200 my-4"></div>
 <div class="flex justify-between items-end">
 <span class="font-heading text-lg font-bold text-plaza-text">Total</span>
 <div class="text-right">
-<span class="block text-3xl font-heading font-bold text-plaza-text tracking-tight">$42.07</span>
-<span class="text-xs text-plaza-muted font-medium">Earn 42 points</span>
+<span class="block text-3xl font-heading font-bold text-plaza-text tracking-tight checkout-total-price">$99.36</span>
+<span class="text-xs text-plaza-muted font-medium">Acumulas 42 puntos</span>
 </div>
 </div>
 </div>
 </section>
 <!-- Terms Text -->
 <p class="text-center text-xs text-plaza-muted mt-6 px-10 leading-relaxed">
-                By sliding, you agree to our Terms of Service. 
-                <br/>No refunds on eaten tacos. 🌮
+                Al deslizar confirmas tu pedido. 
+                <br/>No hay devoluciones en comida ya preparada. 🌮
             </p>
 </main>
 <!-- Sticky Bottom Bar -->
@@ -186,7 +187,7 @@
 <div class="relative h-16 w-full rounded-pill bg-white shadow-lg overflow-hidden flex items-center p-1.5 group select-none" id="slide-pay-container">
 <!-- Background Track Text -->
 <div class="absolute inset-0 flex items-center justify-center z-0">
-<span class="font-heading font-bold text-lg text-plaza-muted/50 tracking-wide animate-pulse">Slide to Feed 🌮</span>
+<span class="font-heading font-bold text-lg text-plaza-muted/50 tracking-wide animate-pulse disable-select">Desliza para Confirmar 🌮</span>
 </div>
 <!-- Gradient Track Reveal (Optional visual effect) -->
 <div class="absolute top-0 left-0 bottom-0 w-1/2 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-active:opacity-100 transition-opacity"></div>

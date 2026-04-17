@@ -3,7 +3,7 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>PlazaFlow - Item Detail Modal</title>
+<title>PlazaFlow - Detalle del Pedido</title>
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -13,6 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="./css/style-client.css">
 <!-- Tailwind Configuration -->
 <script>
         tailwind.config = {
@@ -98,22 +99,22 @@
 <!-- Title Block -->
 <div class="flex flex-col gap-2">
 <div class="flex items-start justify-between">
-<h1 class="font-heading font-bold text-2xl text-plaza-text leading-tight w-3/4">Spicy Tuna Taco</h1>
+<h1 class="font-heading font-bold text-2xl text-plaza-text leading-tight w-3/4">Taco de Carne Asada</h1>
 <span class="bg-plaza-yellow/20 text-yellow-700 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 font-heading whitespace-nowrap">
 <span class="material-symbols-outlined text-[14px]">local_fire_department</span>
-                            450 kcal
+                            Especial
                         </span>
 </div>
-<p class="text-plaza-muted text-base leading-relaxed">
-                        Fresh sashimi-grade tuna, spicy mayo, crispy nori shell, sesame seeds, and micro cilantro.
+<p class="text-gray-600 text-base leading-relaxed mb-4">
+                        Taco sonorense asado al carbón en tortilla recién hecha, con salsa artesanal, cebolla y cilantro finamente picados. ¡Una delicia garantizada!
                     </p>
 </div>
 <div class="h-px w-full bg-gray-100"></div>
 <!-- Modifier Group: Required (Radio) -->
 <div class="flex flex-col gap-4">
 <div class="flex items-center justify-between">
-<h3 class="font-heading font-bold text-lg text-plaza-text">Choice of Sauce</h3>
-<span class="text-xs font-bold text-plaza-coral bg-plaza-highlight px-2 py-1 rounded-lg uppercase tracking-wide">Required</span>
+<h3 class="font-heading font-bold text-lg text-plaza-text">Tipo de Tortilla</h3>
+<span class="text-xs font-bold text-plaza-coral bg-plaza-highlight px-2 py-1 rounded-lg uppercase tracking-wide">Obligatorio</span>
 </div>
 <div class="flex flex-col gap-3">
 <!-- Option 1 -->
@@ -122,7 +123,7 @@
 <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
 <span class="material-symbols-outlined">hot_tub</span>
 </div>
-<span class="font-bold text-plaza-text font-body">Spicy Mayo</span>
+<span class="font-bold text-plaza-text font-body">Harina</span>
 </div>
 <input checked="" class="w-6 h-6 border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0 squishy-radio" name="sauce" type="radio"/>
 </label>
@@ -132,7 +133,7 @@
 <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
 <span class="material-symbols-outlined">water_drop</span>
 </div>
-<span class="font-bold text-plaza-text font-body">Ponzu Citrus</span>
+<span class="font-bold text-plaza-text font-body">Maíz</span>
 </div>
 <input class="w-6 h-6 border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0 squishy-radio" name="sauce" type="radio"/>
 </label>
@@ -142,7 +143,7 @@
 <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
 <span class="material-symbols-outlined">block</span>
 </div>
-<span class="font-bold text-plaza-text font-body">No Sauce</span>
+<span class="font-bold text-plaza-text font-body">Sin Preferencia</span>
 </div>
 <input class="w-6 h-6 border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0 squishy-radio" name="sauce" type="radio"/>
 </label>
@@ -151,8 +152,8 @@
 <!-- Modifier Group: Optional (Checkbox) -->
 <div class="flex flex-col gap-4 pb-8">
 <div class="flex items-center justify-between">
-<h3 class="font-heading font-bold text-lg text-plaza-text">Add Extras</h3>
-<span class="text-xs font-bold text-plaza-muted uppercase tracking-wide">Optional</span>
+<h3 class="font-heading font-bold text-lg text-plaza-text">Añade Extras</h3>
+<span class="text-xs font-bold text-plaza-muted uppercase tracking-wide">Opcional</span>
 </div>
 <div class="grid grid-cols-1 gap-3">
 <!-- Extra 1 -->
@@ -162,8 +163,8 @@
 <span class="material-symbols-outlined">eco</span>
 </div>
 <div class="flex flex-col">
-<span class="font-bold text-plaza-text font-body">Avocado Slice</span>
-<span class="text-xs text-plaza-muted font-bold">+$1.50</span>
+<span class="font-bold text-plaza-text font-body">Limón Extra</span>
+<span class="text-xs text-plaza-muted font-bold">+$0.00</span>
 </div>
 </div>
 <input class="w-6 h-6 rounded-md border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0" type="checkbox"/>
@@ -175,8 +176,8 @@
 <span class="material-symbols-outlined">grain</span>
 </div>
 <div class="flex flex-col">
-<span class="font-bold text-plaza-text font-body">Sesame Seeds</span>
-<span class="text-xs text-plaza-muted font-bold">+$0.50</span>
+<span class="font-bold text-plaza-text font-body">Salsa Aparte</span>
+<span class="text-xs text-plaza-muted font-bold">+$5.00</span>
 </div>
 </div>
 <input class="w-6 h-6 rounded-md border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0" type="checkbox"/>
@@ -200,8 +201,8 @@
 </div>
 <!-- Primary CTA -->
 <button class="flex-1 h-[56px] bg-plaza-coral hover:bg-red-500 text-white rounded-pill flex items-center justify-between px-6 shadow-primary active-bounce transition-colors" id="btn-confirm-add-item">
-<span class="font-heading font-bold text-lg">Add to Order</span>
-<span class="font-heading font-bold text-lg opacity-90" id="item-detail-price">$12.50</span>
+<span class="font-heading font-bold text-lg">Añadir al Pedido</span>
+<span class="font-heading font-bold text-lg opacity-90" id="item-detail-price">$30.00</span>
 </button>
 </div>
 </div>

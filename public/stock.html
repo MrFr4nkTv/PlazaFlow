@@ -2,11 +2,12 @@
 <html lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Plazaflow Unified Stock Control</title>
+<title>Plazaflow Control Inventario</title>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="stylesheet" href="./css/style-kds.css">
 <script>
       tailwind.config = {
         theme: {
@@ -123,7 +124,7 @@
 </div>
 <div>
 <h1 class="text-xl font-display font-bold text-text-main leading-tight">Plazaflow</h1>
-<p class="text-sm font-medium text-text-muted leading-tight">Stock Control</p>
+<p class="text-sm font-medium text-text-muted leading-tight">Control Inventario</p>
 </div>
 </div>
 <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
@@ -135,20 +136,20 @@
 <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
 <span class="material-symbols-outlined text-2xl">search</span>
 </span>
-<input aria-label="Search items" class="w-full h-14 pl-12 pr-6 bg-white border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 text-lg placeholder-gray-400 font-medium transition-all text-text-main" placeholder="Search finished products..." type="text"/>
+<input aria-label="Search items" class="w-full h-14 pl-12 pr-6 bg-white border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 text-lg placeholder-gray-400 font-medium transition-all text-text-main" placeholder="Buscar productos..." type="text"/>
 </div>
 <div class="flex overflow-x-auto no-scrollbar gap-2 mt-4 pb-1">
 <button class="shrink-0 h-10 px-6 bg-text-main text-white font-bold text-sm rounded-full shadow-md transition-transform active:scale-95">
-                    All
+                    Todo
                 </button>
 <button class="shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95">
-                    Mains
+                    Platos Fuertes
                 </button>
 <button class="shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95">
-                    Drinks
+                    Bebidas
                 </button>
 <button class="shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95">
-                    Desserts
+                    Postres
                 </button>
 </div>
 </div>
@@ -156,15 +157,15 @@
 <main class="flex-1 px-6 pt-2 space-y-6">
 <section>
 <div class="flex items-center justify-between mb-4 mt-2">
-<h2 class="text-xl font-display font-bold text-text-main">Mains</h2>
-<span class="text-sm font-medium text-text-muted">8 items</span>
+<h2 class="text-xl font-display font-bold text-text-main">Platos Fuertes</h2>
+<span class="text-sm font-medium text-text-muted">8 artículos</span>
 </div>
 <div class="flex flex-col gap-4">
 <div class="item-row bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-auto gap-4">
 <div class="flex justify-between items-start">
 <div>
-<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Double Smash Burger</span>
-<span class="text-sm text-text-muted font-medium">Kitchen • #MN-204</span>
+<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Taco de Asada Doble</span>
+<span class="text-sm text-text-muted font-medium">Cocina • #MN-204</span>
 </div>
 <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
 <span class="material-symbols-outlined text-lg">check</span>
@@ -176,7 +177,7 @@
 </button>
 <div class="flex flex-col items-center min-w-[60px]">
 <span class="text-3xl font-display font-bold text-text-main tabular-nums tracking-tight">42</span>
-<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">In Stock</span>
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">En Stock</span>
 </div>
 <button class="counter-btn bg-primary text-white shadow-button hover:bg-primary-dark active:shadow-none">
 <span class="material-symbols-outlined font-bold text-2xl">add</span>
@@ -186,11 +187,11 @@
 <div class="item-row bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-auto gap-4">
 <div class="flex justify-between items-start">
 <div>
-<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Spicy Chicken Deluxe</span>
-<span class="text-sm text-text-muted font-medium">Kitchen • #MN-108</span>
+<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Taco de Barbacoa</span>
+<span class="text-sm text-text-muted font-medium">Cocina • #MN-108</span>
 </div>
 <div class="px-2 py-1 rounded-lg bg-orange-100 flex items-center justify-center text-orange-700 text-xs font-bold shrink-0">
-                            LOW
+                            BAJO
                         </div>
 </div>
 <div class="flex items-center justify-between bg-surface-warm/50 p-1.5 rounded-[20px] border border-surface-warm mt-auto">
@@ -199,7 +200,7 @@
 </button>
 <div class="flex flex-col items-center min-w-[60px]">
 <span class="text-3xl font-display font-bold text-orange-500 tabular-nums tracking-tight">08</span>
-<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Low Stock</span>
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Poco Stock</span>
 </div>
 <button class="counter-btn bg-primary text-white shadow-button hover:bg-primary-dark active:shadow-none">
 <span class="material-symbols-outlined font-bold text-2xl">add</span>
@@ -210,18 +211,18 @@
 </section>
 <section>
 <div class="flex items-center justify-between mb-4 mt-2">
-<h2 class="text-xl font-display font-bold text-text-main">Drinks</h2>
-<span class="text-sm font-medium text-text-muted">5 items</span>
+<h2 class="text-xl font-display font-bold text-text-main">Bebidas</h2>
+<span class="text-sm font-medium text-text-muted">5 artículos</span>
 </div>
 <div class="flex flex-col gap-4">
 <div class="item-row is-out bg-white p-5 rounded-3xl shadow-none flex flex-col justify-between h-auto gap-4">
 <div class="flex justify-between items-start">
 <div class="opacity-60">
-<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1 line-through decoration-red-400 decoration-2">Strawberry Shake</span>
-<span class="text-sm text-text-muted font-medium">Bar • #DR-055</span>
+<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1 line-through decoration-red-400 decoration-2">Limonada Fresa</span>
+<span class="text-sm text-text-muted font-medium">Barra • #DR-055</span>
 </div>
 <div class="px-2 py-1 rounded-lg bg-red-100 flex items-center justify-center text-red-700 text-xs font-bold gap-1 shrink-0">
-<span class="material-symbols-outlined text-sm">warning</span> OUT
+<span class="material-symbols-outlined text-sm">warning</span> AGOTADO
                         </div>
 </div>
 <div class="flex items-center justify-between bg-white/50 p-1.5 rounded-[20px] mt-auto">
@@ -230,21 +231,21 @@
 </button>
 <div class="flex flex-col items-center counter-display min-w-[60px]">
 <span class="text-3xl font-display font-bold tabular-nums tracking-tight">0</span>
-<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Empty</span>
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Agotado</span>
 </div>
 <button class="counter-btn bg-white text-gray-400 border border-gray-100 hover:text-primary hover:border-primary/30 transition-colors">
 <span class="material-symbols-outlined font-bold text-2xl">add</span>
 </button>
 </div>
 <button class="w-full py-3 rounded-xl bg-white border-2 border-primary/20 text-primary font-bold text-sm shadow-sm active:bg-primary/5 mt-2">
-                        Restock to Default (25)
+                        Reabastecer (25)
                     </button>
 </div>
 <div class="item-row bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-auto gap-4">
 <div class="flex justify-between items-start">
 <div>
-<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Craft Cola</span>
-<span class="text-sm text-text-muted font-medium">Bar • #DR-012</span>
+<span class="block text-xl font-display font-bold text-text-main leading-tight mb-1">Coca-Cola</span>
+<span class="text-sm text-text-muted font-medium">Barra • #DR-012</span>
 </div>
 <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
 <span class="material-symbols-outlined text-lg">check</span>
@@ -256,7 +257,7 @@
 </button>
 <div class="flex flex-col items-center min-w-[60px]">
 <span class="text-3xl font-display font-bold text-text-main tabular-nums tracking-tight">124</span>
-<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">In Stock</span>
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">En Stock</span>
 </div>
 <button class="counter-btn bg-primary text-white shadow-button hover:bg-primary-dark active:shadow-none">
 <span class="material-symbols-outlined font-bold text-2xl">add</span>
@@ -270,18 +271,18 @@
 <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-8 py-3 flex justify-between items-end z-50 safe-area-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
 <button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-active-orders">
 <span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">dashboard</span>
-<span class="text-[10px] font-bold tracking-wide">Active</span>
+<span class="text-[10px] font-bold tracking-wide">Tablero</span>
 </button>
 <button class="nav-item active group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-stock">
 <div class="relative">
 <span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">inventory_2</span>
 <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white"></span>
 </div>
-<span class="text-[10px] font-bold tracking-wide">Stock</span>
+<span class="text-[10px] font-bold tracking-wide">Inventario</span>
 </button>
 <button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-history">
 <span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">history</span>
-<span class="text-[10px] font-bold tracking-wide">History</span>
+<span class="text-[10px] font-bold tracking-wide">Historial</span>
 </button>
 </nav>
 
