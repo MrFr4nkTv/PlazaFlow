@@ -19,7 +19,7 @@ export const enviarPedido = async (datosPedido) => {
   try {
     const docRef = await addDoc(collection(db, "pedidos"), {
       ...datosPedido,
-      estado: "Nuevo", // Valor por defecto
+      estado: "nuevo", // Valor por defecto
       timestamp: serverTimestamp() // Tiempo de creación proporcionado por Firebase
     });
     console.log("Pedido creado con ID: ", docRef.id);
