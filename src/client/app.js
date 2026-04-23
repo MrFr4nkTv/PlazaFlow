@@ -1,4 +1,4 @@
-import { obtenerMenu, enviarPedido } from '../services/dbOperations.js';
+import { obtenerMenu, enviarPedido, escucharPedidoIndividual } from '../services/dbOperations.js';
 
 // ============================================================
 // CARRITO GLOBAL con localStorage
@@ -252,26 +252,115 @@ function configurarNavegacionCarrito() {
 }
 
 // ============================================================
-// CHECKOUT (desde cart.html y checkout.html)
+// CHECKOUT DINÁMICO
 // ============================================================
+let tipPorcentaje = 0;
+
+function inicializarCheckoutPage() {
+  const subtotalEl = document.getElementById('checkout-subtotal');
+  if (!subtotalEl) return;
+
+  const subtotal = window.carrito.reduce((a, i) => a + (i.precio * i.cantidad), 0);
+  subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+  actualizarTotalCheckout(subtotal);
+
+  // Tip buttons
+  const tipBtns = document.querySelectorAll('[data-tip]');
+  // If no data-tip attrs, use the existing tip grid buttons
+  const tipGrid = document.querySelector('.grid-cols-4');
+  if (tipGrid) {
+    const btns = tipGrid.querySelectorAll('button');
+    const tipValues = [10, 15, 20, 0];
+    const tipEmojis = ['😐', '🙂', '🤩', '✏️'];
+    btns.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        tipPorcentaje = tipValues[i];
+        btns.forEach(b => {
+          b.classList.remove('bg-plaza-secondary', 'border-plaza-secondary', 'shadow-md', 'scale-105');
+          b.classList.add('bg-white', 'border-transparent');
+        });
+        btn.classList.remove('bg-white', 'border-transparent');
+        btn.classList.add('bg-plaza-secondary', 'border-plaza-secondary', 'shadow-md', 'scale-105');
+        actualizarTotalCheckout(subtotal);
+      });
+    });
+  }
+
+  // Slide to pay
+  configurarSlideToPay();
+}
+
+function actualizarTotalCheckout(subtotal) {
+  const tipAmount = subtotal * (tipPorcentaje / 100);
+  const total = subtotal + tipAmount;
+  const tipEl = document.getElementById('checkout-tip');
+  const totalEl = document.getElementById('checkout-total');
+  const emojiEl = document.getElementById('checkout-tip-emoji');
+  if (tipEl) tipEl.textContent = tipPorcentaje > 0 ? `$${tipAmount.toFixed(2)}` : '$0.00';
+  if (totalEl) totalEl.textContent = `$${total.toFixed(2)}`;
+  if (emojiEl) emojiEl.textContent = tipPorcentaje >= 20 ? '🤩' : tipPorcentaje >= 15 ? '🙂' : tipPorcentaje >= 10 ? '😐' : '😶';
+}
+
+function configurarSlideToPay() {
+  const thumb = document.getElementById('btn-pay-checkout');
+  const container = document.getElementById('slide-pay-container');
+  if (!thumb || !container) return;
+
+  let isDragging = false, startX = 0, currentX = 0;
+  const maxSlide = () => container.offsetWidth - thumb.offsetWidth - 12;
+
+  thumb.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; });
+  thumb.addEventListener('touchstart', e => { isDragging = true; startX = e.touches[0].clientX; });
+
+  const onMove = (clientX) => {
+    if (!isDragging) return;
+    currentX = Math.max(0, Math.min(clientX - startX, maxSlide()));
+    thumb.style.transform = `translateX(${currentX}px)`;
+  };
+  document.addEventListener('mousemove', e => onMove(e.clientX));
+  document.addEventListener('touchmove', e => onMove(e.touches[0].clientX));
+
+  const onEnd = async () => {
+    if (!isDragging) return;
+    isDragging = false;
+    if (currentX >= maxSlide() * 0.85) {
+      // Completar pedido
+      thumb.style.transform = `translateX(${maxSlide()}px)`;
+      await handleCheckout();
+    } else {
+      thumb.style.transition = 'transform 0.3s ease';
+      thumb.style.transform = 'translateX(0)';
+      setTimeout(() => { thumb.style.transition = ''; }, 300);
+    }
+    currentX = 0;
+  };
+  document.addEventListener('mouseup', onEnd);
+  document.addEventListener('touchend', onEnd);
+}
+
+async function handleCheckout() {
+  if (window.carrito.length === 0) { alert('El carrito está vacío.'); return; }
+  const subtotal = window.carrito.reduce((a, i) => a + (i.precio * i.cantidad), 0);
+  const tipAmount = subtotal * (tipPorcentaje / 100);
+  const total = subtotal + tipAmount;
+  const datosPedido = {
+    items: window.carrito.map(i => ({ id: i.id, nombre: i.nombre, precio: i.precio, cantidad: i.cantidad, opcion: i.opcionSeleccionada || null })),
+    subtotal, propina: tipAmount, total, metodoPago: 'Efectivo'
+  };
+  try {
+    const orderId = await enviarPedido(datosPedido);
+    window.carrito = []; guardarCarritoEnStorage(); actualizarUICarrito();
+    window.location.href = `tracking.html?orderId=${orderId}`;
+  } catch (error) { alert('Error al enviar el pedido.'); console.error(error); }
+}
+
 function configurarCheckout() {
   const btnCart = document.getElementById('btn-checkout-cart');
-  const btnPay = document.getElementById('btn-pay-checkout');
-  const handleCheckout = async () => {
-    if (window.carrito.length === 0) { alert("El carrito está vacío."); return; }
-    const total = window.carrito.reduce((a, i) => a + (i.precio * i.cantidad), 0);
-    const datosPedido = {
-      items: window.carrito.map(i => ({ id: i.id, nombre: i.nombre, precio: i.precio, cantidad: i.cantidad, opcion: i.opcionSeleccionada || null })),
-      total, metodoPago: 'Efectivo'
-    };
-    try {
-      const orderId = await enviarPedido(datosPedido);
-      window.carrito = []; guardarCarritoEnStorage(); actualizarUICarrito();
-      window.location.href = `tracking.html?orderId=${orderId}`;
-    } catch (error) { alert("Error al enviar el pedido."); console.error(error); }
-  };
-  if (btnCart) btnCart.addEventListener('click', handleCheckout);
-  if (btnPay) btnPay.addEventListener('click', handleCheckout);
+  if (btnCart) {
+    btnCart.addEventListener('click', () => {
+      window.location.href = 'checkout.html';
+    });
+  }
 }
 
 // ============================================================
@@ -302,6 +391,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // --- ITEM DETAIL (item-detail.html) ---
   inicializarItemDetail();
+
+  // --- CHECKOUT (checkout.html) ---
+  inicializarCheckoutPage();
+
+  // --- TRACKING (tracking.html) ---
+  inicializarTracking();
 
   // --- Botón Volver ---
   document.getElementById('btn-back-cart')?.addEventListener('click', () => history.back());
@@ -476,4 +571,67 @@ function inicializarItemDetail() {
       history.back();
     });
   }
+}
+
+// ============================================================
+// TRACKING EN TIEMPO REAL
+// ============================================================
+function inicializarTracking() {
+  const statusTitle = document.getElementById('status-title');
+  if (!statusTitle) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get('orderId');
+  if (!orderId) return;
+
+  const ticketEl = document.querySelector('.text-3xl.font-extrabold');
+  if (ticketEl) ticketEl.textContent = `#${orderId.slice(-4).toUpperCase()}`;
+
+  escucharPedidoIndividual(orderId, (pedido) => {
+    const estado = pedido.estado || 'nuevo';
+    const indicator = document.getElementById('progress-indicator');
+    const iconContainer = document.getElementById('status-icon');
+    const subtitle = document.getElementById('status-subtitle');
+    const timeBadge = document.getElementById('time-badge');
+    const orbitDot = document.getElementById('orbit-dot');
+    const pulse1 = document.getElementById('pulse-ring-1');
+    const pulse2 = document.getElementById('pulse-ring-2');
+    const bgBlob = document.getElementById('bg-blob');
+    const ticketAccent = document.getElementById('ticket-accent');
+    const itemCount = document.getElementById('item-count');
+
+    if (itemCount && pedido.items) {
+      itemCount.textContent = `${pedido.items.length} Artículos`;
+    }
+
+    if (estado === 'listo') {
+      statusTitle.textContent = '¡Pedido Listo!';
+      statusTitle.className = 'text-3xl font-extrabold tracking-tight font-display text-plaza-green';
+      if (subtitle) subtitle.textContent = 'Recoge en ventanilla';
+      if (indicator) { indicator.classList.remove('text-primary'); indicator.classList.add('text-plaza-green'); indicator.style.strokeDashoffset = '0'; }
+      if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-8xl text-plaza-green drop-shadow-sm">check_circle</span>';
+      if (timeBadge) timeBadge.innerHTML = '<span class="text-xs font-bold text-plaza-green">Ahora</span>';
+      if (orbitDot) { orbitDot.classList.remove('bg-primary'); orbitDot.classList.add('bg-plaza-green'); }
+      if (pulse1) { pulse1.classList.remove('bg-primary/5'); pulse1.classList.add('bg-plaza-green/10'); }
+      if (pulse2) { pulse2.classList.remove('bg-primary/10'); pulse2.classList.add('bg-plaza-green/20'); }
+      if (bgBlob) { bgBlob.classList.remove('from-primary/5'); bgBlob.classList.add('from-plaza-green/10'); }
+      if (ticketAccent) { ticketAccent.classList.remove('via-primary'); ticketAccent.classList.add('via-plaza-green'); }
+      if (itemCount) { itemCount.classList.remove('text-primary'); itemCount.classList.add('text-plaza-green'); }
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    } else if (estado === 'preparando') {
+      statusTitle.textContent = 'Preparando...';
+      statusTitle.className = 'text-3xl font-extrabold text-plaza-text tracking-tight font-display';
+      if (subtitle) subtitle.textContent = 'El chef está haciendo su magia';
+      if (indicator) indicator.style.strokeDashoffset = '100';
+      if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-7xl text-primary drop-shadow-sm">skillet</span>';
+      if (timeBadge) timeBadge.innerHTML = '<span class="text-xs font-bold text-plaza-text">~5 min</span>';
+    } else {
+      statusTitle.textContent = 'Pedido Recibido';
+      statusTitle.className = 'text-3xl font-extrabold text-plaza-text tracking-tight font-display';
+      if (subtitle) subtitle.textContent = 'Tu pedido está en cola';
+      if (indicator) indicator.style.strokeDashoffset = '200';
+      if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-7xl text-primary drop-shadow-sm">receipt_long</span>';
+      if (timeBadge) timeBadge.innerHTML = '<span class="text-xs font-bold text-plaza-text">~10 min</span>';
+    }
+  });
 }

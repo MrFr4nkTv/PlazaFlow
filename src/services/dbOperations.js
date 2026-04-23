@@ -105,3 +105,20 @@ export const cambiarDisponibilidad = async (idProducto, disponible) => {
     throw error;
   }
 };
+
+/**
+ * Tarea 2.5: Escuchar un pedido individual en tiempo real (para tracking)
+ * @param {string} pedidoId - ID del pedido
+ * @param {Function} callback - Función que recibe el pedido actualizado
+ * @returns {Function} - Unsubscribe
+ */
+export const escucharPedidoIndividual = (pedidoId, callback) => {
+  const pedidoRef = doc(db, "pedidos", pedidoId);
+  return onSnapshot(pedidoRef, (snapshot) => {
+    if (snapshot.exists()) {
+      callback({ id: snapshot.id, ...snapshot.data() });
+    }
+  }, (error) => {
+    console.error("Error escuchando pedido:", error);
+  });
+};

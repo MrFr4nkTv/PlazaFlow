@@ -153,22 +153,17 @@
 <div class="bg-white rounded-card p-6 shadow-soft space-y-3">
 <div class="flex justify-between items-center text-plaza-muted text-sm font-medium">
 <span>Subtotal</span>
-<span>$80.00</span>
-</div>
-<div class="flex justify-between items-center text-plaza-muted text-sm font-medium">
-<span>Impuestos (8%)</span>
-<span>$6.40</span>
+<span id="checkout-subtotal">$0.00</span>
 </div>
 <div class="flex justify-between items-center text-plaza-text text-sm font-bold">
-<span class="flex items-center gap-1">Propina (15%) <span class="text-plaza-secondary">🙂</span></span>
-<span>$12.96</span>
+<span class="flex items-center gap-1">Propina <span class="text-plaza-secondary" id="checkout-tip-emoji">🙂</span></span>
+<span id="checkout-tip">$0.00</span>
 </div>
 <div class="border-t border-dashed border-gray-200 my-4"></div>
 <div class="flex justify-between items-end">
 <span class="font-heading text-lg font-bold text-plaza-text">Total</span>
 <div class="text-right">
-<span class="block text-3xl font-heading font-bold text-plaza-text tracking-tight checkout-total-price">$99.36</span>
-<span class="text-xs text-plaza-muted font-medium">Acumulas 42 puntos</span>
+<span class="block text-3xl font-heading font-bold text-plaza-text tracking-tight" id="checkout-total">$0.00</span>
 </div>
 </div>
 </div>
