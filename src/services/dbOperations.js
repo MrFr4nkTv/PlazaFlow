@@ -3,12 +3,34 @@ import {
   addDoc, 
   updateDoc, 
   doc, 
+  getDocs,
   onSnapshot, 
   query, 
   orderBy, 
   serverTimestamp 
 } from "firebase/firestore";
 import { db } from "./firebaseInit.js";
+
+/**
+ * Tarea 2.0: Obtener todos los productos del menú
+ * Lee la colección 'productos' completa desde Firestore.
+ * @returns {Promise<Array<Object>>} - Array de productos con su ID de documento
+ */
+export const obtenerMenu = async () => {
+  try {
+    const productosRef = collection(db, "productos");
+    const snapshot = await getDocs(productosRef);
+    const productos = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    console.log(`✔️ Menú obtenido: ${productos.length} productos`);
+    return productos;
+  } catch (error) {
+    console.error("Error obteniendo el menú: ", error);
+    throw error;
+  }
+};
 
 /**
  * Tarea 2.1: Enviar un nuevo pedido

@@ -80,125 +80,40 @@
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased">
 <div class="w-full max-w-md mx-auto flex-1 flex flex-col bg-plaza-cream shadow-xl overflow-hidden relative">
 <div class="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-300/50 rounded-full z-20"></div>
-<!-- Scrollable Content Area -->
 <div class="flex-1 overflow-y-auto no-scrollbar pb-32 relative">
-<!-- Hero Image Section -->
-<div class="relative h-[240px] w-full bg-gray-200 animate-pulse rounded-b-[40px] flex items-center justify-center">
-<span class="text-gray-400 font-bold">Cargando Plato...</span>
-<!-- Floating Close Button -->
-<button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-soft active-bounce text-plaza-text z-10" id="btn-close-item-detail">
+<!-- Hero Image -->
+<div class="relative h-[240px] w-full bg-gradient-to-br from-plaza-highlight to-plaza-cream rounded-b-[40px] flex items-center justify-center" id="item-detail-hero">
+<span class="text-gray-400 font-bold animate-pulse">Cargando...</span>
+<button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-soft active-bounce z-10" id="btn-close-item-detail">
 <span class="material-symbols-outlined font-bold text-[20px]">close</span>
 </button>
 </div>
-<!-- Content Body -->
+<!-- Content -->
 <div class="px-6 pt-6 flex flex-col gap-6">
-<!-- Title Block -->
 <div class="flex flex-col gap-2">
-<div class="flex items-start justify-between">
-<h1 class="font-heading font-bold text-2xl text-plaza-text leading-tight w-3/4">Taco de Carne Asada</h1>
-<span class="bg-plaza-yellow/20 text-yellow-700 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 font-heading whitespace-nowrap">
-<span class="material-symbols-outlined text-[14px]">local_fire_department</span>
-                            Especial
-                        </span>
-</div>
-<p class="text-gray-600 text-base leading-relaxed mb-4">
-                        Taco sonorense asado al carbón en tortilla recién hecha, con salsa artesanal, cebolla y cilantro finamente picados. ¡Una delicia garantizada!
-                    </p>
+<h1 class="font-heading font-bold text-2xl text-plaza-text leading-tight" id="item-detail-title">Cargando...</h1>
+<p class="text-gray-600 text-base leading-relaxed mb-4" id="item-detail-desc"></p>
 </div>
 <div class="h-px w-full bg-gray-100"></div>
-<!-- Modifier Group: Required (Radio) -->
-<div class="flex flex-col gap-4">
-<div class="flex items-center justify-between">
-<h3 class="font-heading font-bold text-lg text-plaza-text">Tipo de Tortilla</h3>
-<span class="text-xs font-bold text-plaza-coral bg-plaza-highlight px-2 py-1 rounded-lg uppercase tracking-wide">Obligatorio</span>
-</div>
-<div class="flex flex-col gap-3">
-<!-- Option 1 -->
-<label class="group relative flex items-center justify-between p-4 bg-white rounded-2xl border-2 border-transparent hover:border-plaza-highlight has-[:checked]:border-plaza-coral has-[:checked]:bg-plaza-highlight/10 transition-all cursor-pointer shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
-<span class="material-symbols-outlined">hot_tub</span>
-</div>
-<span class="font-bold text-plaza-text font-body">Harina</span>
-</div>
-<input checked="" class="w-6 h-6 border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0 squishy-radio" name="sauce" type="radio"/>
-</label>
-<!-- Option 2 -->
-<label class="group relative flex items-center justify-between p-4 bg-white rounded-2xl border-2 border-transparent hover:border-plaza-highlight has-[:checked]:border-plaza-coral has-[:checked]:bg-plaza-highlight/10 transition-all cursor-pointer shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
-<span class="material-symbols-outlined">water_drop</span>
-</div>
-<span class="font-bold text-plaza-text font-body">Maíz</span>
-</div>
-<input class="w-6 h-6 border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0 squishy-radio" name="sauce" type="radio"/>
-</label>
-<!-- Option 3 -->
-<label class="group relative flex items-center justify-between p-4 bg-white rounded-2xl border-2 border-transparent hover:border-plaza-highlight has-[:checked]:border-plaza-coral has-[:checked]:bg-plaza-highlight/10 transition-all cursor-pointer shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-<span class="material-symbols-outlined">block</span>
-</div>
-<span class="font-bold text-plaza-text font-body">Sin Preferencia</span>
-</div>
-<input class="w-6 h-6 border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0 squishy-radio" name="sauce" type="radio"/>
-</label>
+<!-- Options Container (dynamic) -->
+<div id="item-detail-options" class="flex flex-col gap-4"></div>
 </div>
 </div>
-<!-- Modifier Group: Optional (Checkbox) -->
-<div class="flex flex-col gap-4 pb-8">
-<div class="flex items-center justify-between">
-<h3 class="font-heading font-bold text-lg text-plaza-text">Añade Extras</h3>
-<span class="text-xs font-bold text-plaza-muted uppercase tracking-wide">Opcional</span>
-</div>
-<div class="grid grid-cols-1 gap-3">
-<!-- Extra 1 -->
-<label class="group relative flex items-center justify-between p-4 bg-white rounded-2xl border-2 border-transparent hover:border-plaza-highlight has-[:checked]:border-plaza-coral has-[:checked]:bg-plaza-highlight/10 transition-all cursor-pointer shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-<span class="material-symbols-outlined">eco</span>
-</div>
-<div class="flex flex-col">
-<span class="font-bold text-plaza-text font-body">Limón Extra</span>
-<span class="text-xs text-plaza-muted font-bold">+$0.00</span>
-</div>
-</div>
-<input class="w-6 h-6 rounded-md border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0" type="checkbox"/>
-</label>
-<!-- Extra 2 -->
-<label class="group relative flex items-center justify-between p-4 bg-white rounded-2xl border-2 border-transparent hover:border-plaza-highlight has-[:checked]:border-plaza-coral has-[:checked]:bg-plaza-highlight/10 transition-all cursor-pointer shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
-<span class="material-symbols-outlined">grain</span>
-</div>
-<div class="flex flex-col">
-<span class="font-bold text-plaza-text font-body">Salsa Aparte</span>
-<span class="text-xs text-plaza-muted font-bold">+$5.00</span>
-</div>
-</div>
-<input class="w-6 h-6 rounded-md border-2 border-gray-300 text-plaza-coral focus:ring-plaza-coral focus:ring-offset-0" type="checkbox"/>
-</label>
-</div>
-</div>
-</div>
-</div>
-<!-- Sticky Footer Area -->
+<!-- Sticky Footer -->
 <div class="absolute bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-100 p-6 pb-8 z-30 rounded-t-3xl">
 <div class="flex items-center justify-between gap-4">
-<!-- Stepper Control -->
 <div class="flex items-center bg-gray-100 rounded-pill p-1.5 h-[56px] shadow-inner">
-<button class="w-12 h-full rounded-full bg-white text-plaza-text flex items-center justify-center shadow-sm active-bounce disabled:opacity-50 disabled:cursor-not-allowed">
+<button class="w-12 h-full rounded-full bg-white text-plaza-text flex items-center justify-center shadow-sm active-bounce" id="item-detail-minus">
 <span class="material-symbols-outlined">remove</span>
 </button>
-<span class="w-10 text-center font-heading font-bold text-xl text-plaza-text">1</span>
-<button class="w-12 h-full rounded-full bg-plaza-coral text-white flex items-center justify-center shadow-md shadow-plaza-coral/30 active-bounce">
+<span class="w-10 text-center font-heading font-bold text-xl text-plaza-text" id="item-detail-qty">1</span>
+<button class="w-12 h-full rounded-full bg-plaza-coral text-white flex items-center justify-center shadow-md shadow-plaza-coral/30 active-bounce" id="item-detail-plus">
 <span class="material-symbols-outlined">add</span>
 </button>
 </div>
-<!-- Primary CTA -->
 <button class="flex-1 h-[56px] bg-plaza-coral hover:bg-red-500 text-white rounded-pill flex items-center justify-between px-6 shadow-primary active-bounce transition-colors" id="btn-confirm-add-item">
 <span class="font-heading font-bold text-lg">Añadir al Pedido</span>
-<span class="font-heading font-bold text-lg opacity-90" id="item-detail-price">$30.00</span>
+<span class="font-heading font-bold text-lg opacity-90" id="item-detail-price">$0.00</span>
 </button>
 </div>
 </div>
