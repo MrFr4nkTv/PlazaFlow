@@ -7,6 +7,7 @@ import {
   onSnapshot, 
   query, 
   orderBy, 
+  where,
   serverTimestamp 
 } from "firebase/firestore";
 import { db } from "./firebaseInit.js";
@@ -120,5 +121,28 @@ export const escucharPedidoIndividual = (pedidoId, callback) => {
     }
   }, (error) => {
     console.error("Error escuchando pedido:", error);
+  });
+};
+
+/**
+ * Tarea 2.6: Escuchar la cola activa de pedidos en tiempo real
+ * Retorna pedidos con estado 'nuevo' o 'preparando' ordenados por timestamp
+ * @param {Function} callback - Recibe array de pedidos activos
+ * @returns {Function} - Unsubscribe
+ */
+export const escucharColaActiva = (callback) => {
+  const q = query(
+    collection(db, "pedidos"),
+    where("estado", "in", ["nuevo", "preparando"]),
+    orderBy("timestamp", "asc")
+  );
+  return onSnapshot(q, (snapshot) => {
+    const pedidos = snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    }));
+    callback(pedidos);
+  }, (error) => {
+    console.error("Error escuchando cola activa:", error);
   });
 };

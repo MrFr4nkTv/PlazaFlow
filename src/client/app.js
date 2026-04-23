@@ -1,4 +1,4 @@
-import { obtenerMenu, enviarPedido, escucharPedidoIndividual } from '../services/dbOperations.js';
+import { obtenerMenu, enviarPedido, escucharPedidoIndividual, escucharColaActiva } from '../services/dbOperations.js';
 
 // ============================================================
 // CARRITO GLOBAL con localStorage
@@ -576,6 +576,11 @@ function inicializarItemDetail() {
 // ============================================================
 // TRACKING EN TIEMPO REAL
 // ============================================================
+const TIEMPO_PROMEDIO_POR_PEDIDO = 3; // minutos estimados por pedido
+const CIRCUNFERENCIA = 283; // 2 * PI * 45 (radio del SVG circle)
+let progressInterval = null;
+let trackingEstado = null;
+
 function inicializarTracking() {
   const statusTitle = document.getElementById('status-title');
   if (!statusTitle) return;
@@ -587,51 +592,154 @@ function inicializarTracking() {
   const ticketEl = document.querySelector('.text-3xl.font-extrabold');
   if (ticketEl) ticketEl.textContent = `#${orderId.slice(-4).toUpperCase()}`;
 
+  // --- Escuchar cola activa para posición real ---
+  escucharColaActiva((pedidosActivos) => {
+    const miIdx = pedidosActivos.findIndex(p => p.id === orderId);
+    const pedidosAntes = miIdx >= 0 ? miIdx : 0;
+    actualizarCola(pedidosAntes);
+  });
+
+  // --- Escuchar estado del pedido ---
   escucharPedidoIndividual(orderId, (pedido) => {
     const estado = pedido.estado || 'nuevo';
-    const indicator = document.getElementById('progress-indicator');
-    const iconContainer = document.getElementById('status-icon');
-    const subtitle = document.getElementById('status-subtitle');
-    const timeBadge = document.getElementById('time-badge');
-    const orbitDot = document.getElementById('orbit-dot');
-    const pulse1 = document.getElementById('pulse-ring-1');
-    const pulse2 = document.getElementById('pulse-ring-2');
-    const bgBlob = document.getElementById('bg-blob');
-    const ticketAccent = document.getElementById('ticket-accent');
-    const itemCount = document.getElementById('item-count');
+    const prevEstado = trackingEstado;
+    trackingEstado = estado;
 
-    if (itemCount && pedido.items) {
-      itemCount.textContent = `${pedido.items.length} Artículos`;
-    }
+    actualizarUITracking(estado, pedido);
 
-    if (estado === 'listo') {
-      statusTitle.textContent = '¡Pedido Listo!';
-      statusTitle.className = 'text-3xl font-extrabold tracking-tight font-display text-plaza-green';
-      if (subtitle) subtitle.textContent = 'Recoge en ventanilla';
-      if (indicator) { indicator.classList.remove('text-primary'); indicator.classList.add('text-plaza-green'); indicator.style.strokeDashoffset = '0'; }
-      if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-8xl text-plaza-green drop-shadow-sm">check_circle</span>';
-      if (timeBadge) timeBadge.innerHTML = '<span class="text-xs font-bold text-plaza-green">Ahora</span>';
-      if (orbitDot) { orbitDot.classList.remove('bg-primary'); orbitDot.classList.add('bg-plaza-green'); }
-      if (pulse1) { pulse1.classList.remove('bg-primary/5'); pulse1.classList.add('bg-plaza-green/10'); }
-      if (pulse2) { pulse2.classList.remove('bg-primary/10'); pulse2.classList.add('bg-plaza-green/20'); }
-      if (bgBlob) { bgBlob.classList.remove('from-primary/5'); bgBlob.classList.add('from-plaza-green/10'); }
-      if (ticketAccent) { ticketAccent.classList.remove('via-primary'); ticketAccent.classList.add('via-plaza-green'); }
-      if (itemCount) { itemCount.classList.remove('text-primary'); itemCount.classList.add('text-plaza-green'); }
-      if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-    } else if (estado === 'preparando') {
-      statusTitle.textContent = 'Preparando...';
-      statusTitle.className = 'text-3xl font-extrabold text-plaza-text tracking-tight font-display';
-      if (subtitle) subtitle.textContent = 'El chef está haciendo su magia';
-      if (indicator) indicator.style.strokeDashoffset = '100';
-      if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-7xl text-primary drop-shadow-sm">skillet</span>';
-      if (timeBadge) timeBadge.innerHTML = '<span class="text-xs font-bold text-plaza-text">~5 min</span>';
-    } else {
-      statusTitle.textContent = 'Pedido Recibido';
-      statusTitle.className = 'text-3xl font-extrabold text-plaza-text tracking-tight font-display';
-      if (subtitle) subtitle.textContent = 'Tu pedido está en cola';
-      if (indicator) indicator.style.strokeDashoffset = '200';
-      if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-7xl text-primary drop-shadow-sm">receipt_long</span>';
-      if (timeBadge) timeBadge.innerHTML = '<span class="text-xs font-bold text-plaza-text">~10 min</span>';
+    // Iniciar/reiniciar animación de progreso al cambiar de estado
+    if (estado !== prevEstado) {
+      iniciarProgresoAnimado(estado, pedido.timestamp);
     }
   });
+}
+
+function actualizarCola(pedidosAntes) {
+  const dotsEl = document.getElementById('queue-dots');
+  const textEl = document.getElementById('queue-text');
+  const queueCard = document.getElementById('queue-card');
+  if (!dotsEl || !textEl) return;
+
+  // Si listo, ocultar tarjeta de cola
+  if (trackingEstado === 'listo') {
+    if (queueCard) queueCard.style.display = 'none';
+    return;
+  }
+  if (queueCard) queueCard.style.display = '';
+
+  // Generar dots: grises = pedidos antes, amarillo = siguiente, rojo = tú
+  const totalDots = Math.min(pedidosAntes + 1, 8); // máx 8 dots
+  let dotsHTML = '';
+  for (let i = 0; i < totalDots; i++) {
+    if (i < pedidosAntes - 1) {
+      dotsHTML += '<div class="w-2 h-2 rounded-full bg-slate-200 dark:bg-white/20"></div>';
+    } else if (i === pedidosAntes - 1 && pedidosAntes > 0) {
+      dotsHTML += '<div class="w-2 h-2 rounded-full bg-plaza-yellow animate-pulse"></div>';
+    } else {
+      dotsHTML += '<div class="w-2 h-2 rounded-full bg-primary"></div>';
+    }
+  }
+  dotsEl.innerHTML = dotsHTML;
+
+  if (pedidosAntes === 0) {
+    textEl.innerHTML = '<span class="text-plaza-green font-bold">¡Eres el siguiente!</span>';
+  } else {
+    textEl.innerHTML = `<span class="text-plaza-text dark:text-white font-bold">${pedidosAntes} pedido${pedidosAntes > 1 ? 's' : ''}</span> antes que el tuyo`;
+  }
+
+  // Actualizar tiempo estimado en el badge
+  const timeBadge = document.getElementById('time-badge');
+  if (timeBadge && trackingEstado !== 'listo') {
+    const tiempoEst = trackingEstado === 'preparando'
+      ? Math.max(1, Math.ceil(TIEMPO_PROMEDIO_POR_PEDIDO * 0.6))
+      : (pedidosAntes + 1) * TIEMPO_PROMEDIO_POR_PEDIDO;
+    timeBadge.innerHTML = `<span class="text-xs font-bold text-plaza-text dark:text-white/80">~${tiempoEst} min</span>`;
+  }
+}
+
+function iniciarProgresoAnimado(estado, timestamp) {
+  const indicator = document.getElementById('progress-indicator');
+  if (!indicator) return;
+
+  // Limpiar animación previa
+  if (progressInterval) clearInterval(progressInterval);
+
+  if (estado === 'listo') {
+    // Snap al 100%
+    indicator.style.strokeDashoffset = '0';
+    return;
+  }
+
+  // Rangos de progreso según estado
+  // nuevo: 0% → 40%  |  preparando: 40% → 95%
+  const rangoInicio = estado === 'nuevo' ? 0 : 0.4;
+  const rangoFin = estado === 'nuevo' ? 0.4 : 0.95;
+  const duracionMinutos = estado === 'nuevo' ? 8 : 5;
+
+  // Calcular tiempo ya transcurrido desde que entró en este estado
+  let elapsed = 0;
+  if (timestamp && timestamp.toMillis) {
+    elapsed = (Date.now() - timestamp.toMillis()) / 60000; // minutos transcurridos
+  }
+
+  const duracionTotal = duracionMinutos * 60; // en segundos
+  let segundosTranscurridos = Math.min(elapsed * 60, duracionTotal);
+
+  progressInterval = setInterval(() => {
+    segundosTranscurridos += 1;
+    const t = Math.min(segundosTranscurridos / duracionTotal, 1);
+
+    // Easing suave (ease-out)
+    const eased = 1 - Math.pow(1 - t, 3);
+    const progreso = rangoInicio + (rangoFin - rangoInicio) * eased;
+    const offset = CIRCUNFERENCIA * (1 - progreso);
+
+    indicator.style.strokeDashoffset = `${offset}`;
+
+    if (t >= 1) clearInterval(progressInterval);
+  }, 1000);
+}
+
+function actualizarUITracking(estado, pedido) {
+  const statusTitle = document.getElementById('status-title');
+  const indicator = document.getElementById('progress-indicator');
+  const iconContainer = document.getElementById('status-icon');
+  const subtitle = document.getElementById('status-subtitle');
+  const timeBadge = document.getElementById('time-badge');
+  const orbitDot = document.getElementById('orbit-dot');
+  const pulse1 = document.getElementById('pulse-ring-1');
+  const pulse2 = document.getElementById('pulse-ring-2');
+  const bgBlob = document.getElementById('bg-blob');
+  const ticketAccent = document.getElementById('ticket-accent');
+  const itemCount = document.getElementById('item-count');
+
+  if (itemCount && pedido.items) {
+    itemCount.textContent = `${pedido.items.length} Artículos`;
+  }
+
+  if (estado === 'listo') {
+    if (statusTitle) { statusTitle.textContent = '¡Pedido Listo!'; statusTitle.className = 'text-3xl font-extrabold tracking-tight font-display text-plaza-green'; }
+    if (subtitle) subtitle.textContent = 'Recoge en ventanilla';
+    if (indicator) { indicator.classList.remove('text-primary'); indicator.classList.add('text-plaza-green'); }
+    if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-8xl text-plaza-green drop-shadow-sm">check_circle</span>';
+    if (timeBadge) timeBadge.innerHTML = '<span class="text-xs font-bold text-plaza-green">Ahora</span>';
+    if (orbitDot) { orbitDot.classList.remove('bg-primary'); orbitDot.classList.add('bg-plaza-green'); }
+    if (pulse1) { pulse1.classList.remove('bg-primary/5'); pulse1.classList.add('bg-plaza-green/10'); }
+    if (pulse2) { pulse2.classList.remove('bg-primary/10'); pulse2.classList.add('bg-plaza-green/20'); }
+    if (bgBlob) { bgBlob.classList.remove('from-primary/5'); bgBlob.classList.add('from-plaza-green/10'); }
+    if (ticketAccent) { ticketAccent.classList.remove('via-primary'); ticketAccent.classList.add('via-plaza-green'); }
+    if (itemCount) { itemCount.classList.remove('text-primary'); itemCount.classList.add('text-plaza-green'); }
+    // Ocultar cola
+    const queueCard = document.getElementById('queue-card');
+    if (queueCard) queueCard.style.display = 'none';
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+  } else if (estado === 'preparando') {
+    if (statusTitle) { statusTitle.textContent = 'Preparando...'; statusTitle.className = 'text-3xl font-extrabold text-plaza-text tracking-tight font-display'; }
+    if (subtitle) subtitle.textContent = 'El chef está haciendo su magia';
+    if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-7xl text-primary drop-shadow-sm">skillet</span>';
+  } else {
+    if (statusTitle) { statusTitle.textContent = 'Pedido Recibido'; statusTitle.className = 'text-3xl font-extrabold text-plaza-text tracking-tight font-display'; }
+    if (subtitle) subtitle.textContent = 'Tu pedido está en cola';
+    if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-7xl text-primary drop-shadow-sm">receipt_long</span>';
+  }
 }
