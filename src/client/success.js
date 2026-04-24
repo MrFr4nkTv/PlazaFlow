@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // 1. Verificar la sesión con nuestro backend
-        const response = await fetch(`http://localhost:3001/verify-session?session_id=${sessionId}`);
+        const response = await fetch(`http://localhost:3005/verify-session?session_id=${sessionId}`);
         const data = await response.json();
 
         if (!data.success) {
