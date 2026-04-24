@@ -354,6 +354,23 @@ function inicializarAdminDetail() {
             <span>Total</span>
             <span>$${total.toFixed(2)}</span>
           </div>
+          ${pedido.metodoPago === 'Efectivo' ? `
+          <div class="mt-4 p-3 bg-yellow-50 rounded-xl border border-yellow-200 flex items-center gap-2">
+            <span class="material-symbols-outlined text-yellow-600">payments</span>
+            <div class="flex flex-col">
+              <span class="text-sm font-bold text-yellow-800">Falta Pagar (Efectivo)</span>
+              <span class="text-xs text-yellow-700">Cobrar en mostrador al entregar.</span>
+            </div>
+          </div>
+          ` : `
+          <div class="mt-4 p-3 bg-green-50 rounded-xl border border-green-200 flex items-center gap-2">
+            <span class="material-symbols-outlined text-green-600">check_circle</span>
+            <div class="flex flex-col">
+              <span class="text-sm font-bold text-green-800">Pago Completado</span>
+              <span class="text-xs text-green-700">Pagado con Tarjeta (Stripe).</span>
+            </div>
+          </div>
+          `}
         </div>
       `;
 

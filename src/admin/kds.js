@@ -58,7 +58,10 @@ function crearTarjetaPedido(pedido) {
         <span class="font-display font-bold text-lg text-ink">#${pedido.id.slice(-4).toUpperCase()}</span>
         <p class="text-xs text-ink-light">${tiempoTranscurrido(pedido.timestamp)}</p>
       </div>
-      <span class="px-2 py-1 rounded-full text-xs font-bold text-white ${config.color}">${config.label}</span>
+      <div class="flex flex-col items-end gap-1">
+        <span class="px-2 py-1 rounded-full text-[10px] font-bold text-white ${config.color}">${config.label}</span>
+        ${pedido.metodoPago === 'Efectivo' ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-700 border border-yellow-200">Falta Pagar</span>` : ''}
+      </div>
     </div>
     <div class="p-3 flex-1 pointer-events-none">
       <ul class="space-y-1">

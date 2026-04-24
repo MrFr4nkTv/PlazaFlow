@@ -270,11 +270,21 @@ function inicializarCheckoutPage() {
   const tipGrid = document.querySelector('.grid-cols-4');
   if (tipGrid) {
     const btns = tipGrid.querySelectorAll('button');
-    const tipValues = [10, 15, 20, 0];
-    const tipEmojis = ['😐', '🙂', '🤩', '✏️'];
+    const tipValues = [10, 15, 20, 'custom'];
     btns.forEach((btn, i) => {
       btn.addEventListener('click', () => {
-        tipPorcentaje = tipValues[i];
+        if (tipValues[i] === 'custom') {
+          const customTip = prompt("Ingresa el porcentaje de propina (ej. 25):");
+          const parsed = parseInt(customTip);
+          if (!isNaN(parsed) && parsed >= 0) {
+            tipPorcentaje = parsed;
+          } else {
+            return;
+          }
+        } else {
+          tipPorcentaje = tipValues[i];
+        }
+
         btns.forEach(b => {
           b.classList.remove('bg-plaza-secondary', 'border-plaza-secondary', 'shadow-md', 'scale-105');
           b.classList.add('bg-white', 'border-transparent');
@@ -282,6 +292,26 @@ function inicializarCheckoutPage() {
         btn.classList.remove('bg-white', 'border-transparent');
         btn.classList.add('bg-plaza-secondary', 'border-plaza-secondary', 'shadow-md', 'scale-105');
         actualizarTotalCheckout(subtotal);
+      });
+    });
+  }
+
+  // Payment method selection
+  const paymentCards = document.querySelectorAll('.payment-method-card');
+  if (paymentCards.length > 0) {
+    paymentCards.forEach(card => {
+      card.addEventListener('click', () => {
+        paymentCards.forEach(c => {
+          c.classList.remove('border-primary');
+          c.classList.add('border-transparent');
+          const icon = c.querySelector('.check-icon');
+          if (icon) icon.classList.add('hidden');
+        });
+        card.classList.remove('border-transparent');
+        card.classList.add('border-primary');
+        const icon = card.querySelector('.check-icon');
+        if (icon) icon.classList.remove('hidden');
+        window.selectedPaymentMethod = card.dataset.method;
       });
     });
   }
@@ -347,6 +377,21 @@ async function handleCheckout() {
   const origin = window.location.origin;
   const successUrl = `${origin}/public/client/success.html`;
   const cancelUrl = `${origin}/public/client/checkout.html`;
+  
+  const metodoPago = window.selectedPaymentMethod || 'Tarjeta';
+
+  if (metodoPago === 'Efectivo') {
+    const datosPedido = {
+      items: window.carrito.map(i => ({ id: i.id, nombre: i.nombre, precio: i.precio, cantidad: i.cantidad, opcion: i.opcionSeleccionada || null })),
+      subtotal, propina: tipAmount, total, metodoPago: 'Efectivo', estado: 'pago_pendiente'
+    };
+    try {
+      const orderId = await enviarPedido(datosPedido);
+      window.carrito = []; guardarCarritoEnStorage(); actualizarUICarrito();
+      window.location.href = `tracking.html?orderId=${orderId}`;
+    } catch (error) { alert('Error al enviar el pedido.'); console.error(error); }
+    return;
+  }
 
   try {
     const response = await fetch('http://localhost:3001/create-checkout-session', {
@@ -369,7 +414,7 @@ async function handleCheckout() {
     // Redirigir a Stripe Checkout
     window.location.href = session.url;
   } catch (error) {
-    alert('Error al conectar con la pasarela de pagos.');
+    alert('Error al conectar con la pasarela de pagos. Por favor verifica que el servidor esté en ejecución.');
     console.error(error);
   }
 }
@@ -438,7 +483,7 @@ function renderizarCart() {
   if (!cartList) return;
 
   if (window.carrito.length === 0) {
-    cartList.innerHTML = `<div class="text-center py-16"><span class="material-symbols-outlined text-6xl text-gray-300 mb-4 block">shopping_cart</span><p class="font-heading font-bold text-xl text-gray-400 mb-2">Tu bandeja está vacía</p><p class="text-sm text-gray-400">Agrega productos desde el menú</p><a href="index.html" class="inline-block mt-6 px-8 py-3 bg-plaza-primary text-white rounded-pill font-heading font-bold shadow-md hover:shadow-lg transition-all">Ver Menú</a></div>`;
+    cartList.innerHTML = `<div class="text-center py-16"><span class="material-symbols-outlined text-6xl text-gray-300 mb-4 block">shopping_cart</span><p class="font-heading font-bold text-xl text-gray-400 mb-2">Tu bandeja está vacía</p><p class="text-sm text-gray-400">Agrega productos desde el menú</p><a href="index.html" class="inline-block mt-6 px-8 py-3 bg-primary text-white rounded-pill font-heading font-bold shadow-md hover:shadow-lg transition-all">Ver Menú</a></div>`;
     actualizarTotalesCart();
     return;
   }
@@ -465,7 +510,7 @@ function renderizarCart() {
               <span class="material-symbols-outlined text-[16px] font-bold">remove</span>
             </button>
             <span class="w-8 text-center font-heading font-bold text-sm">${item.cantidad}</span>
-            <button class="cart-plus w-7 h-7 flex items-center justify-center rounded-full bg-plaza-primary text-white shadow-sm hover:scale-110 transition active:scale-90" data-cart-id="${item.cartKey || item.id}">
+            <button class="cart-plus w-7 h-7 flex items-center justify-center rounded-full bg-primary text-white shadow-sm hover:scale-110 transition active:scale-90" data-cart-id="${item.cartKey || item.id}">
               <span class="material-symbols-outlined text-[16px] font-bold">add</span>
             </button>
           </div>
@@ -735,6 +780,35 @@ function actualizarUITracking(estado, pedido) {
 
   if (itemCount && pedido.items) {
     itemCount.textContent = `${pedido.items.length} Artículos`;
+  }
+
+  const paymentWarningContainer = document.getElementById('payment-warning-container');
+  if (paymentWarningContainer) {
+    if (pedido.metodoPago === 'Efectivo') {
+      paymentWarningContainer.innerHTML = `
+        <div class="mt-4 p-3 bg-yellow-50 rounded-xl border border-yellow-200 flex items-center gap-3">
+          <div class="h-10 w-10 bg-yellow-100 rounded-full flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-yellow-600">payments</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-bold text-yellow-800 leading-tight">Pago Pendiente</span>
+            <span class="text-xs text-yellow-700 mt-0.5">Por favor paga en caja al recoger tu pedido.</span>
+          </div>
+        </div>
+      `;
+    } else {
+      paymentWarningContainer.innerHTML = `
+        <div class="mt-4 p-3 bg-green-50 rounded-xl border border-green-200 flex items-center gap-3">
+          <div class="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-green-600">check_circle</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-bold text-green-800 leading-tight">Pago Completado</span>
+            <span class="text-xs text-green-700 mt-0.5">Pagado con Tarjeta (Stripe).</span>
+          </div>
+        </div>
+      `;
+    }
   }
 
   if (estado === 'listo') {
