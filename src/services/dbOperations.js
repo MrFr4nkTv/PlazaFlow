@@ -1,7 +1,8 @@
 import { 
   collection, 
   addDoc, 
-  updateDoc, 
+  updateDoc,
+  setDoc,
   doc, 
   getDocs,
   onSnapshot, 
@@ -52,9 +53,12 @@ export const enviarPedido = async (datosPedido) => {
     if (datosPedido.items && datosPedido.items.length > 0) {
       const updatePromises = datosPedido.items.map(item => {
         const productoRef = doc(db, "productos", item.id);
-        return updateDoc(productoRef, {
+        // Usamos setDoc con merge por si el campo 'stock' no existe aún
+        return setDoc(productoRef, {
           stock: increment(-item.cantidad)
-        }).catch(err => console.error(`Error restando stock de ${item.id}:`, err));
+        }, { merge: true }).catch(err => {
+          console.error(`❌ Error crítico: No se pudo restar stock de ${item.id}. Revisa las reglas de Firebase.`, err);
+        });
       });
       await Promise.all(updatePromises);
     }
@@ -110,12 +114,16 @@ export const actualizarEstadoPedido = async (id, nuevoEstado) => {
 export const actualizarStock = async (idProducto, cantidad) => {
   try {
     const productoRef = doc(db, "productos", idProducto);
-    await updateDoc(productoRef, {
+    // Usamos setDoc con merge para asegurar que el campo se cree si no existe
+    await setDoc(productoRef, {
       stock: cantidad
-    });
+    }, { merge: true });
     console.log(`Stock del producto ${idProducto} cambiado a ${cantidad}`);
   } catch (error) {
     console.error("Error actualizando el stock del producto: ", error);
+    if (error.code === 'permission-denied') {
+      alert("⚠️ Error de Firebase: No tienes permisos para modificar el inventario. Revisa las 'Rules' en tu consola de Firebase.");
+    }
     throw error;
   }
 };
