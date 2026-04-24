@@ -1,4 +1,15 @@
 import { escucharPedidos, actualizarEstadoPedido } from '../services/dbOperations.js';
+import { auth } from '../services/firebaseInit.js';
+import { onAuthStateChanged } from 'firebase/auth';
+
+// ============================================================
+// AUTH GUARD
+// ============================================================
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = 'login.html';
+  }
+});
 
 // ============================================================
 // KDS - Kitchen Display System
@@ -40,7 +51,7 @@ function crearTarjetaPedido(pedido) {
       <ul class="space-y-1">
         ${items.map(item => `
           <li class="flex justify-between items-center text-sm">
-            <span class="font-medium text-ink">${item.cantidad}× ${item.nombre}${item.opcion ? ` (${item.opcion})` : ''}</span>
+            <span class="font-medium text-ink">${item.cantidad}\u00d7 ${item.nombre}${item.opcion ? ` (${item.opcion})` : ''}</span>
           </li>
         `).join('')}
       </ul>
@@ -75,7 +86,6 @@ function renderizarPedidos() {
 
   grid.innerHTML = filtrados.map(crearTarjetaPedido).join('');
 
-  // Vincular botones de avance
   grid.querySelectorAll('.kds-advance').forEach(btn => {
     btn.addEventListener('click', async () => {
       const pedidoId = btn.dataset.pedidoId;
@@ -122,7 +132,6 @@ function configurarTabs() {
   tabContainer.querySelectorAll('.kds-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       filtroActual = tab.dataset.estado;
-      // Update tab styles
       tabContainer.querySelectorAll('.kds-tab').forEach(t => {
         t.classList.remove('bg-primary', 'text-white', 'shadow-md');
         t.classList.add('text-ink-light', 'hover:bg-gray-50');
@@ -139,15 +148,25 @@ function configurarTabs() {
 }
 
 // ============================================================
-// INICIALIZACIÓN KDS
+// NAV
+// ============================================================
+function configurarNavAdmin() {
+  document.getElementById('nav-active-orders')?.addEventListener('click', () => { window.location.href = 'kds.html'; });
+  document.getElementById('nav-stock')?.addEventListener('click', () => { window.location.href = 'stock.html'; });
+  document.getElementById('nav-history')?.addEventListener('click', () => { window.location.href = 'history.html'; });
+}
+
+// ============================================================
+// INICIALIZACI\u00d3N KDS
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
   configurarTabs();
+  configurarNavAdmin();
 
   escucharPedidos((pedidos) => {
     todosLosPedidos = pedidos;
     actualizarContadores();
     renderizarPedidos();
-    console.log(`🔄 KDS: ${pedidos.length} pedidos actualizados`);
+    console.log(`\ud83d\udd04 KDS: ${pedidos.length} pedidos actualizados`);
   });
 });

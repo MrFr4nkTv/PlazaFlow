@@ -589,7 +589,7 @@ function inicializarTracking() {
   const orderId = params.get('orderId');
   if (!orderId) return;
 
-  const ticketEl = document.querySelector('.text-3xl.font-extrabold');
+  const ticketEl = document.getElementById('ticket-number');
   if (ticketEl) ticketEl.textContent = `#${orderId.slice(-4).toUpperCase()}`;
 
   // --- Escuchar cola activa para posición real ---
