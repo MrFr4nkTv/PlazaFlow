@@ -115,17 +115,19 @@ function actualizarContadores() {
 }
 
 function configurarTabs() {
-  const tabContainer = document.querySelector('.flex.gap-2');
+  const tabContainer = document.getElementById('kds-tabs-container');
   if (!tabContainer) return;
 
   const estados = ['nuevo', 'preparando', 'listo'];
   const labels = ['Nuevos', 'En Proceso', 'Listos'];
+  const icons = ['notifications_active', 'skillet', 'check_circle'];
 
   tabContainer.innerHTML = estados.map((est, i) => `
-    <button class="kds-tab flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5 min-w-[80px] transition-all ${est === filtroActual ? 'bg-primary text-white shadow-md' : 'text-ink-light hover:bg-gray-50'}"
+    <button class="kds-tab flex-1 h-12 rounded-xl flex items-center justify-center gap-2 transition-all ${est === filtroActual ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'text-gray-500 hover:bg-gray-50'}"
       data-estado="${est}">
-      <span class="font-display text-sm font-bold">${labels[i]}</span>
-      <span class="kds-badge ${est === filtroActual ? 'bg-white/20 text-white' : 'bg-gray-100 text-ink-light'} text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+      <span class="material-symbols-outlined text-[20px]">${icons[i]}</span>
+      <span class="font-display text-base font-bold">${labels[i]}</span>
+      <span class="kds-badge ${est === filtroActual ? 'bg-white/25 text-white' : 'bg-gray-100 text-gray-500'} text-xs font-bold px-2 py-0.5 rounded-full min-w-[24px]">0</span>
     </button>
   `).join('');
 
@@ -133,15 +135,15 @@ function configurarTabs() {
     tab.addEventListener('click', () => {
       filtroActual = tab.dataset.estado;
       tabContainer.querySelectorAll('.kds-tab').forEach(t => {
-        t.classList.remove('bg-primary', 'text-white', 'shadow-md');
-        t.classList.add('text-ink-light', 'hover:bg-gray-50');
+        t.classList.remove('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/30');
+        t.classList.add('text-gray-500', 'hover:bg-gray-50');
         const b = t.querySelector('.kds-badge');
-        if (b) { b.classList.remove('bg-white/20', 'text-white'); b.classList.add('bg-gray-100', 'text-ink-light'); }
+        if (b) { b.classList.remove('bg-white/25', 'text-white'); b.classList.add('bg-gray-100', 'text-gray-500'); }
       });
-      tab.classList.remove('text-ink-light', 'hover:bg-gray-50');
-      tab.classList.add('bg-primary', 'text-white', 'shadow-md');
+      tab.classList.remove('text-gray-500', 'hover:bg-gray-50');
+      tab.classList.add('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/30');
       const badge = tab.querySelector('.kds-badge');
-      if (badge) { badge.classList.remove('bg-gray-100', 'text-ink-light'); badge.classList.add('bg-white/20', 'text-white'); }
+      if (badge) { badge.classList.remove('bg-gray-100', 'text-gray-500'); badge.classList.add('bg-white/25', 'text-white'); }
       renderizarPedidos();
     });
   });

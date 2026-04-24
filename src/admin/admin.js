@@ -35,17 +35,18 @@ function verificarAuth() {
 // LOGIN
 // ============================================================
 function inicializarLogin() {
-  const form = document.querySelector('form');
-  const btnEntrar = form?.querySelector('button[type="button"]');
-  if (!form || !btnEntrar) return;
+  const btnEntrar = document.getElementById('btn-login');
+  if (!btnEntrar) return;
 
   const emailInput = document.getElementById('email');
   const passInput = document.getElementById('password');
+  const toggleBtn = document.getElementById('btn-toggle-pass');
 
   // Toggle password visibility
-  const toggleBtn = form.querySelector('button.absolute');
   if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
+    toggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const isPass = passInput.type === 'password';
       passInput.type = isPass ? 'text' : 'password';
       toggleBtn.querySelector('.material-symbols-outlined').textContent = isPass ? 'visibility_off' : 'visibility';
