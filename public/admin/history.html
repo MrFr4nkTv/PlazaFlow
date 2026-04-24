@@ -92,9 +92,9 @@
 </div>
 <div class="px-6 py-4 space-y-4">
 <div class="flex items-center justify-between bg-gray-50 p-1.5 rounded-2xl border border-gray-100">
-<button class="flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-xl bg-white text-primary shadow-sm border border-gray-100 transition-all">Día</button>
-<button class="flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-xl text-gray-400 hover:text-gray-600 transition-all">Semana</button>
-<button class="flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-xl text-gray-400 hover:text-gray-600 transition-all">Mes</button>
+<button id="filter-day" class="history-filter-btn flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-xl bg-white text-primary shadow-sm border border-gray-100 transition-all">Día</button>
+<button id="filter-week" class="history-filter-btn flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-xl text-gray-400 hover:text-gray-600 transition-all">Semana</button>
+<button id="filter-month" class="history-filter-btn flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-xl text-gray-400 hover:text-gray-600 transition-all">Mes</button>
 </div>
 <div class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
 <div class="flex-1 flex items-center gap-3 px-3 py-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer hover:bg-gray-100 transition-colors">
@@ -103,7 +103,7 @@
 </div>
 <div class="flex flex-col">
 <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wide">Desde</span>
-<span class="text-sm font-mono font-bold text-gray-800">Oct 27</span>
+<span class="text-sm font-mono font-bold text-gray-800" id="history-date-start">--</span>
 </div>
 </div>
 <span class="material-symbols-outlined text-gray-300 text-[20px]">arrow_forward</span>
@@ -113,7 +113,7 @@
 </div>
 <div class="flex flex-col">
 <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wide">Hasta</span>
-<span class="text-sm font-mono font-bold text-gray-800">Oct 27</span>
+<span class="text-sm font-mono font-bold text-gray-800" id="history-date-end">--</span>
 </div>
 </div>
 </div>
@@ -142,8 +142,8 @@
 </header>
 <main class="flex-1 overflow-y-auto px-6 pt-2 pb-8 space-y-4">
 <div class="flex items-center justify-between py-2 px-1">
-<h2 class="font-display font-bold text-lg text-gray-800 flex items-center gap-2">
-            Hoy, Oct 27
+<h2 class="font-display font-bold text-lg text-gray-800 flex items-center gap-2" id="history-date-label">
+            Hoy
             <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
 </h2>
 <div class="flex items-center gap-1 text-[10px] font-bold text-gray-400 bg-white px-3 py-1.5 rounded-full border border-gray-100 shadow-sm">

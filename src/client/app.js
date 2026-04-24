@@ -47,8 +47,9 @@ function crearTarjetaProducto(producto) {
   const categoria = producto.categoria || 'General';
   const emoji = categoriaEmoji[categoria] || '🍽️';
   const opciones = producto.opciones ? producto.opciones.join(' · ') : categoria;
-  const disponible = producto.disponible !== false;
   const tieneOpciones = producto.opciones && producto.opciones.length > 0;
+  const stock = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
+  const disponible = stock > 0;
   const cantidad = obtenerCantidadEnCarrito(producto.id);
 
   const stepperHTML = cantidad > 0 ? `
@@ -76,7 +77,8 @@ function crearTarjetaProducto(producto) {
         </div>
         <div class="flex items-center justify-between mt-2">
           <span class="font-heading font-bold text-lg text-plaza-primary">$${precio.toFixed(2)}</span>
-          ${!disponible ? '<span class="text-xs font-bold text-red-400 bg-red-50 px-2 py-0.5 rounded-pill">Agotado</span>' : ''}
+          ${!disponible ? '<span class="text-xs font-bold text-red-400 bg-red-50 px-2 py-0.5 rounded-pill">Agotado</span>' : 
+            `<span class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-pill border border-green-100">Quedan ${stock}</span>`}
         </div>
         ${disponible ? stepperHTML : ''}
       </div>
@@ -145,9 +147,18 @@ function agregarAlCarrito(productId) {
   const producto = todosLosProductos.find(p => p.id === productId) ||
                    cargarProductosDesdeCache().find(p => p.id === productId);
   if (!producto) return;
+  const stock = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
+  
   const existente = window.carrito.find(i => i.id === productId);
-  if (existente) { existente.cantidad += 1; }
+  if (existente) {
+    if (existente.cantidad >= stock) {
+      alert(`Solo quedan ${stock} unidades de este producto.`);
+      return;
+    }
+    existente.cantidad += 1;
+  }
   else {
+    if (stock <= 0) return;
     window.carrito.push({
       id: producto.id, nombre: producto.nombre || 'Producto',
       precio: Number(producto.precio) || 0, categoria: producto.categoria || 'General',
@@ -161,8 +172,18 @@ function agregarConOpcion(productId, opcion) {
   const producto = todosLosProductos.find(p => p.id === productId) ||
                    cargarProductosDesdeCache().find(p => p.id === productId);
   if (!producto) return;
+  const stock = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
   // Para productos con opciones, el key es id+opción
   const key = `${productId}_${opcion}`;
+  
+  // Contar cantidad total de este producto en el carrito (todas las opciones sumadas)
+  const totalEnCarrito = window.carrito.filter(i => i.id === productId).reduce((acc, curr) => acc + curr.cantidad, 0);
+  
+  if (totalEnCarrito >= stock) {
+    alert(`Solo quedan ${stock} unidades de este producto en total.`);
+    return;
+  }
+
   const existente = window.carrito.find(i => i.cartKey === key);
   if (existente) { existente.cantidad += 1; }
   else {
@@ -616,13 +637,43 @@ function inicializarItemDetail() {
   const btnMinus = document.getElementById('item-detail-minus');
   const btnPlus = document.getElementById('item-detail-plus');
   const btnConfirm = document.getElementById('btn-confirm-add-item');
+  const stock = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
+
+  // Si no hay stock, ocultar todo y mostrar agotado
+  if (stock <= 0) {
+    if (btnConfirm) {
+      btnConfirm.disabled = true;
+      btnConfirm.textContent = 'Agotado';
+      btnConfirm.classList.replace('bg-plaza-text', 'bg-gray-400');
+    }
+    if (btnMinus) btnMinus.style.display = 'none';
+    if (btnPlus) btnPlus.style.display = 'none';
+    if (qtyEl) qtyEl.textContent = '0';
+  } else {
+    // Si hay stock, asegurar que la cantidad visual inicie bien
+    if (btnConfirm) {
+      btnConfirm.disabled = false;
+      btnConfirm.textContent = 'Añadir a Bandeja';
+      btnConfirm.classList.replace('bg-gray-400', 'bg-plaza-text');
+    }
+    if (btnMinus) btnMinus.style.display = '';
+    if (btnPlus) btnPlus.style.display = '';
+  }
 
   function updateDetailUI() {
     if (qtyEl) qtyEl.textContent = cantidad;
     if (priceEl) priceEl.textContent = `$${(precio * cantidad).toFixed(2)}`;
   }
   if (btnMinus) btnMinus.addEventListener('click', () => { if (cantidad > 1) { cantidad--; updateDetailUI(); } });
-  if (btnPlus) btnPlus.addEventListener('click', () => { cantidad++; updateDetailUI(); });
+  if (btnPlus) btnPlus.addEventListener('click', () => { 
+    const yaEnCarrito = window.carrito.filter(i => i.id === productId).reduce((acc, curr) => acc + curr.cantidad, 0);
+    if (cantidad + yaEnCarrito < stock) { 
+      cantidad++; 
+      updateDetailUI(); 
+    } else {
+      alert(`Solo quedan ${stock} unidades disponibles en total (incluyendo las que ya tienes en el carrito).`);
+    }
+  });
 
   if (btnConfirm) {
     btnConfirm.addEventListener('click', () => {

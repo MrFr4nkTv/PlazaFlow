@@ -8,7 +8,8 @@ import {
   query, 
   orderBy, 
   where,
-  serverTimestamp 
+  serverTimestamp,
+  increment
 } from "firebase/firestore";
 import { db } from "./firebaseInit.js";
 
@@ -46,6 +47,18 @@ export const enviarPedido = async (datosPedido) => {
       timestamp: serverTimestamp() // Tiempo de creación proporcionado por Firebase
     });
     console.log("Pedido creado con ID: ", docRef.id);
+
+    // Decrementar stock
+    if (datosPedido.items && datosPedido.items.length > 0) {
+      const updatePromises = datosPedido.items.map(item => {
+        const productoRef = doc(db, "productos", item.id);
+        return updateDoc(productoRef, {
+          stock: increment(-item.cantidad)
+        }).catch(err => console.error(`Error restando stock de ${item.id}:`, err));
+      });
+      await Promise.all(updatePromises);
+    }
+
     return docRef.id;
   } catch (e) {
     console.error("Error añadiendo el pedido: ", e);
@@ -90,19 +103,19 @@ export const actualizarEstadoPedido = async (id, nuevoEstado) => {
 };
 
 /**
- * Tarea 2.4: Cambiar la disponibilidad de un producto ('Quick Sold-Out' / disponible)
+ * Tarea 2.4: Cambiar el stock numérico de un producto
  * @param {string} idProducto - ID of the product in Firestore
- * @param {boolean} disponible - true if available, false if sold out
+ * @param {number} cantidad - Nueva cantidad exacta de stock
  */
-export const cambiarDisponibilidad = async (idProducto, disponible) => {
+export const actualizarStock = async (idProducto, cantidad) => {
   try {
     const productoRef = doc(db, "productos", idProducto);
     await updateDoc(productoRef, {
-      disponible: disponible
+      stock: cantidad
     });
-    console.log(`Disponibilidad del producto ${idProducto} cambiada a ${disponible}`);
+    console.log(`Stock del producto ${idProducto} cambiado a ${cantidad}`);
   } catch (error) {
-    console.error("Error actualizando la disponibilidad del producto: ", error);
+    console.error("Error actualizando el stock del producto: ", error);
     throw error;
   }
 };

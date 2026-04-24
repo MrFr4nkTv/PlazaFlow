@@ -1,6 +1,6 @@
 import { auth } from '../services/firebaseInit.js';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
-import { obtenerMenu, cambiarDisponibilidad, escucharPedidos, escucharPedidoIndividual, actualizarEstadoPedido } from '../services/dbOperations.js';
+import { obtenerMenu, actualizarStock, escucharPedidos, escucharPedidoIndividual, actualizarEstadoPedido } from '../services/dbOperations.js';
 
 // ============================================================
 // AUTH GUARD — Proteger páginas admin
@@ -142,22 +142,44 @@ async function cargarProductosStock() {
       </section>
     `).join('');
 
-    // Vincular toggles
-    stockList.querySelectorAll('.stock-toggle').forEach(toggle => {
-      toggle.addEventListener('click', async () => {
-        const id = toggle.dataset.id;
-        const currentlyAvailable = toggle.dataset.available === 'true';
-        const newState = !currentlyAvailable;
-
-        toggle.disabled = true;
-        try {
-          await cambiarDisponibilidad(id, newState);
-          toggle.dataset.available = String(newState);
-          actualizarToggleUI(toggle, newState);
-        } catch (e) {
-          console.error('Error toggling:', e);
+    // Vincular botones de stock
+    stockList.querySelectorAll('.stock-minus').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const display = stockList.querySelector(`.stock-display[data-id="${id}"]`);
+        let currentStock = parseInt(display.textContent);
+        if (currentStock > 0) {
+          const newState = currentStock - 1;
+          display.textContent = newState;
+          btn.disabled = true;
+          try {
+            await actualizarStock(id, newState);
+            actualizarFilaUI(btn.closest('.bg-white'), newState);
+          } catch (e) {
+            console.error('Error actualizando stock:', e);
+            display.textContent = currentStock; // revert on error
+          }
+          btn.disabled = false;
         }
-        toggle.disabled = false;
+      });
+    });
+
+    stockList.querySelectorAll('.stock-plus').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const display = stockList.querySelector(`.stock-display[data-id="${id}"]`);
+        let currentStock = parseInt(display.textContent);
+        const newState = currentStock + 1;
+        display.textContent = newState;
+        btn.disabled = true;
+        try {
+          await actualizarStock(id, newState);
+          actualizarFilaUI(btn.closest('.bg-white'), newState);
+        } catch (e) {
+          console.error('Error actualizando stock:', e);
+          display.textContent = currentStock; // revert
+        }
+        btn.disabled = false;
       });
     });
 
@@ -186,41 +208,41 @@ async function cargarProductosStock() {
 }
 
 function crearFilaStock(producto) {
-  const disponible = producto.disponible !== false; // default true
+  // Inicializamos a 10 si no existe y si antes estaba disponible (o default 10)
+  let stock = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
+  
   const emoji = {
     'Tacos': '🌮', 'Refrescos 600ml': '🥤', 'Sabritas': '🍿',
     'Otros Líquidos': '🧃', 'Bebidas': '🥤', 'General': '🍽️'
   }[producto.categoria] || '🍽️';
 
   return `
-    <div class="bg-white p-4 rounded-3xl shadow-soft flex items-center gap-4 ${!disponible ? 'opacity-60 border-2 border-red-200' : ''}">
+    <div class="bg-white p-4 rounded-3xl shadow-soft flex items-center gap-3 ${stock === 0 ? 'opacity-60 border-2 border-red-200' : 'border-2 border-transparent'}">
       <div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-2xl shrink-0">${emoji}</div>
       <div class="flex-1 min-w-0">
         <h3 class="font-display font-bold text-base text-gray-800 truncate">${producto.nombre || 'Producto'}</h3>
         <p class="text-sm text-gray-400">${producto.categoria || 'General'} · $${Number(producto.precio || 0).toFixed(2)}</p>
       </div>
-      <button class="stock-toggle relative w-14 h-8 rounded-full transition-colors duration-300 ${disponible ? 'bg-green-400' : 'bg-gray-300'}"
-        data-id="${producto.id}" data-available="${disponible}">
-        <span class="absolute top-1 ${disponible ? 'left-7' : 'left-1'} w-6 h-6 bg-white rounded-full shadow-md transition-all duration-300"></span>
-      </button>
+      <div class="flex items-center gap-2 bg-gray-50 rounded-2xl p-1 shrink-0">
+        <button class="stock-minus w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-gray-500 hover:text-red-500 active:scale-90 transition-all" data-id="${producto.id}">
+          <span class="material-symbols-outlined text-[18px]">remove</span>
+        </button>
+        <span class="stock-display w-6 text-center font-bold text-gray-800" data-id="${producto.id}">${stock}</span>
+        <button class="stock-plus w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-gray-500 hover:text-green-500 active:scale-90 transition-all" data-id="${producto.id}">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+        </button>
+      </div>
     </div>`;
 }
 
-function actualizarToggleUI(toggle, disponible) {
-  const dot = toggle.querySelector('span');
-  const row = toggle.closest('.bg-white');
-  if (disponible) {
-    toggle.classList.remove('bg-gray-300');
-    toggle.classList.add('bg-green-400');
-    dot.classList.remove('left-1');
-    dot.classList.add('left-7');
-    row?.classList.remove('opacity-60', 'border-2', 'border-red-200');
+function actualizarFilaUI(row, stock) {
+  if (!row) return;
+  if (stock === 0) {
+    row.classList.add('opacity-60', 'border-red-200');
+    row.classList.remove('border-transparent');
   } else {
-    toggle.classList.remove('bg-green-400');
-    toggle.classList.add('bg-gray-300');
-    dot.classList.remove('left-7');
-    dot.classList.add('left-1');
-    row?.classList.add('opacity-60', 'border-2', 'border-red-200');
+    row.classList.remove('opacity-60', 'border-red-200');
+    row.classList.add('border-transparent');
   }
 }
 
@@ -231,8 +253,84 @@ function inicializarHistorial() {
   const historyList = document.getElementById('history-order-list');
   if (!historyList) return;
 
+  let currentFilter = 'day'; // 'day', 'week', 'month'
+
+  const btnDay = document.getElementById('filter-day');
+  const btnWeek = document.getElementById('filter-week');
+  const btnMonth = document.getElementById('filter-month');
+  const dateStartEl = document.getElementById('history-date-start');
+  const dateEndEl = document.getElementById('history-date-end');
+  const dateLabelEl = document.getElementById('history-date-label');
+
+  function updateActiveFilterButton() {
+    [btnDay, btnWeek, btnMonth].forEach(b => {
+      if(b) b.classList.replace('bg-white', 'bg-transparent');
+      if(b) b.classList.replace('text-primary', 'text-gray-400');
+      if(b) b.classList.remove('shadow-sm', 'border-gray-100');
+    });
+    const activeBtn = currentFilter === 'day' ? btnDay : (currentFilter === 'week' ? btnWeek : btnMonth);
+    if(activeBtn) {
+      activeBtn.classList.replace('bg-transparent', 'bg-white');
+      activeBtn.classList.replace('text-gray-400', 'text-primary');
+      activeBtn.classList.add('shadow-sm', 'border-gray-100');
+    }
+  }
+
+  function formatDateShort(date) {
+    return date.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' });
+  }
+
+  function filterOrders(pedidos) {
+    const now = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    let filtered = [];
+    let startLabel = '';
+    let endLabel = formatDateShort(now);
+    let titleLabel = '';
+
+    if (currentFilter === 'day') {
+      filtered = pedidos.filter(p => {
+        if (!p.timestamp) return false;
+        return p.timestamp.toMillis() >= startOfDay.getTime();
+      });
+      startLabel = formatDateShort(now);
+      titleLabel = `Hoy <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>`;
+    } else if (currentFilter === 'week') {
+      const startOfWeek = new Date(startOfDay);
+      startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Sunday as start
+      filtered = pedidos.filter(p => {
+        if (!p.timestamp) return false;
+        return p.timestamp.toMillis() >= startOfWeek.getTime();
+      });
+      startLabel = formatDateShort(startOfWeek);
+      titleLabel = `Esta Semana <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>`;
+    } else if (currentFilter === 'month') {
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      filtered = pedidos.filter(p => {
+        if (!p.timestamp) return false;
+        return p.timestamp.toMillis() >= startOfMonth.getTime();
+      });
+      startLabel = formatDateShort(startOfMonth);
+      titleLabel = `Este Mes <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>`;
+    }
+
+    if (dateStartEl) dateStartEl.textContent = startLabel;
+    if (dateEndEl) dateEndEl.textContent = endLabel;
+    if (dateLabelEl) dateLabelEl.innerHTML = titleLabel;
+
+    return filtered;
+  }
+
+  let todosPedidos = [];
+
   escucharPedidos((pedidos) => {
-    const completados = pedidos.filter(p => p.estado === 'listo');
+    todosPedidos = pedidos;
+    renderHistory();
+  });
+
+  function renderHistory() {
+    const completados = filterOrders(todosPedidos).filter(p => p.estado === 'listo');
 
     // Stats
     const totalPedidos = completados.length;
@@ -254,7 +352,9 @@ function inicializarHistorial() {
 
     // Renderizar pedidos (más recientes primero)
     historyList.innerHTML = completados.reverse().map(p => {
-      const hora = p.timestamp ? new Date(p.timestamp.toMillis()).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }) : '--:--';
+      const dateObj = p.timestamp ? new Date(p.timestamp.toMillis()) : new Date();
+      const hora = dateObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+      const fecha = currentFilter !== 'day' ? dateObj.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' }) + ', ' : '';
       const items = p.items || [];
       const itemsText = items.map(i => `${i.cantidad}× ${i.nombre}`).join(', ');
       const ticketId = p.id.slice(-4).toUpperCase();
@@ -269,7 +369,7 @@ function inicializarHistorial() {
               <div class="flex flex-col min-w-0">
                 <span class="font-display font-bold text-base text-gray-800">#${ticketId}</span>
                 <span class="text-xs text-gray-400 truncate max-w-[180px]">${itemsText}</span>
-                <span class="text-xs text-gray-300 mt-0.5">${hora}</span>
+                <span class="text-xs text-gray-300 mt-0.5">${fecha}${hora}</span>
               </div>
             </div>
             <div class="text-right">
@@ -279,7 +379,19 @@ function inicializarHistorial() {
           </div>
         </div>`;
     }).join('');
+  }
+
+  [btnDay, btnWeek, btnMonth].forEach(btn => {
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        currentFilter = e.target.id.replace('filter-', '');
+        updateActiveFilterButton();
+        renderHistory();
+      });
+    }
   });
+
+  updateActiveFilterButton();
 }
 
 // ============================================================
