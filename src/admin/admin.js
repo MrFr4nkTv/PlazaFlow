@@ -1,6 +1,6 @@
 import { auth } from '../services/firebaseInit.js';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
-import { obtenerMenu, cambiarDisponibilidad, escucharPedidos } from '../services/dbOperations.js';
+import { obtenerMenu, cambiarDisponibilidad, escucharPedidos, escucharPedidoIndividual, actualizarEstadoPedido } from '../services/dbOperations.js';
 
 // ============================================================
 // AUTH GUARD — Proteger páginas admin
@@ -285,7 +285,7 @@ function inicializarHistorial() {
 // ============================================================
 // ADMIN DETAIL — Detalle de pedido desde KDS
 // ============================================================
-import { escucharPedidoIndividual, actualizarEstadoPedido } from '../services/dbOperations.js';
+// ============================================================
 
 function inicializarAdminDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -314,48 +314,48 @@ function inicializarAdminDetail() {
     
     if (orderStatusEl) {
       orderStatusEl.textContent = pedido.estado.charAt(0).toUpperCase() + pedido.estado.slice(1);
-      orderStatusEl.className = \`font-body text-sm font-bold \${pedido.estado === 'listo' ? 'text-green-500' : pedido.estado === 'preparando' ? 'text-orange-500' : 'text-ink'}\`;
+      orderStatusEl.className = `font-body text-sm font-bold ${pedido.estado === 'listo' ? 'text-green-500' : pedido.estado === 'preparando' ? 'text-orange-500' : 'text-ink'}`;
     }
 
     const items = pedido.items || [];
-    if (itemCountEl) itemCountEl.textContent = \`\${items.reduce((acc, i) => acc + i.cantidad, 0)} Artículos\`;
+    if (itemCountEl) itemCountEl.textContent = `${items.reduce((acc, i) => acc + i.cantidad, 0)} Artículos`;
 
     if (orderListEl) {
       const subtotal = pedido.subtotal || pedido.total || 0;
       const propina = pedido.propina || 0;
       const total = pedido.total || 0;
 
-      let itemsHtml = items.map(item => \`
+      let itemsHtml = items.map(item => `
         <div class="bg-paper rounded-2xl p-4 shadow-soft border border-black/5">
           <div class="flex justify-between items-start mb-1">
             <div class="flex items-center gap-3">
-              <span class="bg-primary/10 text-primary font-bold text-sm h-8 w-8 rounded-lg flex items-center justify-center">\${item.cantidad}x</span>
-              <span class="font-display font-bold text-ink">\${item.nombre}</span>
+              <span class="bg-primary/10 text-primary font-bold text-sm h-8 w-8 rounded-lg flex items-center justify-center">${item.cantidad}x</span>
+              <span class="font-display font-bold text-ink">${item.nombre}</span>
             </div>
-            <span class="font-display font-bold text-ink">$\${(item.precio * item.cantidad).toFixed(2)}</span>
+            <span class="font-display font-bold text-ink">$${(item.precio * item.cantidad).toFixed(2)}</span>
           </div>
-          \${item.opcion ? \`<p class="text-sm text-muted ml-11">\${item.opcion}</p>\` : ''}
+          ${item.opcion ? `<p class="text-sm text-muted ml-11">${item.opcion}</p>` : ''}
         </div>
-      \`).join('');
+      `).join('');
 
-      itemsHtml += \`
+      itemsHtml += `
         <div class="px-4 py-4 mt-4 bg-white rounded-2xl border border-black/5 shadow-soft">
           <div class="flex justify-between items-center text-sm font-medium text-muted mb-1">
             <span>Subtotal</span>
-            <span>$\${subtotal.toFixed(2)}</span>
+            <span>$${subtotal.toFixed(2)}</span>
           </div>
-          \${propina > 0 ? \`
+          ${propina > 0 ? `
           <div class="flex justify-between items-center text-sm font-medium text-muted mb-3">
             <span>Propina</span>
-            <span>$\${propina.toFixed(2)}</span>
-          </div>\` : ''}
+            <span>$${propina.toFixed(2)}</span>
+          </div>` : ''}
           <div class="border-t border-dashed border-gray-200 my-2"></div>
           <div class="flex justify-between items-center font-display font-bold text-2xl text-ink mt-2">
             <span>Total</span>
-            <span>$\${total.toFixed(2)}</span>
+            <span>$${total.toFixed(2)}</span>
           </div>
         </div>
-      \`;
+      `;
 
       orderListEl.innerHTML = itemsHtml;
     }

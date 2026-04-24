@@ -117,7 +117,7 @@ function renderizarPedidos() {
 
   grid.querySelectorAll('.kds-card').forEach(card => {
     card.addEventListener('click', () => {
-      window.location.href = \`admin-detail.html?id=\${card.dataset.pedidoId}\`;
+      window.location.href = `admin-detail.html?id=${card.dataset.pedidoId}`;
     });
   });
 }
