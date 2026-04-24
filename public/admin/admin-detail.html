@@ -80,33 +80,36 @@
       min-height: max(884px, 100dvh);
     }
   </style>
-  <script src="../../src/kds/admin.js" type="module"></script>
+  <script src="../../src/admin/admin.js" type="module"></script>
   </head>
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-ink font-body antialiased">
 <div class="w-full max-w-7xl mx-auto flex-1 flex flex-col bg-background-light shadow-xl overflow-hidden relative">
 <div class="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"></div>
 <div class="shrink-0 border-b border-black/5 bg-paper px-6 py-4 relative z-10">
 <div class="flex items-center gap-3 mb-4 pb-4 border-b border-black/5">
-<div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden">
-<div class="absolute inset-0 flex items-center justify-center">
-<span class="material-symbols-outlined text-white text-[22px]" style="transform: rotate(90deg);">restaurant</span>
-</div>
-</div>
+<button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center shrink-0 hover:bg-gray-200 transition-colors" onclick="window.location.href='kds.html'">
+<span class="material-symbols-outlined text-[22px] text-gray-600">arrow_back</span>
+</button>
 <div>
 <span class="font-display font-bold text-xl tracking-tight text-ink">Plazaflow</span>
-<div class="text-xs font-medium text-muted">Detalle Unificado</div>
+<div class="text-xs font-medium text-muted">Detalle de Pedido</div>
+</div>
+<div class="ml-auto">
+<button class="w-9 h-9 rounded-full bg-gray-100 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors text-gray-400" id="btn-logout" title="Cerrar sesión">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+</button>
 </div>
 </div>
 <div class="flex items-start justify-between mb-4">
 <div class="flex flex-col gap-1">
 <div class="flex items-center gap-2">
-<span class="bg-ink text-white font-mono text-sm font-bold px-3 py-1 rounded-lg">PEDIDO #1242</span>
+<span class="bg-ink text-white font-mono text-sm font-bold px-3 py-1 rounded-lg" id="detail-order-id">PEDIDO #----</span>
 <span class="bg-primary-light text-primary-dark font-mono text-xs font-bold px-2 py-1 rounded-md uppercase">Web</span>
 </div>
 <div class="flex items-center gap-2 mt-2">
-<span class="font-body text-muted text-sm font-medium">12:43 PM</span>
+<span class="font-body text-muted text-sm font-medium" id="detail-order-time">--:--</span>
 <span class="w-1 h-1 rounded-full bg-muted"></span>
-<span class="font-body text-ink text-sm font-bold">Dave M.</span>
+<span class="font-body text-ink text-sm font-bold" id="detail-order-status">Nuevo</span>
 </div>
 </div>
 <div class="flex flex-col items-end gap-1">
@@ -118,8 +121,7 @@
 </div>
 <div class="flex gap-2 overflow-x-auto pb-1 scroller no-scrollbar">
 <span class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70">Mesa 4</span>
-<span class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70">4 Artículos</span>
-<span class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70">Comedor</span>
+<span class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70" id="detail-item-count">-- Artículos</span>
 </div>
 </div>
 <div class="flex-1 overflow-y-auto scroller bg-background-light/30 flex flex-col">

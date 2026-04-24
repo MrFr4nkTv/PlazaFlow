@@ -29,6 +29,18 @@ function verificarAuth() {
       }
     }
   });
+
+  // Logout listener
+  const btnLogout = document.getElementById('btn-logout');
+  if (btnLogout) {
+    btnLogout.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error('Error signing out:', error);
+      }
+    });
+  }
 }
 
 // ============================================================
@@ -149,6 +161,24 @@ async function cargarProductosStock() {
       });
     });
 
+    // Búsqueda en Stock
+    const searchInput = document.getElementById('stock-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        const rows = stockList.querySelectorAll('.bg-white.p-4');
+        rows.forEach(row => {
+          const name = row.querySelector('h3').textContent.toLowerCase();
+          const category = row.querySelector('p').textContent.toLowerCase();
+          if (name.includes(query) || category.includes(query)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+    }
+
   } catch (error) {
     console.error('Error cargando stock:', error);
     stockList.innerHTML = '<div class="text-center py-12"><p class="text-gray-400">Error cargando productos</p></div>';
@@ -253,6 +283,106 @@ function inicializarHistorial() {
 }
 
 // ============================================================
+// ADMIN DETAIL — Detalle de pedido desde KDS
+// ============================================================
+import { escucharPedidoIndividual, actualizarEstadoPedido } from '../services/dbOperations.js';
+
+function inicializarAdminDetail() {
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get('id');
+  if (!orderId) return;
+
+  const orderIdEl = document.getElementById('detail-order-id');
+  const orderTimeEl = document.getElementById('detail-order-time');
+  const orderStatusEl = document.getElementById('detail-order-status');
+  const itemCountEl = document.getElementById('detail-item-count');
+  const orderListEl = document.getElementById('admin-detail-list');
+  const btnProcess = document.getElementById('btn-admin-process-order');
+  const btnComplete = document.getElementById('btn-admin-complete-order');
+
+  if (orderIdEl) orderIdEl.textContent = `PEDIDO #${orderId.slice(-4).toUpperCase()}`;
+
+  escucharPedidoIndividual(orderId, (pedido) => {
+    if (!pedido) {
+      if (orderListEl) orderListEl.innerHTML = '<p class="text-center text-gray-500 py-10">Pedido no encontrado</p>';
+      return;
+    }
+
+    if (orderTimeEl && pedido.timestamp) {
+      orderTimeEl.textContent = new Date(pedido.timestamp.toMillis()).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    if (orderStatusEl) {
+      orderStatusEl.textContent = pedido.estado.charAt(0).toUpperCase() + pedido.estado.slice(1);
+      orderStatusEl.className = \`font-body text-sm font-bold \${pedido.estado === 'listo' ? 'text-green-500' : pedido.estado === 'preparando' ? 'text-orange-500' : 'text-ink'}\`;
+    }
+
+    const items = pedido.items || [];
+    if (itemCountEl) itemCountEl.textContent = \`\${items.reduce((acc, i) => acc + i.cantidad, 0)} Artículos\`;
+
+    if (orderListEl) {
+      const subtotal = pedido.subtotal || pedido.total || 0;
+      const propina = pedido.propina || 0;
+      const total = pedido.total || 0;
+
+      let itemsHtml = items.map(item => \`
+        <div class="bg-paper rounded-2xl p-4 shadow-soft border border-black/5">
+          <div class="flex justify-between items-start mb-1">
+            <div class="flex items-center gap-3">
+              <span class="bg-primary/10 text-primary font-bold text-sm h-8 w-8 rounded-lg flex items-center justify-center">\${item.cantidad}x</span>
+              <span class="font-display font-bold text-ink">\${item.nombre}</span>
+            </div>
+            <span class="font-display font-bold text-ink">$\${(item.precio * item.cantidad).toFixed(2)}</span>
+          </div>
+          \${item.opcion ? \`<p class="text-sm text-muted ml-11">\${item.opcion}</p>\` : ''}
+        </div>
+      \`).join('');
+
+      itemsHtml += \`
+        <div class="px-4 py-4 mt-4 bg-white rounded-2xl border border-black/5 shadow-soft">
+          <div class="flex justify-between items-center text-sm font-medium text-muted mb-1">
+            <span>Subtotal</span>
+            <span>$\${subtotal.toFixed(2)}</span>
+          </div>
+          \${propina > 0 ? \`
+          <div class="flex justify-between items-center text-sm font-medium text-muted mb-3">
+            <span>Propina</span>
+            <span>$\${propina.toFixed(2)}</span>
+          </div>\` : ''}
+          <div class="border-t border-dashed border-gray-200 my-2"></div>
+          <div class="flex justify-between items-center font-display font-bold text-2xl text-ink mt-2">
+            <span>Total</span>
+            <span>$\${total.toFixed(2)}</span>
+          </div>
+        </div>
+      \`;
+
+      orderListEl.innerHTML = itemsHtml;
+    }
+
+    // Actualizar estado de botones
+    if (btnProcess) {
+      if (pedido.estado === 'nuevo') {
+        btnProcess.classList.remove('opacity-50', 'pointer-events-none');
+        btnProcess.querySelector('span:last-child').textContent = 'Empezar Preparación';
+        btnProcess.onclick = () => actualizarEstadoPedido(orderId, 'preparando');
+      } else {
+        btnProcess.classList.add('opacity-50', 'pointer-events-none');
+      }
+    }
+
+    if (btnComplete) {
+      if (pedido.estado !== 'listo') {
+        btnComplete.classList.remove('opacity-50', 'pointer-events-none');
+        btnComplete.onclick = () => actualizarEstadoPedido(orderId, 'listo');
+      } else {
+        btnComplete.classList.add('opacity-50', 'pointer-events-none');
+      }
+    }
+  });
+}
+
+// ============================================================
 // NAV — Navegación entre páginas admin
 // ============================================================
 function configurarNavAdmin() {
@@ -270,4 +400,5 @@ document.addEventListener('DOMContentLoaded', () => {
   inicializarLogin();
   inicializarStock();
   inicializarHistorial();
+  inicializarAdminDetail();
 });

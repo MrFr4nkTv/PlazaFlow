@@ -1,13 +1,26 @@
 import { escucharPedidos, actualizarEstadoPedido } from '../services/dbOperations.js';
 import { auth } from '../services/firebaseInit.js';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 // ============================================================
-// AUTH GUARD
+// AUTH GUARD & LOGOUT
 // ============================================================
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     window.location.href = 'login.html';
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btnLogout = document.getElementById('btn-logout');
+  if (btnLogout) {
+    btnLogout.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error('Error signing out:', error);
+      }
+    });
   }
 });
 
@@ -39,7 +52,7 @@ function crearTarjetaPedido(pedido) {
   const items = pedido.items || [];
 
   return `
-  <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col relative" data-pedido-id="${pedido.id}">
+  <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col relative cursor-pointer hover:border-primary/50 transition-colors kds-card" data-pedido-id="${pedido.id}">
     <div class="px-3 py-2 border-b border-gray-100 flex justify-between items-center ${config.color}/10">
       <div>
         <span class="font-display font-bold text-lg text-ink">#${pedido.id.slice(-4).toUpperCase()}</span>
@@ -47,7 +60,7 @@ function crearTarjetaPedido(pedido) {
       </div>
       <span class="px-2 py-1 rounded-full text-xs font-bold text-white ${config.color}">${config.label}</span>
     </div>
-    <div class="p-3 flex-1">
+    <div class="p-3 flex-1 pointer-events-none">
       <ul class="space-y-1">
         ${items.map(item => `
           <li class="flex justify-between items-center text-sm">
@@ -87,7 +100,8 @@ function renderizarPedidos() {
   grid.innerHTML = filtrados.map(crearTarjetaPedido).join('');
 
   grid.querySelectorAll('.kds-advance').forEach(btn => {
-    btn.addEventListener('click', async () => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation(); // Prevenir que se abra el detalle
       const pedidoId = btn.dataset.pedidoId;
       const nextEstado = btn.dataset.nextEstado;
       btn.disabled = true;
@@ -98,6 +112,12 @@ function renderizarPedidos() {
         console.error(e);
         btn.disabled = false;
       }
+    });
+  });
+
+  grid.querySelectorAll('.kds-card').forEach(card => {
+    card.addEventListener('click', () => {
+      window.location.href = \`admin-detail.html?id=\${card.dataset.pedidoId}\`;
     });
   });
 }
