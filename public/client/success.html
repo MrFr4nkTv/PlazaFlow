@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>PlazaFlow - Procesando Pago...</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF6B6B",
+                        "plaza-bg": "#FFF9F5",
+                        "plaza-text": "#2D232E",
+                        "plaza-success": "#6BCB77",
+                    },
+                    fontFamily: {
+                        "heading": ["Fredoka", "sans-serif"],
+                        "body": ["Nunito", "sans-serif"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .spinner {
+            border: 4px solid rgba(255, 107, 107, 0.1);
+            border-left-color: #FF6B6B;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    <script src="../../src/client/success.js" type="module"></script>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center bg-plaza-bg text-plaza-text font-body p-6">
+    <div id="status-container" class="bg-white rounded-[32px] p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] w-full max-w-md text-center flex flex-col items-center">
+        
+        <div id="loading-state" class="flex flex-col items-center w-full">
+            <div class="spinner mb-6"></div>
+            <h1 class="font-heading font-bold text-2xl mb-2">Confirmando tu pago</h1>
+            <p class="text-gray-500 text-sm">Por favor espera un momento, estamos validando la transacción con el banco...</p>
+        </div>
+
+        <div id="success-state" class="hidden flex flex-col items-center w-full">
+            <div class="h-20 w-20 bg-[#E8F8F5] rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-[40px] text-plaza-success">check_circle</span>
+            </div>
+            <h1 class="font-heading font-bold text-2xl mb-2 text-plaza-success">¡Pago Exitoso!</h1>
+            <p class="text-gray-500 text-sm mb-6">Tu orden ha sido recibida en cocina.</p>
+            <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2 overflow-hidden">
+                <div class="bg-plaza-success h-full animate-pulse w-full"></div>
+            </div>
+            <p class="text-xs text-gray-400 font-bold tracking-widest uppercase">Redirigiendo...</p>
+        </div>
+
+        <div id="error-state" class="hidden flex flex-col items-center w-full">
+            <div class="h-20 w-20 bg-red-50 rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-[40px] text-primary">error</span>
+            </div>
+            <h1 class="font-heading font-bold text-2xl mb-2 text-primary">Hubo un problema</h1>
+            <p class="text-gray-500 text-sm mb-6" id="error-message">No pudimos confirmar tu pago.</p>
+            <button onclick="window.location.href='checkout.html'" class="bg-primary text-white font-bold py-3 px-6 rounded-full w-full shadow-[0_4px_14px_rgba(255,107,107,0.39)]">
+                Volver a intentar
+            </button>
+        </div>
+
+    </div>
+</body>
+</html>

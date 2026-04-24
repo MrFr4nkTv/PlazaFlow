@@ -343,15 +343,35 @@ async function handleCheckout() {
   const subtotal = window.carrito.reduce((a, i) => a + (i.precio * i.cantidad), 0);
   const tipAmount = subtotal * (tipPorcentaje / 100);
   const total = subtotal + tipAmount;
-  const datosPedido = {
-    items: window.carrito.map(i => ({ id: i.id, nombre: i.nombre, precio: i.precio, cantidad: i.cantidad, opcion: i.opcionSeleccionada || null })),
-    subtotal, propina: tipAmount, total, metodoPago: 'Efectivo'
-  };
+  
+  const origin = window.location.origin;
+  const successUrl = `${origin}/public/client/success.html`;
+  const cancelUrl = `${origin}/public/client/checkout.html`;
+
   try {
-    const orderId = await enviarPedido(datosPedido);
-    window.carrito = []; guardarCarritoEnStorage(); actualizarUICarrito();
-    window.location.href = `tracking.html?orderId=${orderId}`;
-  } catch (error) { alert('Error al enviar el pedido.'); console.error(error); }
+    const response = await fetch('http://localhost:3001/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: window.carrito,
+        successUrl,
+        cancelUrl,
+        propina: tipAmount
+      })
+    });
+
+    const session = await response.json();
+    if (session.error) {
+      alert(`Error: ${session.error}`);
+      return;
+    }
+
+    // Redirigir a Stripe Checkout
+    window.location.href = session.url;
+  } catch (error) {
+    alert('Error al conectar con la pasarela de pagos.');
+    console.error(error);
+  }
 }
 
 function configurarCheckout() {
