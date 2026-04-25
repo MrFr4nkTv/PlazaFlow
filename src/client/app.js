@@ -139,8 +139,49 @@ function configurarFiltrosCategorias() {
       botones.forEach(b => { b.classList.remove('bg-plaza-primary','text-white','shadow-md','shadow-plaza-primary/30'); b.classList.add('bg-white','text-plaza-text','shadow-sm'); });
       btn.classList.remove('bg-white','text-plaza-text','shadow-sm');
       btn.classList.add('bg-plaza-primary','text-white','shadow-md','shadow-plaza-primary/30');
+      
+      // Clear search when clicking category
+      const searchInput = document.getElementById('client-search-input');
+      if (searchInput) searchInput.value = '';
+
       filtrarPorCategoria(texto);
     });
+  });
+}
+
+function configurarBuscador() {
+  const searchInput = document.getElementById('client-search-input');
+  if (!searchInput) return;
+
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    
+    // Clear category selection if searching
+    if (query.length > 0) {
+      const nav = document.querySelector('nav');
+      if (nav) {
+        const botones = nav.querySelectorAll('button');
+        botones.forEach(b => { 
+          b.classList.remove('bg-plaza-primary','text-white','shadow-md','shadow-plaza-primary/30'); 
+          b.classList.add('bg-white','text-plaza-text','shadow-sm'); 
+        });
+      }
+    }
+
+    if (!query) {
+      // If empty, restore "Todos" category or just show all
+      renderizarMenu(todosLosProductos);
+      return;
+    }
+
+    const resultados = todosLosProductos.filter(p => {
+      const matchName = (p.nombre || '').toLowerCase().includes(query);
+      const matchDesc = (p.descripcion || '').toLowerCase().includes(query);
+      const matchCat = (p.categoria || '').toLowerCase().includes(query);
+      return matchName || matchDesc || matchCat;
+    });
+
+    renderizarMenu(resultados);
   });
 }
 
@@ -470,6 +511,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       guardarProductosEnCache(todosLosProductos);
       renderizarMenu(todosLosProductos);
       configurarFiltrosCategorias();
+      configurarBuscador();
     } catch (error) {
       console.error('❌ Error cargando el menú:', error);
       grid.innerHTML = `<div class="text-center py-12"><span class="material-symbols-outlined text-5xl text-red-300 mb-3 block">cloud_off</span><p class="font-heading font-medium text-plaza-text mb-1">Error al cargar el menú</p><button onclick="window.location.reload()" class="mt-4 px-6 py-2 bg-plaza-primary text-white rounded-pill font-heading font-medium shadow-md">Reintentar</button></div>`;
