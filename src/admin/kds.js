@@ -184,14 +184,51 @@ function configurarNavAdmin() {
 // ============================================================
 // INICIALIZACI\u00d3N KDS
 // ============================================================
+function reproducirSonidoNuevoPedido() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+    oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.1);
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.05);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + 0.5);
+  } catch (e) {
+    console.log("No se pudo reproducir sonido", e);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   configurarTabs();
   configurarNavAdmin();
+
+  let previousNewCount = -1;
 
   escucharPedidos((pedidos) => {
     todosLosPedidos = pedidos;
     actualizarContadores();
     renderizarPedidos();
+    
+    // Play sound if there are more new orders than before
+    const currentNewCount = pedidos.filter(p => p.estado === 'nuevo').length;
+    if (previousNewCount !== -1 && currentNewCount > previousNewCount) {
+      reproducirSonidoNuevoPedido();
+    }
+    previousNewCount = currentNewCount;
+    
     console.log(`\ud83d\udd04 KDS: ${pedidos.length} pedidos actualizados`);
   });
+
+  // Update timers every minute
+  setInterval(() => {
+    if (todosLosPedidos.length > 0) {
+      renderizarPedidos();
+    }
+  }, 60000);
 });

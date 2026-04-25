@@ -322,6 +322,15 @@ function inicializarHistorial() {
     return filtered;
   }
 
+  // Event Listeners for Filters
+  if (btnDay) btnDay.addEventListener('click', () => { currentFilter = 'day'; updateActiveFilterButton(); renderHistory(); });
+  if (btnWeek) btnWeek.addEventListener('click', () => { currentFilter = 'week'; updateActiveFilterButton(); renderHistory(); });
+  if (btnMonth) btnMonth.addEventListener('click', () => { currentFilter = 'month'; updateActiveFilterButton(); renderHistory(); });
+
+  // Print button
+  const btnPrint = document.getElementById('btn-print-history');
+  if (btnPrint) btnPrint.addEventListener('click', () => { window.print(); });
+
   let todosPedidos = [];
 
   escucharPedidos((pedidos) => {

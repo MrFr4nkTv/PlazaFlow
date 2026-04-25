@@ -542,6 +542,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 function inicializarCart() {
   const cartList = document.getElementById('cart-items-list');
   if (!cartList) return;
+
+  const btnEmpty = document.getElementById('btn-empty-cart');
+  if (btnEmpty) {
+    btnEmpty.addEventListener('click', () => {
+      if (confirm('¿Estás seguro de vaciar toda la bandeja?')) {
+        window.carrito = [];
+        guardarCarritoEnStorage();
+        renderizarCart();
+        actualizarUICarrito();
+      }
+    });
+  }
+
   renderizarCart();
 }
 
