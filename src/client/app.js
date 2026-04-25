@@ -320,7 +320,7 @@ function configurarNavegacionCarrito() {
 // ============================================================
 // CHECKOUT DINÁMICO
 // ============================================================
-let tipPorcentaje = 0;
+let tipPorcentaje = 15;
 
 function inicializarCheckoutPage() {
   const subtotalEl = document.getElementById('checkout-subtotal');
