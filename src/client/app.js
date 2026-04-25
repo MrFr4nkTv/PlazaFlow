@@ -69,7 +69,13 @@ function crearTarjetaProducto(producto) {
   return `
     <article class="bg-white rounded-card p-3 shadow-soft flex items-start gap-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${!disponible ? 'opacity-50 pointer-events-none' : ''}"
       data-product-id="${producto.id}" data-product-nombre="${nombre}" data-product-precio="${precio}" data-product-categoria="${categoria}" ${tieneOpciones ? `data-product-opciones='${JSON.stringify(producto.opciones)}'` : ''}>
-      <div class="w-[100px] h-[96px] flex-shrink-0 rounded-[16px] bg-gradient-to-br from-plaza-highlight to-plaza-bg flex items-center justify-center text-4xl select-none cursor-pointer btn-open-detail">${emoji}</div>
+      <div class="w-[100px] h-[96px] flex-shrink-0 rounded-[16px] bg-gradient-to-br from-plaza-highlight to-plaza-bg flex items-center justify-center text-4xl select-none cursor-pointer btn-open-detail relative overflow-hidden">
+        ${emoji}
+        ${!disponible ? 
+          `<span class="absolute top-0 left-0 w-full bg-red-500/90 text-white text-[9px] font-bold py-1 text-center uppercase tracking-wider">Agotado</span>` : 
+          `<span class="absolute top-0 left-0 bg-plaza-primary/10 text-plaza-primary text-[9px] font-bold px-2 py-1 rounded-br-lg border-b border-r border-plaza-primary/20">Stock: ${stock}</span>`
+        }
+      </div>
       <div class="flex-1 py-1 flex flex-col justify-between h-full relative">
         <div class="cursor-pointer btn-open-detail">
           <h3 class="font-heading font-semibold text-[15px] text-plaza-text leading-tight mb-1">${nombre}</h3>
@@ -77,8 +83,6 @@ function crearTarjetaProducto(producto) {
         </div>
         <div class="flex items-center justify-between mt-2">
           <span class="font-heading font-bold text-lg text-plaza-primary">$${precio.toFixed(2)}</span>
-          ${!disponible ? '<span class="text-xs font-bold text-red-400 bg-red-50 px-2 py-0.5 rounded-pill">Agotado</span>' : 
-            `<span class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-pill border border-green-100">Quedan ${stock}</span>`}
         </div>
         ${disponible ? stepperHTML : ''}
       </div>
@@ -661,9 +665,21 @@ function inicializarItemDetail() {
   }
 
   function updateDetailUI() {
+    const yaEnCarrito = window.carrito.filter(i => i.id === productId).reduce((acc, curr) => acc + curr.cantidad, 0);
     if (qtyEl) qtyEl.textContent = cantidad;
     if (priceEl) priceEl.textContent = `$${(precio * cantidad).toFixed(2)}`;
+    
+    // Deshabilitar botón + si alcanzamos el stock
+    if (btnPlus) {
+      if (cantidad + yaEnCarrito >= stock) {
+        btnPlus.classList.add('opacity-30', 'grayscale');
+      } else {
+        btnPlus.classList.remove('opacity-30', 'grayscale');
+      }
+    }
   }
+  updateDetailUI();
+
   if (btnMinus) btnMinus.addEventListener('click', () => { if (cantidad > 1) { cantidad--; updateDetailUI(); } });
   if (btnPlus) btnPlus.addEventListener('click', () => { 
     const yaEnCarrito = window.carrito.filter(i => i.id === productId).reduce((acc, curr) => acc + curr.cantidad, 0);
