@@ -5,7 +5,7 @@ import { obtenerMenu, actualizarStock, escucharPedidos, escucharPedidoIndividual
 // ============================================================
 // AUTH GUARD — Proteger páginas admin
 // ============================================================
-const PUBLIC_PAGES = ['login.html'];
+const PUBLIC_PAGES = ['login.html', '/login'];
 let authReady = false;
 
 function esPublica() {
