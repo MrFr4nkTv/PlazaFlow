@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // 5. Redirigir a la vista de tracking
         setTimeout(() => {
-            window.location.href = `tracking.html?orderId=${orderId}`;
+            window.location.href = `/tracking?orderId=${orderId}`;
         }, 2500);
 
     } catch (error) {

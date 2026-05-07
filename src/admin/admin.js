@@ -18,14 +18,14 @@ function verificarAuth() {
     if (user) {
       console.log('✅ Admin autenticado:', user.email);
       if (esPublica()) {
-        window.location.href = 'kds.html';
+        window.location.href = '/cocina';
       }
     } else {
       console.log('🔒 No autenticado');
       if (!esPublica()) {
         // Solo redirigir si estamos seguros de que auth está configurado
         // (no redirigir en el primer load si auth no está habilitado)
-        window.location.href = 'login.html';
+        window.location.href = '/login';
       }
     }
   });
@@ -524,9 +524,9 @@ function inicializarAdminDetail() {
 // NAV — Navegación entre páginas admin
 // ============================================================
 function configurarNavAdmin() {
-  document.getElementById('nav-active-orders')?.addEventListener('click', () => { window.location.href = 'kds.html'; });
-  document.getElementById('nav-stock')?.addEventListener('click', () => { window.location.href = 'stock.html'; });
-  document.getElementById('nav-history')?.addEventListener('click', () => { window.location.href = 'history.html'; });
+  document.getElementById('nav-active-orders')?.addEventListener('click', () => { window.location.href = '/cocina'; });
+  document.getElementById('nav-stock')?.addEventListener('click', () => { window.location.href = '/inventario'; });
+  document.getElementById('nav-history')?.addEventListener('click', () => { window.location.href = '/historial'; });
 }
 
 // ============================================================

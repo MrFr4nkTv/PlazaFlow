@@ -4,21 +4,21 @@
 
 | Página | URL |
 |---|---|
-| **Menú del Cliente** | [Abrir](https://plazaflow-3045c.web.app/public/client/) |
-| **Carrito** | [Abrir](https://plazaflow-3045c.web.app/public/client/cart.html) |
-| **Checkout** | [Abrir](https://plazaflow-3045c.web.app/public/client/checkout.html) |
-| **Detalle de Producto** | [Abrir](https://plazaflow-3045c.web.app/public/client/item-detail.html) |
-| **Tracking de Pedido** | [Abrir](https://plazaflow-3045c.web.app/public/client/tracking.html) |
+| **Menú del Cliente** | [Abrir](https://plazaflow-3045c.web.app/menu) |
+| **Carrito** | [Abrir](https://plazaflow-3045c.web.app/carrito) |
+| **Checkout** | [Abrir](https://plazaflow-3045c.web.app/checkout) |
+| **Detalle de Producto** | [Abrir](https://plazaflow-3045c.web.app/producto) |
+| **Tracking de Pedido** | [Abrir](https://plazaflow-3045c.web.app/tracking) |
 
 ## 👨‍🍳 Admin / KDS
 
 | Página | URL |
 |---|---|
-| **Login Admin** | [Abrir](https://plazaflow-3045c.web.app/public/admin/login.html) |
-| **KDS (Cocina)** | [Abrir](https://plazaflow-3045c.web.app/public/admin/kds.html) |
-| **Inventario / Stock** | [Abrir](https://plazaflow-3045c.web.app/public/admin/stock.html) |
-| **Historial de Pedidos** | [Abrir](https://plazaflow-3045c.web.app/public/admin/history.html) |
-| **Detalle de Pedido (Admin)** | [Abrir](https://plazaflow-3045c.web.app/public/admin/admin-detail.html) |
+| **Login Admin** | [Abrir](https://plazaflow-3045c.web.app/login) |
+| **KDS (Cocina)** | [Abrir](https://plazaflow-3045c.web.app/cocina) |
+| **Inventario / Stock** | [Abrir](https://plazaflow-3045c.web.app/inventario) |
+| **Historial de Pedidos** | [Abrir](https://plazaflow-3045c.web.app/historial) |
+| **Detalle de Pedido** | [Abrir](https://plazaflow-3045c.web.app/pedido) |
 
 ## ⚙️ Backend — Cloud Functions (Stripe API)
 

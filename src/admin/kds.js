@@ -7,7 +7,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 // ============================================================
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = 'login.html';
+    window.location.href = '/login';
   }
 });
 
@@ -120,7 +120,7 @@ function renderizarPedidos() {
 
   grid.querySelectorAll('.kds-card').forEach(card => {
     card.addEventListener('click', () => {
-      window.location.href = `admin-detail.html?id=${card.dataset.pedidoId}`;
+      window.location.href = `/pedido?id=${card.dataset.pedidoId}`;
     });
   });
 }
@@ -176,9 +176,9 @@ function configurarTabs() {
 // NAV
 // ============================================================
 function configurarNavAdmin() {
-  document.getElementById('nav-active-orders')?.addEventListener('click', () => { window.location.href = 'kds.html'; });
-  document.getElementById('nav-stock')?.addEventListener('click', () => { window.location.href = 'stock.html'; });
-  document.getElementById('nav-history')?.addEventListener('click', () => { window.location.href = 'history.html'; });
+  document.getElementById('nav-active-orders')?.addEventListener('click', () => { window.location.href = '/cocina'; });
+  document.getElementById('nav-stock')?.addEventListener('click', () => { window.location.href = '/inventario'; });
+  document.getElementById('nav-history')?.addEventListener('click', () => { window.location.href = '/historial'; });
 }
 
 // ============================================================

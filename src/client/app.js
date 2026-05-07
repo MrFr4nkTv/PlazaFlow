@@ -270,7 +270,7 @@ function vincularBotonesMenu() {
       const id = btn.dataset.id || card?.dataset.productId;
       if (btn.dataset.hasOptions === 'true') {
         // Abrir item-detail para seleccionar opción
-        window.location.href = `item-detail.html?id=${id}`;
+        window.location.href = `/producto?id=${id}`;
         return;
       }
       agregarAlCarrito(id);
@@ -287,7 +287,7 @@ function vincularBotonesMenu() {
   document.querySelectorAll('.btn-open-detail').forEach(el => {
     el.addEventListener('click', () => {
       const card = el.closest('article');
-      if (card) window.location.href = `item-detail.html?id=${card.dataset.productId}`;
+      if (card) window.location.href = `/producto?id=${card.dataset.productId}`;
     });
   });
 }
@@ -314,7 +314,7 @@ function actualizarUICarrito() {
 
 function configurarNavegacionCarrito() {
   const btn = document.getElementById('btn-open-cart');
-  if (btn) btn.addEventListener('click', () => { window.location.href = 'cart.html'; });
+  if (btn) btn.addEventListener('click', () => { window.location.href = '/carrito'; });
 }
 
 // ============================================================
@@ -455,7 +455,7 @@ async function handleCheckout() {
     try {
       const orderId = await enviarPedido(datosPedido);
       window.carrito = []; guardarCarritoEnStorage(); actualizarUICarrito();
-      window.location.href = `tracking.html?orderId=${orderId}`;
+      window.location.href = `/tracking?orderId=${orderId}`;
     } catch (error) { alert('Error al enviar el pedido.'); console.error(error); }
     return;
   }
@@ -491,7 +491,7 @@ function configurarCheckout() {
   const btnCart = document.getElementById('btn-checkout-cart');
   if (btnCart) {
     btnCart.addEventListener('click', () => {
-      window.location.href = 'checkout.html';
+      window.location.href = '/checkout';
     });
   }
 }

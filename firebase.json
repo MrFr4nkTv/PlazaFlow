@@ -11,6 +11,50 @@
       {
         "source": "/",
         "destination": "/public/client/index.html"
+      },
+      {
+        "source": "/menu",
+        "destination": "/public/client/index.html"
+      },
+      {
+        "source": "/carrito",
+        "destination": "/public/client/cart.html"
+      },
+      {
+        "source": "/checkout",
+        "destination": "/public/client/checkout.html"
+      },
+      {
+        "source": "/producto",
+        "destination": "/public/client/item-detail.html"
+      },
+      {
+        "source": "/tracking",
+        "destination": "/public/client/tracking.html"
+      },
+      {
+        "source": "/success",
+        "destination": "/public/client/success.html"
+      },
+      {
+        "source": "/login",
+        "destination": "/public/admin/login.html"
+      },
+      {
+        "source": "/cocina",
+        "destination": "/public/admin/kds.html"
+      },
+      {
+        "source": "/inventario",
+        "destination": "/public/admin/stock.html"
+      },
+      {
+        "source": "/historial",
+        "destination": "/public/admin/history.html"
+      },
+      {
+        "source": "/pedido",
+        "destination": "/public/admin/admin-detail.html"
       }
     ],
     "redirects": [
