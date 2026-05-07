@@ -17,6 +17,7 @@ export default defineConfig({
         clientCheckout: resolve(__dirname, 'public/client/checkout.html'),
         clientItemDetail: resolve(__dirname, 'public/client/item-detail.html'),
         clientTracking: resolve(__dirname, 'public/client/tracking.html'),
+        clientSuccess: resolve(__dirname, 'public/client/success.html'),
         adminLogin: resolve(__dirname, 'public/admin/login.html'),
         adminKDS: resolve(__dirname, 'public/admin/kds.html'),
         adminStock: resolve(__dirname, 'public/admin/stock.html'),

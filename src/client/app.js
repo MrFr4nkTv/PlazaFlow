@@ -441,8 +441,9 @@ async function handleCheckout() {
   const total = subtotal + tipAmount;
   
   const origin = window.location.origin;
-  const successUrl = `${origin}/public/client/success.html`;
-  const cancelUrl = `${origin}/public/client/checkout.html`;
+  const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+  const successUrl = `${origin}${basePath}/success.html`;
+  const cancelUrl = `${origin}${basePath}/checkout.html`;
   
   const metodoPago = window.selectedPaymentMethod || 'Tarjeta';
 
@@ -460,7 +461,8 @@ async function handleCheckout() {
   }
 
   try {
-    const response = await fetch('http://localhost:3005/create-checkout-session', {
+    const checkoutUrl = import.meta.env.VITE_CHECKOUT_URL || 'http://localhost:3005/create-checkout-session';
+    const response = await fetch(checkoutUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

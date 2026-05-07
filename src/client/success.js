@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // 1. Verificar la sesión con nuestro backend
-        const response = await fetch(`http://localhost:3005/verify-session?session_id=${sessionId}`);
+        const verifyUrl = import.meta.env.VITE_VERIFY_URL || 'http://localhost:3005/verify-session';
+        const response = await fetch(`${verifyUrl}?session_id=${sessionId}`);
         const data = await response.json();
 
         if (!data.success) {
