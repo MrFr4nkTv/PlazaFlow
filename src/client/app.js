@@ -398,40 +398,16 @@ function actualizarTotalCheckout(subtotal) {
 }
 
 function configurarSlideToPay() {
-  const thumb = document.getElementById('btn-pay-checkout');
-  const container = document.getElementById('slide-pay-container');
-  if (!thumb || !container) return;
-
-  let isDragging = false, startX = 0, currentX = 0;
-  const maxSlide = () => container.offsetWidth - thumb.offsetWidth - 12;
-
-  thumb.addEventListener('mousedown', e => { isDragging = true; startX = e.clientX; });
-  thumb.addEventListener('touchstart', e => { isDragging = true; startX = e.touches[0].clientX; });
-
-  const onMove = (clientX) => {
-    if (!isDragging) return;
-    currentX = Math.max(0, Math.min(clientX - startX, maxSlide()));
-    thumb.style.transform = `translateX(${currentX}px)`;
-  };
-  document.addEventListener('mousemove', e => onMove(e.clientX));
-  document.addEventListener('touchmove', e => onMove(e.touches[0].clientX));
-
-  const onEnd = async () => {
-    if (!isDragging) return;
-    isDragging = false;
-    if (currentX >= maxSlide() * 0.85) {
-      // Completar pedido
-      thumb.style.transform = `translateX(${maxSlide()}px)`;
+  const btn = document.getElementById('btn-pay-checkout');
+  if (btn) {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-white">sync</span> Procesando...';
       await handleCheckout();
-    } else {
-      thumb.style.transition = 'transform 0.3s ease';
-      thumb.style.transform = 'translateX(0)';
-      setTimeout(() => { thumb.style.transition = ''; }, 300);
-    }
-    currentX = 0;
-  };
-  document.addEventListener('mouseup', onEnd);
-  document.addEventListener('touchend', onEnd);
+      btn.disabled = false;
+      btn.innerHTML = 'Confirmar Pedido 🌮';
+    });
+  }
 }
 
 async function handleCheckout() {
@@ -441,9 +417,8 @@ async function handleCheckout() {
   const total = subtotal + tipAmount;
   
   const origin = window.location.origin;
-  const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
-  const successUrl = `${origin}${basePath}/success.html`;
-  const cancelUrl = `${origin}${basePath}/checkout.html`;
+  const successUrl = `${origin}/success`;
+  const cancelUrl = `${origin}/checkout`;
   
   const metodoPago = window.selectedPaymentMethod || 'Tarjeta';
 
