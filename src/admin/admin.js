@@ -165,7 +165,13 @@ function renderizarStockVisual() {
 
   let filtrados = stockProductosCache;
   if (stockFiltroCat !== 'Todo') {
-    filtrados = filtrados.filter(p => (p.categoria || 'General') === stockFiltroCat);
+    filtrados = filtrados.filter(p => {
+      const cat = p.categoria || 'General';
+      if (stockFiltroCat === 'Platos Fuertes') return ['Tacos', 'Sabritas', 'Platos Fuertes'].includes(cat);
+      if (stockFiltroCat === 'Bebidas') return ['Refrescos 600ml', 'Otros Líquidos', 'Bebidas'].includes(cat);
+      if (stockFiltroCat === 'Postres') return ['Postres'].includes(cat);
+      return cat === stockFiltroCat;
+    });
   }
   if (term) {
     filtrados = filtrados.filter(p => (p.nombre||'').toLowerCase().includes(term) || (p.categoria||'').toLowerCase().includes(term));
