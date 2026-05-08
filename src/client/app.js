@@ -53,7 +53,7 @@ function crearTarjetaProducto(producto) {
   const cantidad = obtenerCantidadEnCarrito(producto.id);
 
   const stepperHTML = cantidad > 0 ? `
-    <div class="flex items-center gap-1 absolute -right-1 bottom-0">
+    <div class="flex items-center gap-1 absolute right-0 bottom-0">
       <button class="btn-quitar w-8 h-8 rounded-full bg-plaza-highlight text-plaza-primary flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-200" data-id="${producto.id}">
         <span class="material-symbols-outlined text-[18px] font-bold">remove</span>
       </button>
@@ -62,7 +62,7 @@ function crearTarjetaProducto(producto) {
         <span class="material-symbols-outlined text-[18px] font-bold">add</span>
       </button>
     </div>` : `
-    <button class="btn-agregar absolute -right-1 bottom-0 w-9 h-9 rounded-full bg-plaza-primary text-white shadow-md shadow-plaza-primary/30 flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-200" data-id="${producto.id}" ${tieneOpciones ? 'data-has-options="true"' : ''}>
+    <button class="btn-agregar absolute right-0 bottom-0 w-9 h-9 rounded-full bg-plaza-primary text-white shadow-md shadow-plaza-primary/30 flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-200" data-id="${producto.id}" ${tieneOpciones ? 'data-has-options="true"' : ''}>
       <span class="material-symbols-outlined text-[20px] font-bold">add</span>
     </button>`;
 
