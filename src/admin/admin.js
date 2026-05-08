@@ -167,9 +167,10 @@ function renderizarStockVisual() {
   if (stockFiltroCat !== 'Todo') {
     filtrados = filtrados.filter(p => {
       const cat = p.categoria || 'General';
-      if (stockFiltroCat === 'Platos Fuertes') return ['Tacos', 'Sabritas', 'Platos Fuertes'].includes(cat);
-      if (stockFiltroCat === 'Bebidas') return ['Refrescos 600ml', 'Otros Líquidos', 'Bebidas'].includes(cat);
-      if (stockFiltroCat === 'Postres') return ['Postres'].includes(cat);
+      if (stockFiltroCat === 'Platos Fuertes') return /taco|plato fuerte|comida|tostito|nacho/i.test(cat);
+      if (stockFiltroCat === 'Sabritas') return /sabrita/i.test(cat);
+      if (stockFiltroCat === 'Bebidas') return /bebida|refresco|l[ií]quido|jugo|agua|coca|sprite|fanta/i.test(cat);
+      if (stockFiltroCat === 'Postres') return /postre/i.test(cat);
       return cat === stockFiltroCat;
     });
   }
@@ -389,8 +390,39 @@ function inicializarHistorial() {
   if (btnWeek) btnWeek.addEventListener('click', () => { currentFilter = 'week'; updateActiveFilterButton(); renderHistory(); });
   if (btnMonth) btnMonth.addEventListener('click', () => { currentFilter = 'month'; updateActiveFilterButton(); renderHistory(); });
   
-  if (dateStartEl) dateStartEl.addEventListener('change', () => { currentFilter = 'custom'; updateActiveFilterButton(); renderHistory(); });
-  if (dateEndEl) dateEndEl.addEventListener('change', () => { currentFilter = 'custom'; updateActiveFilterButton(); renderHistory(); });
+  if (dateStartEl && dateEndEl) {
+    const today = new Date();
+    const tzoffset = today.getTimezoneOffset() * 60000;
+    const todayStr = (new Date(today - tzoffset)).toISOString().split('T')[0];
+    dateStartEl.max = todayStr;
+    dateEndEl.max = todayStr;
+
+    dateStartEl.addEventListener('change', () => { 
+      currentFilter = 'custom'; 
+      if (dateStartEl.value) {
+        dateEndEl.min = dateStartEl.value;
+        if (dateEndEl.value && dateEndEl.value < dateStartEl.value) {
+          dateEndEl.value = dateStartEl.value;
+        }
+      }
+      updateActiveFilterButton(); 
+      renderHistory(); 
+    });
+    
+    dateEndEl.addEventListener('change', () => { 
+      currentFilter = 'custom'; 
+      if (dateEndEl.value) {
+        dateStartEl.max = dateEndEl.value;
+        if (dateStartEl.value && dateStartEl.value > dateEndEl.value) {
+          dateStartEl.value = dateEndEl.value;
+        }
+      } else {
+        dateStartEl.max = todayStr;
+      }
+      updateActiveFilterButton(); 
+      renderHistory(); 
+    });
+  }
 
   // Print button
   const btnPrint = document.getElementById('btn-print-history');
