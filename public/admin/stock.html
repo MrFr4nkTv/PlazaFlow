@@ -98,7 +98,13 @@
     }
   </style>
   <script src="../../src/admin/admin.js" type="module"></script>
-  </head>
+  <style>
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+</style>
+</head>
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased">
 <div class="w-full max-w-7xl mx-auto flex-1 flex flex-col bg-surface-warm shadow-xl overflow-hidden relative">
 <div class="sticky top-0 z-40 bg-surface-warm/95 backdrop-blur-sm pb-2">
@@ -124,17 +130,17 @@
 </span>
 <input aria-label="Search items" class="w-full h-14 pl-12 pr-6 bg-white border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 text-lg placeholder-gray-400 font-medium transition-all text-text-main" placeholder="Buscar productos..." type="text" id="stock-search-input"/>
 </div>
-<div class="flex overflow-x-auto no-scrollbar gap-2 mt-4 pb-1">
-<button class="shrink-0 h-10 px-6 bg-text-main text-white font-bold text-sm rounded-full shadow-md transition-transform active:scale-95">
+<div class="flex overflow-x-auto no-scrollbar gap-2 mt-4 pb-1" id="stock-category-filters">
+<button class="cat-btn active shrink-0 h-10 px-6 bg-text-main text-white font-bold text-sm rounded-full shadow-md transition-transform active:scale-95" data-cat="Todo">
                     Todo
                 </button>
-<button class="shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95">
+<button class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95" data-cat="Platos Fuertes">
                     Platos Fuertes
                 </button>
-<button class="shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95">
+<button class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95" data-cat="Bebidas">
                     Bebidas
                 </button>
-<button class="shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95">
+<button class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95" data-cat="Postres">
                     Postres
                 </button>
 </div>
@@ -186,3 +192,4 @@
 </nav>
 </div>
 </body></html>
+

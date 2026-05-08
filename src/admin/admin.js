@@ -117,94 +117,128 @@ function inicializarStock() {
   cargarProductosStock();
 }
 
+let stockProductosCache = [];
+let stockFiltroCat = 'Todo';
+
 async function cargarProductosStock() {
   const stockList = document.getElementById('admin-stock-list');
   try {
-    const productos = await obtenerMenu();
+    stockProductosCache = await obtenerMenu();
+    renderizarStockVisual();
 
-    // Agrupar por categoría
-    const categorias = {};
-    productos.forEach(p => {
-      const cat = p.categoria || 'General';
-      if (!categorias[cat]) categorias[cat] = [];
-      categorias[cat].push(p);
-    });
-
-    stockList.innerHTML = Object.entries(categorias).map(([cat, items]) => `
-      <section>
-        <div class="flex items-center justify-between mb-3 mt-2">
-          <h2 class="font-display font-bold text-lg text-gray-800">${cat}</h2>
-          <span class="text-xs font-bold text-gray-400">${items.length} productos</span>
-        </div>
-        <div class="flex flex-col gap-3">
-          ${items.map(p => crearFilaStock(p)).join('')}
-        </div>
-      </section>
-    `).join('');
-
-    // Vincular botones de stock
-    stockList.querySelectorAll('.stock-minus').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.dataset.id;
-        const display = stockList.querySelector(`.stock-display[data-id="${id}"]`);
-        let currentStock = parseInt(display.textContent);
-        if (currentStock > 0) {
-          const newState = currentStock - 1;
-          display.textContent = newState;
-          btn.disabled = true;
-          try {
-            await actualizarStock(id, newState);
-            actualizarFilaUI(btn.closest('.bg-white'), newState);
-          } catch (e) {
-            console.error('Error actualizando stock:', e);
-            display.textContent = currentStock; // revert on error
-          }
-          btn.disabled = false;
-        }
-      });
-    });
-
-    stockList.querySelectorAll('.stock-plus').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.dataset.id;
-        const display = stockList.querySelector(`.stock-display[data-id="${id}"]`);
-        let currentStock = parseInt(display.textContent);
-        const newState = currentStock + 1;
-        display.textContent = newState;
-        btn.disabled = true;
-        try {
-          await actualizarStock(id, newState);
-          actualizarFilaUI(btn.closest('.bg-white'), newState);
-        } catch (e) {
-          console.error('Error actualizando stock:', e);
-          display.textContent = currentStock; // revert
-        }
-        btn.disabled = false;
+    // Filtros de categoría
+    const catBtns = document.querySelectorAll('.cat-btn');
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catBtns.forEach(b => {
+          b.classList.remove('bg-text-main', 'text-white');
+          b.classList.add('bg-white', 'text-gray-600');
+        });
+        btn.classList.remove('bg-white', 'text-gray-600');
+        btn.classList.add('bg-text-main', 'text-white');
+        
+        stockFiltroCat = btn.dataset.cat;
+        renderizarStockVisual();
       });
     });
 
     // Búsqueda en Stock
     const searchInput = document.getElementById('stock-search-input');
     if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        const rows = stockList.querySelectorAll('.bg-white.p-4');
-        rows.forEach(row => {
-          const name = row.querySelector('h3').textContent.toLowerCase();
-          const category = row.querySelector('p').textContent.toLowerCase();
-          if (name.includes(query) || category.includes(query)) {
-            row.style.display = '';
-          } else {
-            row.style.display = 'none';
-          }
-        });
+      searchInput.addEventListener('input', () => {
+        renderizarStockVisual();
       });
     }
 
   } catch (error) {
     console.error('Error cargando stock:', error);
-    stockList.innerHTML = '<div class="text-center py-12"><p class="text-gray-400">Error cargando productos</p></div>';
+    if(stockList) stockList.innerHTML = '<div class="text-center py-12"><p class="text-gray-400">Error cargando productos</p></div>';
   }
+}
+
+function renderizarStockVisual() {
+  const stockList = document.getElementById('admin-stock-list');
+  if (!stockList) return;
+
+  const searchInput = document.getElementById('stock-search-input');
+  const term = searchInput ? searchInput.value.toLowerCase() : '';
+
+  let filtrados = stockProductosCache;
+  if (stockFiltroCat !== 'Todo') {
+    filtrados = filtrados.filter(p => (p.categoria || 'General') === stockFiltroCat);
+  }
+  if (term) {
+    filtrados = filtrados.filter(p => (p.nombre||'').toLowerCase().includes(term) || (p.categoria||'').toLowerCase().includes(term));
+  }
+
+  if (filtrados.length === 0) {
+    stockList.innerHTML = '<div class="text-center py-12"><p class="text-gray-400">No hay productos que coincidan</p></div>';
+    return;
+  }
+
+  const categorias = {};
+  filtrados.forEach(p => {
+    const cat = p.categoria || 'General';
+    if (!categorias[cat]) categorias[cat] = [];
+    categorias[cat].push(p);
+  });
+
+  stockList.innerHTML = Object.entries(categorias).map(([cat, items]) => `
+    <section>
+      <div class="flex items-center justify-between mb-3 mt-2">
+        <h2 class="font-display font-bold text-lg text-gray-800">${cat}</h2>
+        <span class="text-xs font-bold text-gray-400">${items.length} productos</span>
+      </div>
+      <div class="flex flex-col gap-3">
+        ${items.map(p => crearFilaStock(p)).join('')}
+      </div>
+    </section>
+  `).join('');
+
+  // Vincular botones de stock
+  stockList.querySelectorAll('.stock-minus').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      const display = stockList.querySelector(`.stock-display[data-id="${id}"]`);
+      let currentStock = parseInt(display.textContent);
+      if (currentStock > 0) {
+        const newState = currentStock - 1;
+        display.textContent = newState;
+        btn.disabled = true;
+        try {
+          await actualizarStock(id, newState);
+          const prod = stockProductosCache.find(p => p.id === id);
+          if (prod) prod.stock = newState;
+          actualizarFilaUI(btn.closest('.bg-white'), newState);
+        } catch (e) {
+          console.error('Error actualizando stock:', e);
+          display.textContent = currentStock; // revert on error
+        }
+        btn.disabled = false;
+      }
+    });
+  });
+
+  stockList.querySelectorAll('.stock-plus').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      const display = stockList.querySelector(`.stock-display[data-id="${id}"]`);
+      let currentStock = parseInt(display.textContent);
+      const newState = currentStock + 1;
+      display.textContent = newState;
+      btn.disabled = true;
+      try {
+        await actualizarStock(id, newState);
+        const prod = stockProductosCache.find(p => p.id === id);
+        if (prod) prod.stock = newState;
+        actualizarFilaUI(btn.closest('.bg-white'), newState);
+      } catch (e) {
+        console.error('Error actualizando stock:', e);
+        display.textContent = currentStock; // revert on error
+      }
+      btn.disabled = false;
+    });
+  });
 }
 
 function crearFilaStock(producto) {
@@ -253,13 +287,15 @@ function inicializarHistorial() {
   const historyList = document.getElementById('history-order-list');
   if (!historyList) return;
 
-  let currentFilter = 'day'; // 'day', 'week', 'month'
+  let currentFilter = 'day'; // 'day', 'week', 'month', 'custom'
 
   const btnDay = document.getElementById('filter-day');
   const btnWeek = document.getElementById('filter-week');
   const btnMonth = document.getElementById('filter-month');
   const dateStartEl = document.getElementById('history-date-start');
   const dateEndEl = document.getElementById('history-date-end');
+  const dateStartLabelEl = document.getElementById('history-date-start-label');
+  const dateEndLabelEl = document.getElementById('history-date-end-label');
   const dateLabelEl = document.getElementById('history-date-label');
 
   function updateActiveFilterButton() {
@@ -268,16 +304,19 @@ function inicializarHistorial() {
       if(b) b.classList.replace('text-primary', 'text-gray-400');
       if(b) b.classList.remove('shadow-sm', 'border-gray-100');
     });
-    const activeBtn = currentFilter === 'day' ? btnDay : (currentFilter === 'week' ? btnWeek : btnMonth);
-    if(activeBtn) {
-      activeBtn.classList.replace('bg-transparent', 'bg-white');
-      activeBtn.classList.replace('text-gray-400', 'text-primary');
-      activeBtn.classList.add('shadow-sm', 'border-gray-100');
+    if (currentFilter !== 'custom') {
+      const activeBtn = currentFilter === 'day' ? btnDay : (currentFilter === 'week' ? btnWeek : btnMonth);
+      if(activeBtn) {
+        activeBtn.classList.replace('bg-transparent', 'bg-white');
+        activeBtn.classList.replace('text-gray-400', 'text-primary');
+        activeBtn.classList.add('shadow-sm', 'border-gray-100');
+      }
     }
   }
 
   function formatDateShort(date) {
-    return date.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' });
+    if (!date || isNaN(date.getTime())) return '--';
+    return date.toLocaleDateString('es-MX', { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
   function filterOrders(pedidos) {
@@ -289,7 +328,24 @@ function inicializarHistorial() {
     let endLabel = formatDateShort(now);
     let titleLabel = '';
 
-    if (currentFilter === 'day') {
+    if (currentFilter === 'custom') {
+      const startVal = dateStartEl ? dateStartEl.value : null;
+      const endVal = dateEndEl ? dateEndEl.value : null;
+      const customStart = startVal ? new Date(startVal + 'T00:00:00') : null;
+      const customEnd = endVal ? new Date(endVal + 'T23:59:59') : null;
+
+      filtered = pedidos.filter(p => {
+        if (!p.timestamp) return false;
+        const pt = p.timestamp.toMillis();
+        let valid = true;
+        if (customStart && pt < customStart.getTime()) valid = false;
+        if (customEnd && pt > customEnd.getTime()) valid = false;
+        return valid;
+      });
+      startLabel = customStart ? formatDateShort(customStart) : '--';
+      endLabel = customEnd ? formatDateShort(customEnd) : '--';
+      titleLabel = `Personalizado <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>`;
+    } else if (currentFilter === 'day') {
       filtered = pedidos.filter(p => {
         if (!p.timestamp) return false;
         return p.timestamp.toMillis() >= startOfDay.getTime();
@@ -315,8 +371,8 @@ function inicializarHistorial() {
       titleLabel = `Este Mes <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>`;
     }
 
-    if (dateStartEl) dateStartEl.textContent = startLabel;
-    if (dateEndEl) dateEndEl.textContent = endLabel;
+    if (dateStartLabelEl) dateStartLabelEl.textContent = startLabel;
+    if (dateEndLabelEl) dateEndLabelEl.textContent = endLabel;
     if (dateLabelEl) dateLabelEl.innerHTML = titleLabel;
 
     return filtered;
@@ -326,6 +382,9 @@ function inicializarHistorial() {
   if (btnDay) btnDay.addEventListener('click', () => { currentFilter = 'day'; updateActiveFilterButton(); renderHistory(); });
   if (btnWeek) btnWeek.addEventListener('click', () => { currentFilter = 'week'; updateActiveFilterButton(); renderHistory(); });
   if (btnMonth) btnMonth.addEventListener('click', () => { currentFilter = 'month'; updateActiveFilterButton(); renderHistory(); });
+  
+  if (dateStartEl) dateStartEl.addEventListener('change', () => { currentFilter = 'custom'; updateActiveFilterButton(); renderHistory(); });
+  if (dateEndEl) dateEndEl.addEventListener('change', () => { currentFilter = 'custom'; updateActiveFilterButton(); renderHistory(); });
 
   // Print button
   const btnPrint = document.getElementById('btn-print-history');
@@ -339,7 +398,7 @@ function inicializarHistorial() {
   });
 
   function renderHistory() {
-    const completados = filterOrders(todosPedidos).filter(p => p.estado === 'listo');
+    const completados = filterOrders(todosPedidos).filter(p => p.estado === 'listo' || p.estado === 'entregado');
 
     // Stats
     const totalPedidos = completados.length;

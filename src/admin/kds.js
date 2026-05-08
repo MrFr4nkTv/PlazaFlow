@@ -39,12 +39,12 @@ const estadoConfig = {
 
 function tiempoTranscurrido(timestamp) {
   if (!timestamp) return '...';
-  const now = Date.now();
-  const ms = now - timestamp.toMillis();
-  const mins = Math.floor(ms / 60000);
-  if (mins < 1) return 'Ahora';
-  if (mins < 60) return `${mins} min`;
-  return `${Math.floor(mins / 60)}h ${mins % 60}m`;
+  const date = new Date(timestamp.toMillis());
+  const dia = date.getDate().toString().padStart(2, '0');
+  const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+  const horas = date.getHours().toString().padStart(2, '0');
+  const mins = date.getMinutes().toString().padStart(2, '0');
+  return `${dia}/${mes} ${horas}:${mins}`;
 }
 
 function crearTarjetaPedido(pedido) {
@@ -100,7 +100,33 @@ function renderizarPedidos() {
     return;
   }
 
-  grid.innerHTML = filtrados.map(crearTarjetaPedido).join('');
+  let limpiarHtml = '';
+  if (filtroActual === 'listo' && filtrados.length > 0) {
+    limpiarHtml = `
+      <div class="col-span-full mb-1 flex justify-end">
+        <button id="btn-limpiar-listos" class="flex items-center gap-1 px-4 py-2 bg-red-50 text-red-600 font-bold text-sm rounded-xl border border-red-100 hover:bg-red-100 transition-colors shadow-sm active:scale-95">
+          <span class="material-symbols-outlined text-[18px]">cleaning_services</span> Limpiar Completados
+        </button>
+      </div>
+    `;
+  }
+
+  grid.innerHTML = limpiarHtml + filtrados.map(crearTarjetaPedido).join('');
+
+  const btnLimpiar = document.getElementById('btn-limpiar-listos');
+  if (btnLimpiar) {
+    btnLimpiar.addEventListener('click', async () => {
+      btnLimpiar.disabled = true;
+      btnLimpiar.innerHTML = '<span class="material-symbols-outlined animate-spin text-[18px]">sync</span> Limpiando...';
+      try {
+        await Promise.all(filtrados.map(p => actualizarEstadoPedido(p.id, 'entregado')));
+      } catch (e) {
+        console.error('Error limpiando pedidos', e);
+        btnLimpiar.disabled = false;
+        btnLimpiar.innerHTML = 'Error al limpiar';
+      }
+    });
+  }
 
   grid.querySelectorAll('.kds-advance').forEach(btn => {
     btn.addEventListener('click', async (e) => {
