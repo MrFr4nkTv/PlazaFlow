@@ -42,33 +42,20 @@ function obtenerCantidadEnCarrito(productId) {
 }
 
 function crearTarjetaProducto(producto) {
-  const nombre = producto.nombre || 'Producto';
+  const nombre = producto.nombre || 'Sin nombre';
   const precio = Number(producto.precio) || 0;
   const categoria = producto.categoria || 'General';
   const emoji = categoriaEmoji[categoria] || '🍽️';
-  const opciones = producto.opciones ? producto.opciones.join(' · ') : categoria;
   const tieneOpciones = producto.opciones && producto.opciones.length > 0;
   const stock = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
   const disponible = stock > 0;
   const cantidad = obtenerCantidadEnCarrito(producto.id);
 
-  const stepperHTML = cantidad > 0 ? `
-    <div class="flex items-center gap-1 absolute right-0 bottom-0">
-      <button class="btn-quitar w-8 h-8 rounded-full bg-plaza-highlight text-plaza-primary flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-200" data-id="${producto.id}">
-        <span class="material-symbols-outlined text-[18px] font-bold">remove</span>
-      </button>
-      <span class="w-6 text-center font-heading font-bold text-sm text-plaza-text">${cantidad}</span>
-      <button class="btn-agregar w-8 h-8 rounded-full bg-plaza-primary text-white shadow-md shadow-plaza-primary/30 flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-200" data-id="${producto.id}" ${tieneOpciones ? 'data-has-options="true"' : ''}>
-        <span class="material-symbols-outlined text-[18px] font-bold">add</span>
-      </button>
-    </div>` : `
-    <button class="btn-agregar absolute right-0 bottom-0 w-9 h-9 rounded-full bg-plaza-primary text-white shadow-md shadow-plaza-primary/30 flex items-center justify-center hover:scale-110 active:scale-90 transition-all duration-200" data-id="${producto.id}" ${tieneOpciones ? 'data-has-options="true"' : ''}>
-      <span class="material-symbols-outlined text-[20px] font-bold">add</span>
-    </button>`;
-
   return `
-    <article class="bg-white rounded-card p-3 shadow-soft flex items-start gap-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${!disponible ? 'opacity-50 pointer-events-none' : ''}"
+    <article class="bg-white rounded-card p-3 shadow-soft flex items-start gap-4 transition-all duration-300 hover:shadow-lg ${!disponible ? 'opacity-50 pointer-events-none' : ''}"
       data-product-id="${producto.id}" data-product-nombre="${nombre}" data-product-precio="${precio}" data-product-categoria="${categoria}" ${tieneOpciones ? `data-product-opciones='${JSON.stringify(producto.opciones)}'` : ''}>
+      
+      <!-- Imagen Premium (100px) -->
       <div class="w-[100px] h-[96px] flex-shrink-0 rounded-[16px] bg-gradient-to-br from-plaza-highlight to-plaza-bg flex items-center justify-center text-4xl select-none cursor-pointer btn-open-detail relative overflow-hidden">
         ${emoji}
         ${!disponible ? 
@@ -76,15 +63,31 @@ function crearTarjetaProducto(producto) {
           `<span class="absolute top-0 left-0 bg-plaza-primary/10 text-plaza-primary text-[9px] font-bold px-2 py-1 rounded-br-lg border-b border-r border-plaza-primary/20">Stock: ${stock}</span>`
         }
       </div>
-      <div class="flex-1 py-1 flex flex-col justify-between h-full relative">
-        <div class="cursor-pointer btn-open-detail">
-          <h3 class="font-heading font-semibold text-[15px] text-plaza-text leading-tight mb-1">${nombre}</h3>
-          <p class="text-xs text-plaza-muted leading-relaxed">${opciones}</p>
+
+      <!-- Info Fluida -->
+      <div class="flex-1 min-w-0 flex flex-col justify-between h-[96px] py-1">
+        <div class="cursor-pointer btn-open-detail min-w-0">
+          <h3 class="font-heading font-semibold text-[15px] text-plaza-text leading-tight mb-1 truncate">${nombre}</h3>
+          <p class="text-xs text-plaza-muted leading-relaxed truncate">${categoria}</p>
         </div>
-        <div class="flex items-center justify-between mt-2">
-          <span class="font-heading font-bold text-lg text-plaza-primary">$${precio.toFixed(2)}</span>
+        
+        <div class="flex items-center justify-between gap-2 mt-auto">
+          <span class="font-heading font-bold text-lg text-plaza-primary shrink-0">$${precio.toFixed(2)}</span>
+          
+          <!-- Controles de cantidad integrados en el flujo -->
+          <div class="flex items-center gap-2">
+            ${cantidad > 0 ? `
+              <button class="btn-quitar w-8 h-8 rounded-full bg-plaza-highlight text-plaza-primary flex items-center justify-center active:scale-90 transition-all" data-id="${producto.id}">
+                <span class="material-symbols-outlined text-[18px] font-bold">remove</span>
+              </button>
+              <span class="w-6 text-center font-heading font-bold text-sm text-plaza-text">${cantidad}</span>
+            ` : ''}
+            <button class="btn-agregar w-9 h-9 rounded-full bg-plaza-primary text-white shadow-md shadow-plaza-primary/30 flex items-center justify-center active:scale-90 transition-all" 
+              data-id="${producto.id}" ${tieneOpciones ? 'data-has-options="true"' : ''}>
+              <span class="material-symbols-outlined text-[20px] font-bold">${cantidad > 0 ? 'add' : 'add'}</span>
+            </button>
+          </div>
         </div>
-        ${disponible ? stepperHTML : ''}
       </div>
     </article>`;
 }
