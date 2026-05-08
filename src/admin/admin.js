@@ -167,10 +167,10 @@ function renderizarStockVisual() {
   if (stockFiltroCat !== 'Todo') {
     filtrados = filtrados.filter(p => {
       const cat = p.categoria || 'General';
-      if (stockFiltroCat === 'Platos Fuertes') return /taco|plato fuerte|comida|tostito|nacho/i.test(cat);
-      if (stockFiltroCat === 'Sabritas') return /sabrita/i.test(cat);
-      if (stockFiltroCat === 'Bebidas') return /bebida|refresco|l[ií]quido|jugo|agua|coca|sprite|fanta/i.test(cat);
-      if (stockFiltroCat === 'Postres') return /postre/i.test(cat);
+      if (stockFiltroCat === 'Platos Fuertes') return /taco|plato fuerte|comida|tostito|nacho|alimento|hamburguesa|burrito|orden/i.test(cat);
+      if (stockFiltroCat === 'Sabritas') return /sabrita|papa|botana|churrito/i.test(cat);
+      if (stockFiltroCat === 'Bebidas') return /bebida|refresco|l[ií]quido|jugo|agua|coca|sprite|fanta|sidral|mirinda|pepsi|manzanita|jugo/i.test(cat);
+      if (stockFiltroCat === 'Postres') return /postre|dulce|nieve|pastel/i.test(cat);
       return cat === stockFiltroCat;
     });
   }

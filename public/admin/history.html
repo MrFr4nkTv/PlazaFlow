@@ -67,15 +67,9 @@
     }
   </style>
   <script src="../../src/admin/admin.js" type="module"></script>
-  <style>
-  html, body {
-    overflow-x: hidden;
-    max-width: 100vw;
-  }
-</style>
 </head>
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-ink font-body antialiased">
-<div class="w-full max-w-7xl mx-auto flex-1 flex flex-col bg-[#FFF9F7] shadow-xl overflow-hidden relative">
+<div class="w-full max-w-lg mx-auto flex-1 flex flex-col bg-[#FFF9F7] shadow-xl overflow-hidden relative">
 <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
 <div class="flex items-center justify-between h-16 px-6 pt-2">
 <div class="flex items-center gap-3">
@@ -103,9 +97,9 @@
 <button id="filter-month" class="history-filter-btn flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-xl text-gray-400 hover:text-gray-600 transition-all">Mes</button>
 </div>
 <div class="flex items-center gap-3 bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
-<div class="flex-1 flex items-center gap-3 px-3 py-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer hover:bg-gray-100 transition-colors relative">
+<div class="flex-1 flex items-center gap-3 px-3 py-2 bg-gray-50 rounded-xl border border-gray-100 transition-colors relative">
+<div class="h-8 w-8 rounded-full bg-white flex items-center justify-center text-primary border border-gray-100 shadow-sm shrink-0 relative">
 <input type="date" id="history-date-start" class="w-full h-full bg-transparent border-none p-0 focus:ring-0 cursor-pointer absolute inset-0 opacity-0 z-10" />
-<div class="h-8 w-8 rounded-full bg-white flex items-center justify-center text-primary border border-gray-100 shadow-sm shrink-0">
 <span class="material-symbols-outlined text-[16px]">calendar_today</span>
 </div>
 <div class="flex flex-col flex-1 relative">
@@ -114,9 +108,9 @@
 </div>
 </div>
 <span class="material-symbols-outlined text-gray-300 text-[20px] shrink-0">arrow_forward</span>
-<div class="flex-1 flex items-center gap-3 px-3 py-2 bg-gray-50 rounded-xl border border-gray-100 cursor-pointer hover:bg-gray-100 transition-colors relative">
+<div class="flex-1 flex items-center gap-3 px-3 py-2 bg-gray-50 rounded-xl border border-gray-100 transition-colors relative">
+<div class="h-8 w-8 rounded-full bg-white flex items-center justify-center text-primary border border-gray-100 shadow-sm shrink-0 relative">
 <input type="date" id="history-date-end" class="w-full h-full bg-transparent border-none p-0 focus:ring-0 cursor-pointer absolute inset-0 opacity-0 z-10" />
-<div class="h-8 w-8 rounded-full bg-white flex items-center justify-center text-primary border border-gray-100 shadow-sm shrink-0">
 <span class="material-symbols-outlined text-[16px]">event</span>
 </div>
 <div class="flex flex-col flex-1 relative">
@@ -190,7 +184,7 @@
         </button>
 </div>
 </main>
-<nav class="fixed bottom-0 left-0 right-0 max-w-7xl mx-auto bg-white border-t border-gray-100 shadow-nav z-50 pb-safe">
+<nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white border-t border-gray-100 shadow-nav z-50 pb-safe">
 <div class="flex items-center justify-between px-10 pt-3 pb-6 h-[88px] max-w-lg mx-auto">
 <button class="flex flex-col items-center gap-1 group w-16" id="nav-active-orders">
 <div class="h-7 w-12 flex items-center justify-center rounded-2xl bg-transparent text-gray-400 group-hover:text-primary group-hover:bg-primary/5 transition-all">
@@ -214,4 +208,5 @@
 </nav>
 </div>
 </body></html>
+
 
