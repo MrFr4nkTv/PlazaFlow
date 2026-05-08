@@ -412,6 +412,21 @@ function configurarSlideToPay() {
 
 async function handleCheckout() {
   if (window.carrito.length === 0) { alert('El carrito está vacío.'); return; }
+
+  try {
+    const productosDB = await obtenerMenu();
+    for (const item of window.carrito) {
+      const prodDB = productosDB.find(p => p.id === item.id);
+      const stockDisp = prodDB && prodDB.stock !== undefined ? prodDB.stock : (prodDB && prodDB.disponible !== false ? 10 : 0);
+      if (item.cantidad > stockDisp) {
+        alert(`❌ No hay suficiente stock para "${item.nombre}". Stock disponible: ${stockDisp}. Por favor ajusta tu carrito antes de pagar.`);
+        return;
+      }
+    }
+  } catch (error) {
+    console.error('Error validando stock', error);
+  }
+
   const subtotal = window.carrito.reduce((a, i) => a + (i.precio * i.cantidad), 0);
   const tipAmount = subtotal * (tipPorcentaje / 100);
   const total = subtotal + tipAmount;

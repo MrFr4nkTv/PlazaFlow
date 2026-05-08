@@ -4,6 +4,7 @@ import {
   updateDoc,
   setDoc,
   doc, 
+  getDoc,
   getDocs,
   onSnapshot, 
   query, 
@@ -51,14 +52,18 @@ export const enviarPedido = async (datosPedido) => {
 
     // Decrementar stock
     if (datosPedido.items && datosPedido.items.length > 0) {
-      const updatePromises = datosPedido.items.map(item => {
+      const updatePromises = datosPedido.items.map(async (item) => {
         const productoRef = doc(db, "productos", item.id);
-        // Usamos setDoc con merge por si el campo 'stock' no existe aún
-        return setDoc(productoRef, {
-          stock: increment(-item.cantidad)
-        }, { merge: true }).catch(err => {
+        try {
+          const prodSnap = await getDoc(productoRef);
+          if (prodSnap.exists()) {
+            const currentStock = prodSnap.data().stock !== undefined ? prodSnap.data().stock : (prodSnap.data().disponible !== false ? 10 : 0);
+            const newStock = Math.max(0, currentStock - item.cantidad);
+            return setDoc(productoRef, { stock: newStock }, { merge: true });
+          }
+        } catch (err) {
           console.error(`❌ Error crítico: No se pudo restar stock de ${item.id}. Revisa las reglas de Firebase.`, err);
-        });
+        }
       });
       await Promise.all(updatePromises);
     }

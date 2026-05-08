@@ -217,7 +217,7 @@ function crearFilaStock(producto) {
   }[producto.categoria] || '🍽️';
 
   return `
-    <div class="bg-white p-4 rounded-3xl shadow-soft flex items-center gap-3 ${stock === 0 ? 'opacity-60 border-2 border-red-200' : 'border-2 border-transparent'}">
+    <div class="bg-white p-4 rounded-3xl shadow-soft flex items-center gap-3 ${stock <= 0 ? 'opacity-60 border-2 border-red-200' : 'border-2 border-transparent'}">
       <div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-2xl shrink-0">${emoji}</div>
       <div class="flex-1 min-w-0">
         <h3 class="font-display font-bold text-base text-gray-800 truncate">${producto.nombre || 'Producto'}</h3>
@@ -237,7 +237,7 @@ function crearFilaStock(producto) {
 
 function actualizarFilaUI(row, stock) {
   if (!row) return;
-  if (stock === 0) {
+  if (stock <= 0) {
     row.classList.add('opacity-60', 'border-red-200');
     row.classList.remove('border-transparent');
   } else {
