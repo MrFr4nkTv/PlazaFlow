@@ -1,7 +1,7 @@
 import { auth, storage } from '../services/firebaseInit.js';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { obtenerMenu, actualizarStock, escucharPedidos, escucharPedidoIndividual, actualizarEstadoPedido, escaparHtml, agregarProducto, eliminarProducto } from '../services/dbOperations.js';
+import { obtenerMenu, actualizarStock, escucharPedidos, escucharPedidoIndividual, actualizarEstadoPedido, escaparHtml, agregarProducto, actualizarProducto, eliminarProducto } from '../services/dbOperations.js';
 
 // ============================================================
 // AUTH GUARD — Proteger páginas admin
@@ -129,10 +129,13 @@ function inicializarModalAgregarProducto() {
   const previewImg = document.getElementById('upload-preview');
   const placeholder = document.getElementById('upload-placeholder');
   const btnSubmit = document.getElementById('btn-submit-product');
+  const titleEl = document.getElementById('modal-product-title');
 
   if (!modal || !btnOpen) return;
 
   let archivoSeleccionado = null;
+  let modoEdicionId = null;
+  let imagenPreviaUrl = null;
 
   const abrirModal = () => {
     modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -147,14 +150,58 @@ function inicializarModalAgregarProducto() {
     // Limpiar formulario
     if (form) form.reset();
     archivoSeleccionado = null;
+    modoEdicionId = null;
+    imagenPreviaUrl = null;
     if (previewImg) {
       previewImg.src = '';
       previewImg.classList.add('hidden');
     }
     if (placeholder) placeholder.classList.remove('hidden');
+    if (titleEl) titleEl.textContent = 'Nuevo Producto';
+    if (btnSubmit) btnSubmit.innerHTML = '<span class="material-symbols-outlined text-lg">check</span> Guardar en Menú';
   };
 
-  btnOpen.addEventListener('click', abrirModal);
+  btnOpen.addEventListener('click', () => {
+    cerrarModal(); // Asegurar estado limpio
+    setTimeout(() => {
+      abrirModal();
+    }, 10);
+  });
+
+  window.abrirModalEdicion = (producto) => {
+    cerrarModal();
+    modoEdicionId = producto.id;
+    imagenPreviaUrl = producto.imagen || null;
+    
+    // Poblar campos
+    const nombreInput = document.getElementById('add-nombre');
+    const precioInput = document.getElementById('add-precio');
+    const stockInput = document.getElementById('add-stock');
+    const catInput = document.getElementById('add-categoria');
+    const opcionesInput = document.getElementById('add-opciones');
+
+    if (nombreInput) nombreInput.value = producto.nombre || '';
+    if (precioInput) precioInput.value = producto.precio || '';
+    if (stockInput) stockInput.value = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
+    if (catInput && producto.categoria) catInput.value = producto.categoria;
+    if (opcionesInput) opcionesInput.value = producto.opciones ? producto.opciones.join(', ') : '';
+
+    if (titleEl) titleEl.textContent = 'Editar Producto';
+    if (btnSubmit) btnSubmit.innerHTML = '<span class="material-symbols-outlined text-lg">update</span> Actualizar Producto';
+
+    if (imagenPreviaUrl) {
+      if (previewImg) {
+        previewImg.src = imagenPreviaUrl;
+        previewImg.classList.remove('hidden');
+      }
+      if (placeholder) placeholder.classList.add('hidden');
+    }
+
+    setTimeout(() => {
+      abrirModal();
+    }, 10);
+  };
+
   if (btnClose) btnClose.addEventListener('click', cerrarModal);
   modal.addEventListener('click', (e) => {
     if (e.target === modal) cerrarModal();
@@ -188,7 +235,7 @@ function inicializarModalAgregarProducto() {
     });
   }
 
-  // Guardado del Producto
+  // Guardado o Actualización del Producto
   if (btnSubmit) {
     btnSubmit.addEventListener('click', async () => {
       const nombreInput = document.getElementById('add-nombre');
@@ -214,7 +261,7 @@ function inicializarModalAgregarProducto() {
       btnSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> Guardando...';
 
       try {
-        let imageUrl = null;
+        let imageUrl = imagenPreviaUrl;
         if (archivoSeleccionado) {
           btnSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> Subiendo foto...';
           const ext = archivoSeleccionado.name.split('.').pop();
@@ -232,23 +279,38 @@ function inicializarModalAgregarProducto() {
           disponible: stock > 0
         };
 
-        if (opciones.length > 0) datosProducto.opciones = opciones;
-        if (imageUrl) datosProducto.imagen = imageUrl;
+        if (opciones.length > 0) {
+          datosProducto.opciones = opciones;
+        } else {
+          datosProducto.opciones = [];
+        }
 
-        await agregarProducto(datosProducto);
+        if (imageUrl) {
+          datosProducto.imagen = imageUrl;
+        }
+
+        if (modoEdicionId) {
+          await actualizarProducto(modoEdicionId, datosProducto);
+        } else {
+          await manualCleanCacheAndAdd(datosProducto);
+        }
         
-        // Recargar inventario para mostrar el nuevo elemento de forma brillante
+        // Recargar inventario para mostrar los cambios
         await cargarProductosStock();
         cerrarModal();
       } catch (error) {
-        console.error('Error al registrar el producto:', error);
-        alert('Ocurrió un error al guardar el producto. Revisa los permisos de escritura en la consola de Firebase.');
+        console.error('Error al guardar/actualizar el producto:', error);
+        alert('Ocurrió un error al procesar el producto. Revisa los permisos de escritura en la consola de Firebase.');
       } finally {
         btnSubmit.disabled = false;
         btnSubmit.innerHTML = textoOriginal;
       }
     });
   }
+}
+
+async function manualCleanCacheAndAdd(datos) {
+  await agregarProducto(datos);
 }
 
 let stockProductosCache = [];
@@ -391,6 +453,17 @@ function renderizarStockVisual() {
     });
   });
 
+  // Vincular botón de editar
+  stockList.querySelectorAll('.stock-edit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      const prod = stockProductosCache.find(p => p.id === id);
+      if (prod && typeof window.abrirModalEdicion === 'function') {
+        window.abrirModalEdicion(prod);
+      }
+    });
+  });
+
   // Vincular botón de eliminar definitivamente
   stockList.querySelectorAll('.stock-delete').forEach(btn => {
     btn.addEventListener('click', async () => {
@@ -445,6 +518,9 @@ function crearFilaStock(producto) {
             <span class="material-symbols-outlined text-[18px]">add</span>
           </button>
         </div>
+        <button class="stock-edit w-9 h-9 flex items-center justify-center bg-amber-50 rounded-xl text-amber-600 hover:bg-amber-100 active:scale-90 transition-all ml-1 shadow-sm" data-id="${producto.id}" title="Editar Producto">
+          <span class="material-symbols-outlined text-[18px]">edit</span>
+        </button>
         <button class="stock-delete w-9 h-9 flex items-center justify-center bg-red-50 rounded-xl text-red-500 hover:bg-red-600 active:scale-90 transition-all ml-1 shadow-sm" data-id="${producto.id}" title="Eliminar definitivamente">
           <span class="material-symbols-outlined text-[18px]">delete_forever</span>
         </button>
@@ -694,12 +770,14 @@ function inicializarAdminDetail() {
   const btnProcess = document.getElementById('btn-admin-process-order');
   const btnComplete = document.getElementById('btn-admin-complete-order');
 
-  if (orderIdEl) orderIdEl.textContent = `PEDIDO #${orderId.slice(-4).toUpperCase()}`;
-
   escucharPedidoIndividual(orderId, (pedido) => {
     if (!pedido) {
       if (orderListEl) orderListEl.innerHTML = '<p class="text-center text-gray-500 py-10">Pedido no encontrado</p>';
       return;
+    }
+
+    if (orderIdEl) {
+      orderIdEl.innerHTML = `PEDIDO #${orderId.slice(-4).toUpperCase()}${pedido.clienteNombre ? `<span class="block text-sm font-bold text-primary mt-1">Cliente: ${escaparHtml(pedido.clienteNombre)}</span>` : ''}`;
     }
 
     if (orderTimeEl && pedido.timestamp) {

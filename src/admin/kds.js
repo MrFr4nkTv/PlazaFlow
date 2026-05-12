@@ -55,7 +55,10 @@ function crearTarjetaPedido(pedido) {
   <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col relative cursor-pointer hover:border-primary/50 transition-colors kds-card" data-pedido-id="${pedido.id}">
     <div class="px-3 py-2 border-b border-gray-100 flex justify-between items-center ${config.color}/10">
       <div>
-        <span class="font-display font-bold text-lg text-ink">#${pedido.id.slice(-4).toUpperCase()}</span>
+        <div class="flex items-center gap-1.5">
+          <span class="font-display font-bold text-lg text-ink">#${pedido.id.slice(-4).toUpperCase()}</span>
+          ${pedido.clienteNombre ? `<span class="px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold text-xs truncate max-w-[140px]">${escaparHtml(pedido.clienteNombre)}</span>` : ''}
+        </div>
         <p class="text-xs text-ink-light">${tiempoTranscurrido(pedido.timestamp)}</p>
       </div>
       <div class="flex flex-col items-end gap-1">

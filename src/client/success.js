@@ -58,7 +58,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const totalPagado = (data.session.amount_total / 100);
         const propina = totalPagado - subtotal;
 
+        const clienteNombre = localStorage.getItem('plazaflow_cliente_nombre') || 'Cliente Local';
+
         const datosPedido = {
+            clienteNombre,
             items: carrito.map(i => ({ 
                 id: i.id, 
                 nombre: i.nombre, 

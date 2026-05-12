@@ -209,6 +209,22 @@ export const agregarProducto = async (datosProducto) => {
 };
 
 /**
+ * Actualizar las propiedades de un producto existente en la colección 'productos'
+ * @param {string} id - ID del documento del producto
+ * @param {Object} camposActualizados - Propiedades a actualizar
+ */
+export const actualizarProducto = async (id, camposActualizados) => {
+  try {
+    const productoRef = doc(db, "productos", id);
+    await updateDoc(productoRef, camposActualizados);
+    console.log("Producto actualizado exitosamente con ID: ", id);
+  } catch (error) {
+    console.error("Error al actualizar el producto: ", error);
+    throw error;
+  }
+};
+
+/**
  * Eliminar un producto definitivamente de la colección 'productos'
  * @param {string} id - ID del documento del producto
  */

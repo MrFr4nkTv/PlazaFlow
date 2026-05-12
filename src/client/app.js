@@ -429,6 +429,15 @@ function configurarSlideToPay() {
 async function handleCheckout() {
   if (window.carrito.length === 0) { alert('El carrito está vacío.'); return; }
 
+  const nameInput = document.getElementById('checkout-customer-name');
+  const clienteNombre = nameInput ? nameInput.value.trim() : '';
+  if (!clienteNombre) {
+    alert('Por favor ingresa tu nombre para identificar tu pedido.');
+    if (nameInput) nameInput.focus();
+    return;
+  }
+  localStorage.setItem('plazaflow_cliente_nombre', clienteNombre);
+
   try {
     const productosDB = await obtenerMenu();
     for (const item of window.carrito) {
@@ -455,6 +464,7 @@ async function handleCheckout() {
 
   if (metodoPago === 'Efectivo') {
     const datosPedido = {
+      clienteNombre,
       items: window.carrito.map(i => ({ id: i.id, nombre: i.nombre, precio: i.precio, cantidad: i.cantidad, opcion: i.opcionSeleccionada || null })),
       subtotal, propina: tipAmount, total, metodoPago: 'Efectivo', estado: 'pago_pendiente'
     };
