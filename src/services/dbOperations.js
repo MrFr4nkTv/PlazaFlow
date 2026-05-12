@@ -128,6 +128,33 @@ export const actualizarEstadoPedido = async (id, nuevoEstado) => {
 };
 
 /**
+ * Restaura el stock de los productos cuando se cancela un pedido
+ * @param {Array<Object>} items - Array de items del pedido con id y cantidad
+ */
+export const restaurarStockPedido = async (items) => {
+  if (!items || items.length === 0) return;
+  try {
+    const updatePromises = items.map(async (item) => {
+      const productoRef = doc(db, "productos", item.id);
+      try {
+        const prodSnap = await getDoc(productoRef);
+        if (prodSnap.exists()) {
+          const currentStock = prodSnap.data().stock !== undefined ? prodSnap.data().stock : (prodSnap.data().disponible !== false ? 10 : 0);
+          const newStock = currentStock + item.cantidad;
+          await setDoc(productoRef, { stock: newStock }, { merge: true });
+          console.log(`✔️ Stock restaurado para ${item.nombre}: +${item.cantidad}`);
+        }
+      } catch (err) {
+        console.error(`❌ Error restaurando stock de ${item.id}`, err);
+      }
+    });
+    await Promise.all(updatePromises);
+  } catch (error) {
+    console.error("Error global al restaurar stock: ", error);
+  }
+};
+
+/**
  * Tarea 2.4: Cambiar el stock numérico de un producto
  * @param {string} idProducto - ID of the product in Firestore
  * @param {number} cantidad - Nueva cantidad exacta de stock

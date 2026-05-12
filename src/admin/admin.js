@@ -1,7 +1,7 @@
 import { auth, storage } from '../services/firebaseInit.js';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { obtenerMenu, actualizarStock, escucharPedidos, escucharPedidoIndividual, actualizarEstadoPedido, escaparHtml, agregarProducto, actualizarProducto, eliminarProducto } from '../services/dbOperations.js';
+import { obtenerMenu, actualizarStock, escucharPedidos, escucharPedidoIndividual, actualizarEstadoPedido, restaurarStockPedido, escaparHtml, agregarProducto, actualizarProducto, eliminarProducto } from '../services/dbOperations.js';
 
 // ============================================================
 // AUTH GUARD — Proteger páginas admin
@@ -895,7 +895,10 @@ function inicializarAdminDetail() {
                 }
               }
               await actualizarEstadoPedido(orderId, 'cancelado');
-              alert('Pedido cancelado exitosamente.');
+              if (pedido.items) {
+                await restaurarStockPedido(pedido.items);
+              }
+              alert('Pedido cancelado exitosamente e inventario restaurado.');
             } catch (err) {
               console.error('Error cancelando pedido:', err);
               alert('Error al actualizar el estado del pedido en Firebase.');
