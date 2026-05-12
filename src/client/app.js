@@ -941,7 +941,33 @@ function actualizarUITracking(estado, pedido) {
 
   const paymentWarningContainer = document.getElementById('payment-warning-container');
   if (paymentWarningContainer) {
-    if (pedido.metodoPago === 'Efectivo') {
+    if (estado === 'cancelado') {
+      if (pedido.metodoPago === 'Efectivo') {
+        paymentWarningContainer.innerHTML = `
+          <div class="mt-4 p-3 bg-red-50 rounded-xl border border-red-200 flex items-center gap-3">
+            <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-red-600">block</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm font-bold text-red-800 leading-tight">Pedido Cancelado</span>
+              <span class="text-xs text-red-700 mt-0.5">La orden fue cancelada. No se cobrará nada en mostrador.</span>
+            </div>
+          </div>
+        `;
+      } else {
+        paymentWarningContainer.innerHTML = `
+          <div class="mt-4 p-3 bg-red-50 rounded-xl border border-red-200 flex items-center gap-3">
+            <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-red-600">account_balance_wallet</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-sm font-bold text-red-800 leading-tight">Pedido Cancelado</span>
+              <span class="text-xs text-red-700 mt-0.5">El reembolso de tu pago en Stripe ha sido procesado exitosamente.</span>
+            </div>
+          </div>
+        `;
+      }
+    } else if (pedido.metodoPago === 'Efectivo') {
       paymentWarningContainer.innerHTML = `
         <div class="mt-4 p-3 bg-yellow-50 rounded-xl border border-yellow-200 flex items-center gap-3">
           <div class="h-10 w-10 bg-yellow-100 rounded-full flex items-center justify-center shrink-0">
@@ -968,7 +994,16 @@ function actualizarUITracking(estado, pedido) {
     }
   }
 
-  if (estado === 'listo') {
+  if (estado === 'cancelado') {
+    if (statusTitle) { statusTitle.textContent = 'Pedido Cancelado'; statusTitle.className = 'text-3xl font-extrabold text-red-600 tracking-tight font-display'; }
+    if (subtitle) subtitle.textContent = 'El pedido ha sido cancelado por la administración';
+    if (indicator) { indicator.classList.remove('text-plaza-green'); indicator.classList.add('text-primary'); indicator.style.strokeDashoffset = '283'; }
+    if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-8xl text-red-600 drop-shadow-sm">cancel</span>';
+    if (timeBadge) timeBadge.innerHTML = '<span class="text-xs font-bold text-red-600">Cancelado</span>';
+    if (orbitDot) { orbitDot.classList.remove('bg-plaza-green'); orbitDot.classList.add('bg-primary'); }
+    const queueCard = document.getElementById('queue-card');
+    if (queueCard) queueCard.style.display = 'none';
+  } else if (estado === 'listo') {
     if (statusTitle) { statusTitle.textContent = '¡Pedido Listo!'; statusTitle.className = 'text-3xl font-extrabold tracking-tight font-display text-plaza-green'; }
     if (subtitle) subtitle.textContent = 'Recoge en ventanilla';
     if (indicator) { indicator.classList.remove('text-primary'); indicator.classList.add('text-plaza-green'); }
@@ -980,7 +1015,6 @@ function actualizarUITracking(estado, pedido) {
     if (bgBlob) { bgBlob.classList.remove('from-primary/5'); bgBlob.classList.add('from-plaza-green/10'); }
     if (ticketAccent) { ticketAccent.classList.remove('via-primary'); ticketAccent.classList.add('via-plaza-green'); }
     if (itemCount) { itemCount.classList.remove('text-primary'); itemCount.classList.add('text-plaza-green'); }
-    // Ocultar cola
     const queueCard = document.getElementById('queue-card');
     if (queueCard) queueCard.style.display = 'none';
     if (navigator.vibrate) navigator.vibrate([100, 50, 100]);

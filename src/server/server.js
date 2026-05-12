@@ -100,6 +100,34 @@ app.get('/verify-session', async (req, res) => {
   }
 });
 
+// ============================================================
+// Endpoint: Reembolsar Sesión de Stripe
+// ============================================================
+app.post('/refund-session', async (req, res) => {
+  try {
+    const { session_id } = req.body;
+    
+    if (!session_id) {
+      return res.status(400).json({ error: 'Falta el session_id' });
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+    
+    if (!session.payment_intent) {
+      return res.status(400).json({ error: 'La sesión no tiene un pago capturado para reembolsar' });
+    }
+
+    const refund = await stripe.refunds.create({
+      payment_intent: session.payment_intent,
+    });
+
+    res.json({ success: true, refund });
+  } catch (error) {
+    console.error('Error reembolsando sesión:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Servidor de Stripe iniciado en http://localhost:${PORT}`);
 });

@@ -786,7 +786,7 @@ function inicializarAdminDetail() {
     
     if (orderStatusEl) {
       orderStatusEl.textContent = pedido.estado.charAt(0).toUpperCase() + pedido.estado.slice(1);
-      orderStatusEl.className = `font-body text-sm font-bold ${pedido.estado === 'listo' ? 'text-green-500' : pedido.estado === 'preparando' ? 'text-orange-500' : 'text-ink'}`;
+      orderStatusEl.className = `font-body text-sm font-bold ${pedido.estado === 'listo' ? 'text-green-500' : pedido.estado === 'preparando' ? 'text-orange-500' : pedido.estado === 'cancelado' ? 'text-red-500' : 'text-ink'}`;
     }
 
     const items = pedido.items || [];
@@ -826,7 +826,15 @@ function inicializarAdminDetail() {
             <span>Total</span>
             <span>$${total.toFixed(2)}</span>
           </div>
-          ${pedido.metodoPago === 'Efectivo' ? `
+          ${pedido.estado === 'cancelado' ? `
+          <div class="mt-4 p-3 bg-red-50 rounded-xl border border-red-200 flex items-center gap-2">
+            <span class="material-symbols-outlined text-red-600">block</span>
+            <div class="flex flex-col">
+              <span class="text-sm font-bold text-red-800">Pedido Cancelado</span>
+              <span class="text-xs text-red-700">${pedido.metodoPago === 'Efectivo' ? 'Sin cargo al cliente.' : 'Reembolsado en Stripe.'}</span>
+            </div>
+          </div>
+          ` : pedido.metodoPago === 'Efectivo' ? `
           <div class="mt-4 p-3 bg-yellow-50 rounded-xl border border-yellow-200 flex items-center gap-2">
             <span class="material-symbols-outlined text-yellow-600">payments</span>
             <div class="flex flex-col">
@@ -850,6 +858,45 @@ function inicializarAdminDetail() {
     }
 
     // Actualizar estado de botones
+    const btnCancel = document.getElementById('btn-admin-cancel-order');
+    if (btnCancel) {
+      if (pedido.estado !== 'cancelado' && pedido.estado !== 'listo' && pedido.estado !== 'entregado') {
+        btnCancel.classList.remove('opacity-50', 'pointer-events-none');
+        btnCancel.onclick = async () => {
+          if (confirm('¿Estás totalmente seguro de cancelar este pedido? Se notificará al cliente y se reembolsará el pago si usó tarjeta.')) {
+            btnCancel.disabled = true;
+            const originalHtml = btnCancel.innerHTML;
+            btnCancel.innerHTML = '<span class="material-symbols-outlined animate-spin text-xl font-bold">sync</span><span class="font-display font-bold text-[11px] uppercase leading-none text-center">Cancelando</span>';
+            
+            try {
+              if (pedido.stripeSessionId && pedido.metodoPago !== 'Efectivo') {
+                const refundUrl = import.meta.env.VITE_REFUND_URL || 'http://localhost:3005/refund-session';
+                const res = await fetch(refundUrl, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ session_id: pedido.stripeSessionId })
+                });
+                const data = await res.json();
+                if (!data.success) {
+                  console.warn('Advertencia en reembolso:', data.error);
+                }
+              }
+              await actualizarEstadoPedido(orderId, 'cancelado');
+              alert('Pedido cancelado exitosamente.');
+            } catch (err) {
+              console.error('Error cancelando pedido:', err);
+              alert('Error al cancelar el pedido. Verifica los registros del servidor.');
+            } finally {
+              btnCancel.disabled = false;
+              btnCancel.innerHTML = originalHtml;
+            }
+          }
+        };
+      } else {
+        btnCancel.classList.add('opacity-50', 'pointer-events-none');
+      }
+    }
+
     if (btnProcess) {
       if (pedido.estado === 'nuevo') {
         btnProcess.classList.remove('opacity-50', 'pointer-events-none');
@@ -861,7 +908,7 @@ function inicializarAdminDetail() {
     }
 
     if (btnComplete) {
-      if (pedido.estado !== 'listo') {
+      if (pedido.estado !== 'listo' && pedido.estado !== 'cancelado') {
         btnComplete.classList.remove('opacity-50', 'pointer-events-none');
         btnComplete.onclick = () => actualizarEstadoPedido(orderId, 'listo');
       } else {
