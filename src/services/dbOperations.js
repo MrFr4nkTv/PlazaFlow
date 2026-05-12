@@ -6,6 +6,7 @@ import {
   doc, 
   getDoc,
   getDocs,
+  deleteDoc,
   onSnapshot, 
   query, 
   orderBy, 
@@ -14,6 +15,21 @@ import {
   increment
 } from "firebase/firestore";
 import { db } from "./firebaseInit.js";
+
+/**
+ * Función utilitaria para sanitizar cadenas y neutralizar ataques XSS / inyecciones HTML
+ * @param {string} str - Cadena de entrada
+ * @returns {string} - Cadena sanitizada
+ */
+export const escaparHtml = (str) => {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
 
 /**
  * Tarea 2.0: Obtener todos los productos del menú
@@ -171,4 +187,37 @@ export const escucharColaActiva = (callback) => {
   }, (error) => {
     console.error("Error escuchando cola activa:", error);
   });
+};
+
+/**
+ * Tarea 2.7: Agregar un producto nuevo a la colección 'productos'
+ * @param {Object} datosProducto - Data del producto (nombre, precio, stock, imagen, etc)
+ * @returns {Promise<string>} - ID del nuevo producto
+ */
+export const agregarProducto = async (datosProducto) => {
+  try {
+    const docRef = await addDoc(collection(db, "productos"), {
+      ...datosProducto,
+      timestamp: serverTimestamp()
+    });
+    console.log("Producto agregado exitosamente con ID: ", docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error("Error al agregar el producto: ", error);
+    throw error;
+  }
+};
+
+/**
+ * Eliminar un producto definitivamente de la colección 'productos'
+ * @param {string} id - ID del documento del producto
+ */
+export const eliminarProducto = async (id) => {
+  try {
+    await deleteDoc(doc(db, "productos", id));
+    console.log("Producto eliminado definitivamente con ID: ", id);
+  } catch (error) {
+    console.error("Error al eliminar el producto: ", error);
+    throw error;
+  }
 };

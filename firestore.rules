@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Función para verificar si el usuario es un administrador autenticado
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // ====================================================================
+    // COLECCIÓN: PRODUCTOS (Menú e Inventario)
+    // ====================================================================
+    match /productos/{productoId} {
+      // Cualquier usuario puede ver el menú para comprar
+      allow read: if true;
+      
+      // Solo administradores pueden crear o eliminar productos del catálogo
+      allow create, delete: if isAdmin();
+      
+      // Actualización de stock permitida de forma restrictiva durante un pedido
+      // o libremente para los administradores.
+      allow update: if isAdmin() || (
+        // Permitir a clientes decrementar exclusivamente el campo 'stock'
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock']) &&
+        request.resource.data.stock >= 0 &&
+        request.resource.data.stock <= resource.data.stock
+      );
+    }
+
+    // ====================================================================
+    // COLECCIÓN: PEDIDOS
+    // ====================================================================
+    match /pedidos/{pedidoId} {
+      // Clientes pueden crear pedidos si mandan datos correctos
+      allow create: if request.resource.data.keys().hasAll(['items', 'total', 'estado', 'timestamp']) &&
+                       request.resource.data.estado in ['nuevo', 'pago_pendiente'];
+      
+      // Clientes pueden leer su propio pedido (tracking) y Admins pueden leer todos
+      allow read: if true;
+      
+      // Solo el KDS/Administrador puede actualizar el estado de los pedidos
+      allow update, delete: if isAdmin();
+    }
+  }
+}

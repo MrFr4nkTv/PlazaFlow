@@ -1,4 +1,4 @@
-import { obtenerMenu, enviarPedido, escucharPedidoIndividual, escucharColaActiva } from '../services/dbOperations.js';
+import { obtenerMenu, enviarPedido, escucharPedidoIndividual, escucharColaActiva, escaparHtml } from '../services/dbOperations.js';
 
 // ============================================================
 // CARRITO GLOBAL con localStorage
@@ -42,22 +42,26 @@ function obtenerCantidadEnCarrito(productId) {
 }
 
 function crearTarjetaProducto(producto) {
-  const nombre = producto.nombre || 'Sin nombre';
+  const nombreSanitizado = escaparHtml(producto.nombre || 'Sin nombre');
   const precio = Number(producto.precio) || 0;
-  const categoria = producto.categoria || 'General';
-  const emoji = categoriaEmoji[categoria] || '🍽️';
+  const categoriaSanitizada = escaparHtml(producto.categoria || 'General');
+  const emoji = categoriaEmoji[producto.categoria] || '🍽️';
   const tieneOpciones = producto.opciones && producto.opciones.length > 0;
   const stock = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
   const disponible = stock > 0;
   const cantidad = obtenerCantidadEnCarrito(producto.id);
 
+  const heroMedia = producto.imagen ? 
+    `<img src="${escaparHtml(producto.imagen)}" class="w-full h-full object-cover" alt="${nombreSanitizado}" loading="lazy"/>` : 
+    emoji;
+
   return `
     <article class="bg-white rounded-card p-3 shadow-soft flex items-start gap-4 transition-all duration-300 hover:shadow-lg ${!disponible ? 'opacity-50 pointer-events-none' : ''}"
-      data-product-id="${producto.id}" data-product-nombre="${nombre}" data-product-precio="${precio}" data-product-categoria="${categoria}" ${tieneOpciones ? `data-product-opciones='${JSON.stringify(producto.opciones)}'` : ''}>
+      data-product-id="${producto.id}" data-product-nombre="${nombreSanitizado}" data-product-precio="${precio}" data-product-categoria="${categoriaSanitizada}" ${tieneOpciones ? `data-product-opciones='${escaparHtml(JSON.stringify(producto.opciones))}'` : ''}>
       
       <!-- Imagen Premium (100px) -->
       <div class="w-[100px] h-[96px] flex-shrink-0 rounded-[16px] bg-gradient-to-br from-plaza-highlight to-plaza-bg flex items-center justify-center text-4xl select-none cursor-pointer btn-open-detail relative overflow-hidden">
-        ${emoji}
+        ${heroMedia}
         ${!disponible ? 
           `<span class="absolute top-0 left-0 w-full bg-red-500/90 text-white text-[9px] font-bold py-1 text-center uppercase tracking-wider">Agotado</span>` : 
           `<span class="absolute top-0 left-0 bg-plaza-primary/10 text-plaza-primary text-[9px] font-bold px-2 py-1 rounded-br-lg border-b border-r border-plaza-primary/20">Stock: ${stock}</span>`
@@ -67,8 +71,8 @@ function crearTarjetaProducto(producto) {
       <!-- Info Fluida -->
       <div class="flex-1 min-w-0 flex flex-col justify-between h-[96px] py-1">
         <div class="cursor-pointer btn-open-detail min-w-0">
-          <h3 class="font-heading font-semibold text-[15px] text-plaza-text leading-tight mb-1 truncate">${nombre}</h3>
-          <p class="text-xs text-plaza-muted leading-relaxed truncate">${categoria}</p>
+          <h3 class="font-heading font-semibold text-[15px] text-plaza-text leading-tight mb-1 truncate">${nombreSanitizado}</h3>
+          <p class="text-xs text-plaza-muted leading-relaxed truncate">${categoriaSanitizada}</p>
         </div>
         
         <div class="flex items-center justify-between gap-2 mt-auto">
@@ -210,6 +214,7 @@ function agregarAlCarrito(productId) {
     window.carrito.push({
       id: producto.id, nombre: producto.nombre || 'Producto',
       precio: Number(producto.precio) || 0, categoria: producto.categoria || 'General',
+      imagen: producto.imagen || null,
       cantidad: 1, opcionSeleccionada: null
     });
   }
@@ -238,6 +243,7 @@ function agregarConOpcion(productId, opcion) {
     window.carrito.push({
       id: producto.id, cartKey: key, nombre: producto.nombre || 'Producto',
       precio: Number(producto.precio) || 0, categoria: producto.categoria || 'General',
+      imagen: producto.imagen || null,
       cantidad: 1, opcionSeleccionada: opcion
     });
   }
@@ -502,7 +508,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (grid) {
     mostrarSkeletons();
     try {
-      todosLosProductos = await obtenerMenu();
+      const menuCompleto = await obtenerMenu();
+      todosLosProductos = menuCompleto.filter(p => {
+        const stock = p.stock !== undefined ? p.stock : (p.disponible !== false ? 10 : 0);
+        return stock > 0 && p.disponible !== false;
+      });
       guardarProductosEnCache(todosLosProductos);
       renderizarMenu(todosLosProductos);
       configurarFiltrosCategorias();
@@ -566,13 +576,18 @@ function renderizarCart() {
   const emojis = categoriaEmoji;
   cartList.innerHTML = window.carrito.map(item => {
     const emoji = emojis[item.categoria] || '🍽️';
-    const opcionLabel = item.opcionSeleccionada ? `<p class="text-sm text-gray-400 truncate">Tortilla: ${item.opcionSeleccionada}</p>` : '';
+    const opcionLabel = item.opcionSeleccionada ? `<p class="text-sm text-gray-400 truncate">Tortilla: ${escaparHtml(item.opcionSeleccionada)}</p>` : '';
+    
+    const cartMedia = item.imagen ? 
+      `<img src="${escaparHtml(item.imagen)}" class="w-full h-full object-cover" alt="${escaparHtml(item.nombre)}" loading="lazy"/>` : 
+      emoji;
+
     return `
     <div class="group relative bg-white p-3 rounded-2xl shadow-soft flex gap-4 overflow-hidden" data-cart-id="${item.cartKey || item.id}">
-      <div class="w-[72px] h-[72px] shrink-0 rounded-2xl bg-gradient-to-br from-plaza-highlight to-plaza-bg flex items-center justify-center text-3xl">${emoji}</div>
+      <div class="w-[72px] h-[72px] shrink-0 rounded-2xl bg-gradient-to-br from-plaza-highlight to-plaza-bg flex items-center justify-center text-3xl overflow-hidden">${cartMedia}</div>
       <div class="flex-1 flex flex-col justify-center min-w-0">
         <div class="flex justify-between items-start">
-          <h3 class="font-heading font-bold text-base leading-tight truncate pr-2">${item.nombre}</h3>
+          <h3 class="font-heading font-bold text-base leading-tight truncate pr-2">${escaparHtml(item.nombre)}</h3>
           <span class="font-heading font-bold text-base text-plaza-primary whitespace-nowrap">$${(item.precio * item.cantidad).toFixed(2)}</span>
         </div>
         ${opcionLabel}
@@ -651,20 +666,28 @@ function inicializarItemDetail() {
   const producto = productos.find(p => p.id === productId);
   if (!producto) return;
 
-  const nombre = producto.nombre || 'Producto';
+  const nombreSanitizado = escaparHtml(producto.nombre || 'Producto');
   const precio = Number(producto.precio) || 0;
-  const categoria = producto.categoria || 'General';
-  const emoji = categoriaEmoji[categoria] || '🍽️';
+  const categoriaSanitizada = escaparHtml(producto.categoria || 'General');
+  const emoji = categoriaEmoji[producto.categoria] || '🍽️';
   const tieneOpciones = producto.opciones && producto.opciones.length > 0;
 
   // Rellenar contenido
-  titleEl.textContent = nombre;
+  titleEl.textContent = nombreSanitizado;
   const heroEl = document.getElementById('item-detail-hero');
-  if (heroEl) { heroEl.classList.remove('animate-pulse'); heroEl.innerHTML = `<span class="text-7xl">${emoji}</span>`; }
+  if (heroEl) { 
+    heroEl.classList.remove('animate-pulse'); 
+    heroEl.classList.add('overflow-hidden');
+    if (producto.imagen) {
+      heroEl.innerHTML = `<img src="${escaparHtml(producto.imagen)}" class="w-full h-full object-cover" alt="${nombreSanitizado}"/>`;
+    } else {
+      heroEl.innerHTML = `<span class="text-7xl">${emoji}</span>`;
+    }
+  }
   const priceEl = document.getElementById('item-detail-price');
   if (priceEl) priceEl.textContent = `$${precio.toFixed(2)}`;
   const descEl = document.getElementById('item-detail-desc');
-  if (descEl) descEl.textContent = `${nombre} — ${categoria}`;
+  if (descEl) descEl.textContent = `${nombreSanitizado} — ${categoriaSanitizada}`;
 
   // Opciones dinámicas
   const optContainer = document.getElementById('item-detail-options');
@@ -677,8 +700,8 @@ function inicializarItemDetail() {
       <div class="flex flex-col gap-3">
         ${producto.opciones.map((op, i) => `
         <label class="group flex items-center justify-between p-4 bg-white rounded-2xl border-2 border-transparent hover:border-red-100 has-[:checked]:border-red-400 has-[:checked]:bg-red-50/10 transition-all cursor-pointer shadow-sm">
-          <span class="font-bold">${op}</span>
-          <input type="radio" name="opcion-tortilla" value="${op}" ${i === 0 ? 'checked' : ''} class="w-6 h-6 border-2 border-gray-300 text-red-400 focus:ring-red-400 squishy-radio"/>
+          <span class="font-bold">${escaparHtml(op)}</span>
+          <input type="radio" name="opcion-tortilla" value="${escaparHtml(op)}" ${i === 0 ? 'checked' : ''} class="w-6 h-6 border-2 border-gray-300 text-red-400 focus:ring-red-400 squishy-radio"/>
         </label>`).join('')}
       </div>`;
   } else if (optContainer) {

@@ -1,4 +1,4 @@
-import { escucharPedidos, actualizarEstadoPedido } from '../services/dbOperations.js';
+import { escucharPedidos, actualizarEstadoPedido, escaparHtml } from '../services/dbOperations.js';
 import { auth } from '../services/firebaseInit.js';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 
@@ -67,7 +67,7 @@ function crearTarjetaPedido(pedido) {
       <ul class="space-y-1">
         ${items.map(item => `
           <li class="flex justify-between items-center text-sm">
-            <span class="font-medium text-ink">${item.cantidad}\u00d7 ${item.nombre}${item.opcion ? ` (${item.opcion})` : ''}</span>
+            <span class="font-medium text-ink">${item.cantidad}\u00d7 ${escaparHtml(item.nombre)}${item.opcion ? ` (${escaparHtml(item.opcion)})` : ''}</span>
           </li>
         `).join('')}
       </ul>

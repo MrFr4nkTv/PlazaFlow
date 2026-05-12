@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Función para verificar si el usuario es administrador
+    function isAdmin() {
+      return request.auth != null;
+    }
+
+    // Reglas para la carpeta de imágenes de productos
+    match /productos/{fileName} {
+      // Acceso público de lectura para mostrar las imágenes en el menú del cliente
+      allow read: if true;
+      
+      // Subida permitida solo a administradores, validando que sea una imagen de menos de 5MB
+      allow write: if isAdmin() &&
+                   request.resource.size < 5 * 1024 * 1024 && // Max 5MB
+                   request.resource.contentType.matches('image/.*');
+    }
+  }
+}

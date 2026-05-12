@@ -1,6 +1,7 @@
-import { auth } from '../services/firebaseInit.js';
+import { auth, storage } from '../services/firebaseInit.js';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
-import { obtenerMenu, actualizarStock, escucharPedidos, escucharPedidoIndividual, actualizarEstadoPedido } from '../services/dbOperations.js';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { obtenerMenu, actualizarStock, escucharPedidos, escucharPedidoIndividual, actualizarEstadoPedido, escaparHtml, agregarProducto, eliminarProducto } from '../services/dbOperations.js';
 
 // ============================================================
 // AUTH GUARD — Proteger páginas admin
@@ -115,6 +116,139 @@ function inicializarStock() {
   if (!stockList) return;
 
   cargarProductosStock();
+  inicializarModalAgregarProducto();
+}
+
+function inicializarModalAgregarProducto() {
+  const modal = document.getElementById('modal-add-product');
+  const btnOpen = document.getElementById('btn-open-add-modal');
+  const btnClose = document.getElementById('btn-close-add-modal');
+  const form = document.getElementById('form-add-product');
+  const uploadZone = document.getElementById('upload-zone');
+  const fileInput = document.getElementById('add-imagen');
+  const previewImg = document.getElementById('upload-preview');
+  const placeholder = document.getElementById('upload-placeholder');
+  const btnSubmit = document.getElementById('btn-submit-product');
+
+  if (!modal || !btnOpen) return;
+
+  let archivoSeleccionado = null;
+
+  const abrirModal = () => {
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    modal.querySelector('.bg-white').classList.remove('translate-y-full', 'sm:translate-y-8');
+    modal.querySelector('.bg-white').classList.add('translate-y-0');
+  };
+
+  const cerrarModal = () => {
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    modal.querySelector('.bg-white').classList.add('translate-y-full', 'sm:translate-y-8');
+    modal.querySelector('.bg-white').classList.remove('translate-y-0');
+    // Limpiar formulario
+    if (form) form.reset();
+    archivoSeleccionado = null;
+    if (previewImg) {
+      previewImg.src = '';
+      previewImg.classList.add('hidden');
+    }
+    if (placeholder) placeholder.classList.remove('hidden');
+  };
+
+  btnOpen.addEventListener('click', abrirModal);
+  if (btnClose) btnClose.addEventListener('click', cerrarModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) cerrarModal();
+  });
+
+  // Previsualización de imagen nativa
+  if (uploadZone && fileInput) {
+    uploadZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        if (!file.type.startsWith('image/')) {
+          alert('Por favor selecciona un archivo de imagen válido.');
+          return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          alert('La imagen no debe superar los 5MB.');
+          return;
+        }
+        archivoSeleccionado = file;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          if (previewImg) {
+            previewImg.src = ev.target.result;
+            previewImg.classList.remove('hidden');
+          }
+          if (placeholder) placeholder.classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Guardado del Producto
+  if (btnSubmit) {
+    btnSubmit.addEventListener('click', async () => {
+      const nombreInput = document.getElementById('add-nombre');
+      const precioInput = document.getElementById('add-precio');
+      const stockInput = document.getElementById('add-stock');
+      const catInput = document.getElementById('add-categoria');
+      const opcionesInput = document.getElementById('add-opciones');
+
+      if (!nombreInput || !nombreInput.checkValidity() || !precioInput || !precioInput.checkValidity() || !stockInput || !stockInput.checkValidity()) {
+        if (form) form.reportValidity();
+        return;
+      }
+
+      const nombre = nombreInput.value.trim();
+      const precio = parseFloat(precioInput.value);
+      const stock = parseInt(stockInput.value);
+      const categoria = catInput ? catInput.value : 'General';
+      const opcionesRaw = opcionesInput ? opcionesInput.value.trim() : '';
+      const opciones = opcionesRaw ? opcionesRaw.split(',').map(o => o.trim()).filter(o => o.length > 0) : [];
+
+      btnSubmit.disabled = true;
+      const textoOriginal = btnSubmit.innerHTML;
+      btnSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> Guardando...';
+
+      try {
+        let imageUrl = null;
+        if (archivoSeleccionado) {
+          btnSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> Subiendo foto...';
+          const ext = archivoSeleccionado.name.split('.').pop();
+          const fileName = `prod_${Date.now()}_${Math.floor(Math.random()*1000)}.${ext}`;
+          const storageRef = ref(storage, `productos/${fileName}`);
+          await uploadBytes(storageRef, archivoSeleccionado);
+          imageUrl = await getDownloadURL(storageRef);
+        }
+
+        const datosProducto = {
+          nombre,
+          precio,
+          stock,
+          categoria,
+          disponible: stock > 0
+        };
+
+        if (opciones.length > 0) datosProducto.opciones = opciones;
+        if (imageUrl) datosProducto.imagen = imageUrl;
+
+        await agregarProducto(datosProducto);
+        
+        // Recargar inventario para mostrar el nuevo elemento de forma brillante
+        await cargarProductosStock();
+        cerrarModal();
+      } catch (error) {
+        console.error('Error al registrar el producto:', error);
+        alert('Ocurrió un error al guardar el producto. Revisa los permisos de escritura en la consola de Firebase.');
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = textoOriginal;
+      }
+    });
+  }
 }
 
 let stockProductosCache = [];
@@ -246,31 +380,63 @@ function renderizarStockVisual() {
       btn.disabled = false;
     });
   });
+
+  // Vincular botón de eliminar definitivamente
+  stockList.querySelectorAll('.stock-delete').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (confirm('¿Estás totalmente seguro de eliminar este producto de forma definitiva? Desaparecerá del menú y del inventario.')) {
+        const id = btn.dataset.id;
+        btn.disabled = true;
+        try {
+          await eliminarProducto(id);
+          // Remover del cache local y re-renderizar
+          stockProductosCache = stockProductosCache.filter(p => p.id !== id);
+          renderizarStockVisual();
+        } catch (e) {
+          console.error('Error eliminando producto:', e);
+          alert('Error al eliminar el producto. Verifica los permisos.');
+          btn.disabled = false;
+        }
+      }
+    });
+  });
 }
 
 function crearFilaStock(producto) {
   // Inicializamos a 10 si no existe y si antes estaba disponible (o default 10)
   let stock = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
   
+  const nombreSanitizado = escaparHtml(producto.nombre || 'Producto');
+  const catSanitizada = escaparHtml(producto.categoria || 'General');
+
   const emoji = {
     'Tacos': '🌮', 'Refrescos 600ml': '🥤', 'Sabritas': '🍿',
     'Otros Líquidos': '🧃', 'Bebidas': '🥤', 'General': '🍽️'
   }[producto.categoria] || '🍽️';
 
+  const vistaPreviaArticulo = producto.imagen ? 
+    `<img src="${escaparHtml(producto.imagen)}" class="w-14 h-14 rounded-2xl object-cover shrink-0 shadow-sm" alt="${nombreSanitizado}" loading="lazy"/>` :
+    `<div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-2xl shrink-0">${emoji}</div>`;
+
   return `
     <div class="bg-white p-4 rounded-3xl shadow-soft flex items-center gap-3 ${stock <= 0 ? 'opacity-60 border-2 border-red-200' : 'border-2 border-transparent'}">
-      <div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-2xl shrink-0">${emoji}</div>
+      ${vistaPreviaArticulo}
       <div class="flex-1 min-w-0">
-        <h3 class="font-display font-bold text-base text-gray-800 truncate">${producto.nombre || 'Producto'}</h3>
-        <p class="text-sm text-gray-400">${producto.categoria || 'General'} · $${Number(producto.precio || 0).toFixed(2)}</p>
+        <h3 class="font-display font-bold text-base text-gray-800 truncate">${nombreSanitizado}</h3>
+        <p class="text-sm text-gray-400">${catSanitizada} · $${Number(producto.precio || 0).toFixed(2)}</p>
       </div>
-      <div class="flex items-center gap-2 bg-gray-50 rounded-2xl p-1 shrink-0">
-        <button class="stock-minus w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-gray-500 hover:text-red-500 active:scale-90 transition-all" data-id="${producto.id}">
-          <span class="material-symbols-outlined text-[18px]">remove</span>
-        </button>
-        <span class="stock-display w-6 text-center font-bold text-gray-800" data-id="${producto.id}">${stock}</span>
-        <button class="stock-plus w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-gray-500 hover:text-green-500 active:scale-90 transition-all" data-id="${producto.id}">
-          <span class="material-symbols-outlined text-[18px]">add</span>
+      <div class="flex items-center gap-1 shrink-0">
+        <div class="flex items-center gap-1 bg-gray-50 rounded-2xl p-1 shrink-0">
+          <button class="stock-minus w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-gray-500 hover:text-red-500 active:scale-90 transition-all" data-id="${producto.id}">
+            <span class="material-symbols-outlined text-[18px]">remove</span>
+          </button>
+          <span class="stock-display w-6 text-center font-bold text-gray-800" data-id="${producto.id}">${stock}</span>
+          <button class="stock-plus w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-gray-500 hover:text-green-500 active:scale-90 transition-all" data-id="${producto.id}">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+          </button>
+        </div>
+        <button class="stock-delete w-9 h-9 flex items-center justify-center bg-red-50 rounded-xl text-red-500 hover:bg-red-600 active:scale-90 transition-all ml-1 shadow-sm" data-id="${producto.id}" title="Eliminar definitivamente">
+          <span class="material-symbols-outlined text-[18px]">delete_forever</span>
         </button>
       </div>
     </div>`;
@@ -462,8 +628,8 @@ function inicializarHistorial() {
       const hora = dateObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
       const fecha = currentFilter !== 'day' ? dateObj.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' }) + ', ' : '';
       const items = p.items || [];
-      const itemsText = items.map(i => `${i.cantidad}× ${i.nombre}`).join(', ');
-      const ticketId = p.id.slice(-4).toUpperCase();
+      const itemsText = escaparHtml(items.map(i => `${i.cantidad}× ${i.nombre}`).join(', '));
+      const ticketId = escaparHtml(p.id.slice(-4).toUpperCase());
 
       return `
         <div class="bg-white rounded-[24px] shadow-card border border-gray-100 overflow-hidden hover:shadow-float transition-shadow">
@@ -548,11 +714,11 @@ function inicializarAdminDetail() {
           <div class="flex justify-between items-start mb-1">
             <div class="flex items-center gap-3">
               <span class="bg-primary/10 text-primary font-bold text-sm h-8 w-8 rounded-lg flex items-center justify-center">${item.cantidad}x</span>
-              <span class="font-display font-bold text-ink">${item.nombre}</span>
+              <span class="font-display font-bold text-ink">${escaparHtml(item.nombre)}</span>
             </div>
             <span class="font-display font-bold text-ink">$${(item.precio * item.cantidad).toFixed(2)}</span>
           </div>
-          ${item.opcion ? `<p class="text-sm text-muted ml-11">${item.opcion}</p>` : ''}
+          ${item.opcion ? `<p class="text-sm text-muted ml-11">${escaparHtml(item.opcion)}</p>` : ''}
         </div>
       `).join('');
 
