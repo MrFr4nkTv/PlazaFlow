@@ -209,7 +209,11 @@ function inicializarModalAgregarProducto() {
 
   // Previsualización de imagen nativa
   if (uploadZone && fileInput) {
-    uploadZone.addEventListener('click', () => fileInput.click());
+    uploadZone.addEventListener('click', (e) => {
+      if (e.target !== fileInput) {
+        fileInput.click();
+      }
+    });
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
