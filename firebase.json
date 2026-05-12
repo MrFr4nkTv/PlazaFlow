@@ -9,10 +9,6 @@
     "cleanUrls": true,
     "rewrites": [
       {
-        "source": "/",
-        "destination": "/public/client/index.html"
-      },
-      {
         "source": "/menu",
         "destination": "/public/client/index.html"
       },
@@ -59,8 +55,18 @@
     ],
     "redirects": [
       {
+        "source": "/",
+        "destination": "/login",
+        "type": 302
+      },
+      {
+        "source": "/client",
+        "destination": "/menu",
+        "type": 301
+      },
+      {
         "source": "/index.html",
-        "destination": "/public/client/index.html",
+        "destination": "/menu",
         "type": 301
       }
     ],
