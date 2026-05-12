@@ -124,8 +124,8 @@
 </header>
 
 <!-- Modal Premium de Agregar Producto (Oculto por defecto) -->
-<div id="modal-add-product" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
-  <div class="bg-white w-full max-w-lg rounded-t-[32px] sm:rounded-[32px] p-6 shadow-floating max-h-[90vh] overflow-y-auto flex flex-col gap-4 transform translate-y-full sm:translate-y-8 transition-transform duration-300">
+<div id="modal-add-product" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 p-4">
+  <div class="bg-white w-full max-w-lg rounded-[32px] p-6 shadow-floating max-h-[85vh] overflow-y-auto flex flex-col gap-4 transform scale-95 transition-transform duration-300">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
@@ -202,7 +202,7 @@
 </span>
 <input aria-label="Search items" class="w-full h-14 pl-12 pr-6 bg-white border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 text-lg placeholder-gray-400 font-medium transition-all text-text-main" placeholder="Buscar productos..." type="text" id="stock-search-input"/>
 </div>
-<div class="flex overflow-x-auto no-scrollbar gap-2 mt-4 pb-1" id="stock-category-filters">
+<div class="flex sm:flex-wrap overflow-x-auto no-scrollbar gap-2 mt-4 pb-1" id="stock-category-filters">
 <button class="cat-btn active shrink-0 h-10 px-6 bg-text-main text-white font-bold text-sm rounded-full shadow-md transition-transform active:scale-95" data-cat="Todo">
                     Todo
                 </button>

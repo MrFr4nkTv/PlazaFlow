@@ -136,14 +136,14 @@ function inicializarModalAgregarProducto() {
 
   const abrirModal = () => {
     modal.classList.remove('opacity-0', 'pointer-events-none');
-    modal.querySelector('.bg-white').classList.remove('translate-y-full', 'sm:translate-y-8');
-    modal.querySelector('.bg-white').classList.add('translate-y-0');
+    modal.querySelector('.bg-white').classList.remove('scale-95');
+    modal.querySelector('.bg-white').classList.add('scale-100');
   };
 
   const cerrarModal = () => {
     modal.classList.add('opacity-0', 'pointer-events-none');
-    modal.querySelector('.bg-white').classList.add('translate-y-full', 'sm:translate-y-8');
-    modal.querySelector('.bg-white').classList.remove('translate-y-0');
+    modal.querySelector('.bg-white').classList.add('scale-95');
+    modal.querySelector('.bg-white').classList.remove('scale-100');
     // Limpiar formulario
     if (form) form.reset();
     archivoSeleccionado = null;
@@ -275,6 +275,16 @@ async function cargarProductosStock() {
         renderizarStockVisual();
       });
     });
+
+    const catContainer = document.getElementById('stock-category-filters');
+    if (catContainer) {
+      catContainer.addEventListener('wheel', (e) => {
+        if (e.deltaY !== 0) {
+          e.preventDefault();
+          catContainer.scrollLeft += e.deltaY;
+        }
+      });
+    }
 
     // Búsqueda en Stock
     const searchInput = document.getElementById('stock-search-input');

@@ -154,6 +154,13 @@ function configurarFiltrosCategorias() {
       filtrarPorCategoria(texto);
     });
   });
+
+  nav.addEventListener('wheel', (e) => {
+    if (e.deltaY !== 0) {
+      e.preventDefault();
+      nav.scrollLeft += e.deltaY;
+    }
+  });
 }
 
 function configurarBuscador() {
