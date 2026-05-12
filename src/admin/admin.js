@@ -870,22 +870,33 @@ function inicializarAdminDetail() {
             
             try {
               if (pedido.stripeSessionId && pedido.metodoPago !== 'Efectivo') {
-                const refundUrl = import.meta.env.VITE_REFUND_URL || 'http://localhost:3005/refund-session';
-                const res = await fetch(refundUrl, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ session_id: pedido.stripeSessionId })
-                });
-                const data = await res.json();
-                if (!data.success) {
-                  console.warn('Advertencia en reembolso:', data.error);
+                try {
+                  const refundUrl = import.meta.env.VITE_REFUND_URL || 'http://localhost:3005/refund-session';
+                  const res = await fetch(refundUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: pedido.stripeSessionId })
+                  });
+                  
+                  if (!res.ok) {
+                    console.warn(`Servidor de reembolso respondió con estado ${res.status}`);
+                  } else {
+                    const contentType = res.headers.get("content-type");
+                    if (contentType && contentType.indexOf("application/json") !== -1) {
+                      const data = await res.json();
+                      if (!data.success) console.warn('Advertencia en reembolso:', data.error);
+                    }
+                  }
+                } catch (refundErr) {
+                  console.error('No se pudo conectar con el servidor de reembolsos de Stripe:', refundErr);
+                  alert('Aviso: El pedido se marcará como cancelado, pero no se pudo contactar automáticamente al servidor de Stripe para el reembolso. Asegúrate de que el servidor Node (server.js) esté en ejecución y reiniciado.');
                 }
               }
               await actualizarEstadoPedido(orderId, 'cancelado');
               alert('Pedido cancelado exitosamente.');
             } catch (err) {
               console.error('Error cancelando pedido:', err);
-              alert('Error al cancelar el pedido. Verifica los registros del servidor.');
+              alert('Error al actualizar el estado del pedido en Firebase.');
             } finally {
               btnCancel.disabled = false;
               btnCancel.innerHTML = originalHtml;
