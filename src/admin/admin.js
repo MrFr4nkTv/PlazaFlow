@@ -502,13 +502,15 @@ function crearFilaStock(producto) {
     `<div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-2xl shrink-0">${emoji}</div>`;
 
   return `
-    <div class="bg-white p-4 rounded-3xl shadow-soft flex items-center gap-3 ${stock <= 0 ? 'opacity-60 border-2 border-red-200' : 'border-2 border-transparent'}">
-      ${vistaPreviaArticulo}
-      <div class="flex-1 min-w-0">
-        <h3 class="font-display font-bold text-base text-gray-800 truncate">${nombreSanitizado}</h3>
-        <p class="text-sm text-gray-400">${catSanitizada} · $${Number(producto.precio || 0).toFixed(2)}</p>
+    <div class="bg-white p-3 sm:p-4 rounded-3xl shadow-soft flex flex-col sm:flex-row sm:items-center gap-3 justify-between ${stock <= 0 ? 'opacity-60 border-2 border-red-200' : 'border-2 border-transparent'}">
+      <div class="flex items-center gap-3 w-full sm:w-auto flex-1 min-w-0">
+        ${vistaPreviaArticulo}
+        <div class="flex-1 min-w-0">
+          <h3 class="font-display font-bold text-sm sm:text-base text-gray-800 leading-tight break-words">${nombreSanitizado}</h3>
+          <p class="text-xs sm:text-sm text-gray-400 mt-0.5">${catSanitizada} · $${Number(producto.precio || 0).toFixed(2)}</p>
+        </div>
       </div>
-      <div class="flex items-center gap-1 shrink-0">
+      <div class="flex items-center justify-end gap-1 sm:gap-1.5 w-full sm:w-auto shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-gray-100">
         <div class="flex items-center gap-1 bg-gray-50 rounded-2xl p-1 shrink-0">
           <button class="stock-minus w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm text-gray-500 hover:text-red-500 active:scale-90 transition-all" data-id="${producto.id}">
             <span class="material-symbols-outlined text-[18px]">remove</span>
