@@ -123,77 +123,6 @@
     </div>
 </header>
 
-<!-- Modal Premium de Agregar Producto (Oculto por defecto) -->
-<div id="modal-add-product" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 p-4">
-  <div class="bg-white w-full max-w-lg rounded-[32px] p-6 shadow-floating max-h-[85vh] overflow-y-auto flex flex-col gap-4 transform scale-95 transition-transform duration-300">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-          <span class="material-symbols-outlined font-bold">add_circle</span>
-        </div>
-        <h3 class="font-display font-bold text-lg text-text-main">Nuevo Producto</h3>
-      </div>
-      <button id="btn-close-add-modal" class="w-8 h-8 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-gray-200 transition-colors">
-        <span class="material-symbols-outlined text-sm font-bold">close</span>
-      </button>
-    </div>
-
-    <!-- Formulario -->
-    <form id="form-add-product" class="flex flex-col gap-4 mt-2" onsubmit="return false;">
-      <div>
-        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Nombre del Producto</label>
-        <input type="text" id="add-nombre" required placeholder="Ej. Tacos de Birria (Orden)" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Precio ($)</label>
-          <input type="number" step="0.5" id="add-precio" required placeholder="0.00" min="0" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
-        </div>
-        <div>
-          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Stock Inicial</label>
-          <input type="number" id="add-stock" required placeholder="10" min="0" value="10" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
-        </div>
-      </div>
-
-      <div>
-        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Categoría</label>
-        <select id="add-categoria" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
-          <option value="Tacos">Tacos</option>
-          <option value="Refrescos 600ml">Refrescos 600ml</option>
-          <option value="Sabritas">Sabritas</option>
-          <option value="Otros Líquidos">Otros Líquidos</option>
-          <option value="Especialidades">Especialidades</option>
-          <option value="Postres">Postres</option>
-          <option value="Platos Fuertes">Platos Fuertes</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Opciones / Variantes (Separadas por coma)</label>
-        <input type="text" id="add-opciones" placeholder="Ej. Maíz, Harina (Opcional)" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
-      </div>
-
-      <!-- Sección de Subida de Imagen -->
-      <div>
-        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Fotografía del Producto</label>
-        <div class="relative flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 hover:bg-gray-100/50 transition-colors cursor-pointer overflow-hidden group" id="upload-zone">
-          <input type="file" id="add-imagen" accept="image/*" capture="environment" class="absolute inset-0 opacity-0 cursor-pointer z-10"/>
-          <div id="upload-placeholder" class="flex flex-col items-center pointer-events-none">
-            <span class="material-symbols-outlined text-3xl text-gray-400 group-hover:scale-110 transition-transform">add_a_photo</span>
-            <span class="text-xs font-bold text-gray-500 mt-2">Tomar foto o subir imagen</span>
-            <span class="text-[10px] text-gray-400">Formatos: JPG, PNG, WEBP</span>
-          </div>
-          <img id="upload-preview" class="absolute inset-0 w-full h-full object-cover hidden" alt="Previsualización"/>
-        </div>
-      </div>
-
-      <button type="button" id="btn-submit-product" class="w-full h-12 mt-2 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl shadow-button flex items-center justify-center gap-2 active:scale-95 transition-all">
-        <span class="material-symbols-outlined text-lg">check</span> Guardar en Menú
-      </button>
-    </form>
-  </div>
-</div>
 
 <div class="px-6 pb-2">
 <div class="relative group mt-2">
@@ -265,6 +194,78 @@
 <span class="text-[10px] font-bold tracking-wide">Historial</span>
 </button>
 </nav>
+</div>
+
+<!-- Modal Premium de Agregar Producto (Nivel Raíz del Body) -->
+<div id="modal-add-product" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 p-4">
+  <div class="bg-white w-full max-w-lg rounded-[32px] p-6 shadow-floating max-h-[85vh] overflow-y-auto flex flex-col gap-4 transform scale-95 transition-transform duration-300">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined font-bold">add_circle</span>
+        </div>
+        <h3 class="font-display font-bold text-lg text-text-main">Nuevo Producto</h3>
+      </div>
+      <button id="btn-close-add-modal" class="w-8 h-8 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-gray-200 transition-colors">
+        <span class="material-symbols-outlined text-sm font-bold">close</span>
+      </button>
+    </div>
+
+    <!-- Formulario -->
+    <form id="form-add-product" class="flex flex-col gap-4 mt-2" onsubmit="return false;">
+      <div>
+        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Nombre del Producto</label>
+        <input type="text" id="add-nombre" required placeholder="Ej. Tacos de Birria (Orden)" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Precio ($)</label>
+          <input type="number" step="0.5" id="add-precio" required placeholder="0.00" min="0" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
+        </div>
+        <div>
+          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Stock Inicial</label>
+          <input type="number" id="add-stock" required placeholder="10" min="0" value="10" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Categoría</label>
+        <select id="add-categoria" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+          <option value="Tacos">Tacos</option>
+          <option value="Refrescos 600ml">Refrescos 600ml</option>
+          <option value="Sabritas">Sabritas</option>
+          <option value="Otros Líquidos">Otros Líquidos</option>
+          <option value="Especialidades">Especialidades</option>
+          <option value="Postres">Postres</option>
+          <option value="Platos Fuertes">Platos Fuertes</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Opciones / Variantes (Separadas por coma)</label>
+        <input type="text" id="add-opciones" placeholder="Ej. Maíz, Harina (Opcional)" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
+      </div>
+
+      <!-- Sección de Subida de Imagen -->
+      <div>
+        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Fotografía del Producto</label>
+        <div class="relative flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 hover:bg-gray-100/50 transition-colors cursor-pointer overflow-hidden group" id="upload-zone">
+          <input type="file" id="add-imagen" accept="image/*" capture="environment" class="absolute inset-0 opacity-0 cursor-pointer z-10"/>
+          <div id="upload-placeholder" class="flex flex-col items-center pointer-events-none">
+            <span class="material-symbols-outlined text-3xl text-gray-400 group-hover:scale-110 transition-transform">add_a_photo</span>
+            <span class="text-xs font-bold text-gray-500 mt-2">Tomar foto o subir imagen</span>
+            <span class="text-[10px] text-gray-400">Formatos: JPG, PNG, WEBP</span>
+          </div>
+          <img id="upload-preview" class="absolute inset-0 w-full h-full object-cover hidden" alt="Previsualización"/>
+        </div>
+      </div>
+
+      <button type="button" id="btn-submit-product" class="w-full h-12 mt-2 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl shadow-button flex items-center justify-center gap-2 active:scale-95 transition-all">
+        <span class="material-symbols-outlined text-lg">check</span> Guardar en Menú
+      </button>
+    </form>
+  </div>
 </div>
 </body></html>
 
