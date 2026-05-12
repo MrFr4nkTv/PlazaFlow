@@ -75,7 +75,7 @@ export const enviarPedido = async (datosPedido) => {
           if (prodSnap.exists()) {
             const currentStock = prodSnap.data().stock !== undefined ? prodSnap.data().stock : (prodSnap.data().disponible !== false ? 10 : 0);
             const newStock = Math.max(0, currentStock - item.cantidad);
-            return setDoc(productoRef, { stock: newStock }, { merge: true });
+            await setDoc(productoRef, { stock: newStock }, { merge: true });
           }
         } catch (err) {
           console.error(`❌ Error crítico: No se pudo restar stock de ${item.id}. Revisa las reglas de Firebase.`, err);
