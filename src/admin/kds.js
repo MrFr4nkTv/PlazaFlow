@@ -54,16 +54,16 @@ function crearTarjetaPedido(pedido) {
   return `
   <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col relative cursor-pointer hover:border-primary/50 transition-colors kds-card" data-pedido-id="${pedido.id}">
     <div class="px-3 py-2 border-b border-gray-100 flex justify-between items-center ${config.color}/10">
-      <div>
-        <div class="flex items-center gap-1.5">
+      <div class="min-w-0 flex-1 pr-2">
+        <div class="flex items-center gap-1.5 flex-wrap">
           <span class="font-display font-bold text-lg text-ink">#${pedido.id.slice(-4).toUpperCase()}</span>
-          ${pedido.clienteNombre ? `<span class="px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold text-xs truncate max-w-[140px]">${escaparHtml(pedido.clienteNombre)}</span>` : ''}
+          ${pedido.clienteNombre ? `<span class="px-2 py-0.5 rounded-md bg-primary/10 text-primary font-bold text-xs truncate max-w-[120px]">${escaparHtml(pedido.clienteNombre)}</span>` : ''}
         </div>
         <p class="text-xs text-ink-light">${tiempoTranscurrido(pedido.timestamp)}</p>
       </div>
-      <div class="flex flex-col items-end gap-1">
-        <span class="px-2 py-1 rounded-full text-[10px] font-bold text-white ${config.color}">${config.label}</span>
-        ${pedido.metodoPago === 'Efectivo' ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-700 border border-yellow-200">Falta Pagar</span>` : ''}
+      <div class="flex flex-col items-end gap-1 shrink-0">
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold text-white whitespace-nowrap ${config.color}">${config.label}</span>
+        ${pedido.metodoPago === 'Efectivo' ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-700 border border-yellow-200 whitespace-nowrap">Falta Pagar</span>` : ''}
       </div>
     </div>
     <div class="p-3 flex-1 pointer-events-none">
