@@ -1,3 +1,9 @@
+// ============================================================
+// SERVIDOR LOCAL DE DESARROLLO (Solo para pruebas locales)
+// En producción, estas funciones las ejecutan las Cloud Functions
+// de Firebase (functions/index.js). Este archivo NO se usa en
+// el hosting desplegado.
+// ============================================================
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';

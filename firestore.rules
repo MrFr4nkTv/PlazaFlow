@@ -43,7 +43,7 @@ service cloud.firestore {
       allow update: if isAdmin() || (
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado']) &&
         request.resource.data.estado == 'cancelado' &&
-        resource.data.estado == 'nuevo'
+        (resource.data.estado == 'nuevo' || resource.data.estado == 'pago_pendiente')
       );
       allow delete: if isAdmin();
     }

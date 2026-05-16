@@ -833,7 +833,7 @@ function inicializarTracking() {
 
     const cancelContainer = document.getElementById('client-cancel-container');
     if (cancelContainer) {
-      if (estado === 'nuevo') {
+      if (estado === 'nuevo' || estado === 'pago_pendiente') {
         cancelContainer.classList.remove('hidden');
       } else {
         cancelContainer.classList.add('hidden');
@@ -1060,7 +1060,7 @@ function actualizarUITracking(estado, pedido) {
 
   if (estado === 'cancelado') {
     if (statusTitle) { statusTitle.textContent = 'Pedido Cancelado'; statusTitle.className = 'text-3xl font-extrabold text-red-600 tracking-tight font-display'; }
-    if (subtitle) subtitle.textContent = 'El pedido ha sido cancelado por la administración';
+    if (subtitle) subtitle.textContent = 'Este pedido ha sido cancelado';
     if (indicator) { indicator.classList.remove('text-plaza-green'); indicator.classList.add('text-primary'); indicator.style.strokeDashoffset = '283'; }
     if (iconContainer) iconContainer.innerHTML = '<span class="material-symbols-outlined text-8xl text-red-600 drop-shadow-sm">cancel</span>';
     if (timeBadge) timeBadge.innerHTML = '<span class="text-xs font-bold text-red-600">Cancelado</span>';

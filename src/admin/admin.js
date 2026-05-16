@@ -377,7 +377,8 @@ function renderizarStockVisual() {
   if (stockFiltroCat !== 'Todo') {
     filtrados = filtrados.filter(p => {
       const cat = p.categoria || 'General';
-      if (stockFiltroCat === 'Platos Fuertes') return /taco|plato fuerte|comida|tostito|nacho|alimento|hamburguesa|burrito|orden/i.test(cat);
+      if (stockFiltroCat === 'Platos Fuertes') return /taco|plato fuerte|comida|nacho|alimento|hamburguesa|burrito|orden/i.test(cat);
+      if (stockFiltroCat === 'Especialidades') return /especialidad|tostito|preparado/i.test(cat);
       if (stockFiltroCat === 'Sabritas') return /sabrita|papa|botana|churrito/i.test(cat);
       if (stockFiltroCat === 'Bebidas') return /bebida|refresco|l[ií]quido|jugo|agua|coca|sprite|fanta|sidral|mirinda|pepsi|manzanita|jugo/i.test(cat);
       if (stockFiltroCat === 'Postres') return /postre|dulce|nieve|pastel/i.test(cat);
@@ -744,16 +745,6 @@ function inicializarHistorial() {
         </div>`;
     }).join('');
   }
-
-  [btnDay, btnWeek, btnMonth].forEach(btn => {
-    if (btn) {
-      btn.addEventListener('click', (e) => {
-        currentFilter = e.target.id.replace('filter-', '');
-        updateActiveFilterButton();
-        renderHistory();
-      });
-    }
-  });
 
   updateActiveFilterButton();
 }

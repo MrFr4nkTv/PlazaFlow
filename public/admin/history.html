@@ -69,7 +69,7 @@
   <script src="../../src/admin/admin.js" type="module"></script>
 </head>
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-ink font-body antialiased">
-<div class="w-full max-w-lg mx-auto flex-1 flex flex-col bg-[#FFF9F7] shadow-xl overflow-hidden relative">
+<div class="w-full max-w-lg md:max-w-4xl mx-auto flex-1 flex flex-col bg-[#FFF9F7] shadow-xl overflow-hidden relative">
 <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
 <div class="flex items-center justify-between h-16 px-6 pt-2">
 <div class="flex items-center gap-3">
@@ -153,7 +153,7 @@
 <span class="material-symbols-outlined text-[12px]">sort</span>
 </div>
 </div>
-<div class="space-y-4" id="history-order-list">
+<div class="space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0" id="history-order-list">
 <!-- Orders will be dynamically injected here. Replacing with skeleton loaders. -->
 <div class="bg-white rounded-[24px] shadow-float overflow-hidden border border-primary/20 animate-pulse">
 <div class="p-5 flex items-center justify-between">
@@ -184,8 +184,8 @@
         </button>
 </div>
 </main>
-<nav class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto bg-white border-t border-gray-100 shadow-nav z-50 pb-safe">
-<div class="flex items-center justify-between px-10 pt-3 pb-6 h-[88px] max-w-lg mx-auto">
+<nav class="fixed bottom-0 left-0 right-0 max-w-lg md:max-w-4xl mx-auto bg-white border-t border-gray-100 shadow-nav z-50 pb-safe">
+<div class="flex items-center justify-between px-10 pt-3 pb-6 h-[88px] max-w-lg md:max-w-4xl mx-auto">
 <button class="flex flex-col items-center gap-1 group w-16" id="nav-active-orders">
 <div class="h-7 w-12 flex items-center justify-center rounded-2xl bg-transparent text-gray-400 group-hover:text-primary group-hover:bg-primary/5 transition-all">
 <span class="material-symbols-outlined text-[24px]">grid_view</span>

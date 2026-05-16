@@ -1,4 +1,6 @@
 import { enviarPedido } from '../services/dbOperations.js';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../services/firebaseInit.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const loadingState = document.getElementById('loading-state');
@@ -28,6 +30,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
+        // Protección contra doble pedido: verificar si ya existe un pedido con este sessionId
+        const existingQuery = query(
+            collection(db, 'pedidos'),
+            where('stripeSessionId', '==', sessionId)
+        );
+        const existingSnap = await getDocs(existingQuery);
+        if (!existingSnap.empty) {
+            // Ya existe un pedido con este sessionId, redirigir directamente al tracking
+            const existingOrderId = existingSnap.docs[0].id;
+            showSuccess();
+            setTimeout(() => {
+                window.location.href = `/tracking?orderId=${existingOrderId}`;
+            }, 1500);
+            return;
+        }
+
         // 1. Verificar la sesión con nuestro backend
         const verifyUrl = import.meta.env.VITE_VERIFY_URL || 'http://localhost:3005/verify-session';
         const response = await fetch(`${verifyUrl}?session_id=${sessionId}`);
@@ -52,9 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // 3. Crear el pedido en Firebase usando dbOperations
-        // El subtotal y la propina ya se calcularon en app.js y Stripe, pero los recalculamos para el registro final.
         const subtotal = carrito.reduce((a, i) => a + (i.precio * i.cantidad), 0);
-        // Stripe nos devuelve amount_total en centavos. Lo usamos para saber el total pagado.
         const totalPagado = (data.session.amount_total / 100);
         const propina = totalPagado - subtotal;
 
@@ -92,3 +108,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         showError('Ocurrió un error inesperado al procesar tu pedido. Si se realizó el cobro, acércate a mostrador con el ID: ' + (new URLSearchParams(window.location.search).get('session_id') || 'desconocido'));
     }
 });
+
