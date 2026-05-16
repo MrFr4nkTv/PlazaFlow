@@ -688,6 +688,31 @@ function inicializarHistorial() {
   if (btnPrint) btnPrint.addEventListener('click', () => { window.print(); });
 
   let todosPedidos = [];
+  let historyViewMode = 'completados'; // 'completados' | 'cancelados'
+
+  // Toggle button
+  const btnToggleType = document.getElementById('btn-toggle-history-type');
+  const toggleIcon = document.getElementById('toggle-history-icon');
+  const toggleLabel = document.getElementById('toggle-history-label');
+
+  if (btnToggleType) {
+    btnToggleType.addEventListener('click', () => {
+      if (historyViewMode === 'completados') {
+        historyViewMode = 'cancelados';
+        toggleLabel.textContent = 'CANCELADOS';
+        toggleIcon.textContent = 'cancel';
+        btnToggleType.classList.remove('text-green-600', 'hover:border-green-200');
+        btnToggleType.classList.add('text-red-500', 'hover:border-red-200');
+      } else {
+        historyViewMode = 'completados';
+        toggleLabel.textContent = 'COMPLETADOS';
+        toggleIcon.textContent = 'check_circle';
+        btnToggleType.classList.remove('text-red-500', 'hover:border-red-200');
+        btnToggleType.classList.add('text-green-600', 'hover:border-green-200');
+      }
+      renderHistory();
+    });
+  }
 
   escucharPedidos((pedidos) => {
     todosPedidos = pedidos;
@@ -695,34 +720,68 @@ function inicializarHistorial() {
   });
 
   function renderHistory() {
-    const completados = filterOrders(todosPedidos).filter(p => p.estado === 'listo' || p.estado === 'entregado');
+    const filtered = filterOrders(todosPedidos);
+    let listaPedidos;
 
-    // Stats
-    const totalPedidos = completados.length;
-    const totalVentas = completados.reduce((a, p) => a + (Number(p.total) || 0), 0);
+    if (historyViewMode === 'cancelados') {
+      listaPedidos = filtered.filter(p => p.estado === 'cancelado');
+    } else {
+      listaPedidos = filtered.filter(p => p.estado === 'listo' || p.estado === 'entregado');
+    }
+
+    // Stats (siempre calculan sobre los completados del rango)
+    const completadosParaStats = filtered.filter(p => p.estado === 'listo' || p.estado === 'entregado');
+    const totalPedidos = completadosParaStats.length;
+    const totalVentas = completadosParaStats.reduce((a, p) => a + (Number(p.total) || 0), 0);
 
     // Actualizar stats cards
     const statEls = document.querySelectorAll('.text-3xl.font-bold');
     if (statEls[0]) statEls[0].textContent = totalPedidos;
     if (statEls[1]) statEls[1].textContent = `$${totalVentas.toFixed(0)}`;
 
-    if (completados.length === 0) {
+    if (listaPedidos.length === 0) {
+      const emptyMsg = historyViewMode === 'cancelados' ? 'No hay pedidos cancelados' : 'No hay pedidos completados';
+      const emptyIcon = historyViewMode === 'cancelados' ? 'block' : 'receipt_long';
       historyList.innerHTML = `
-        <div class="text-center py-12">
-          <span class="material-symbols-outlined text-5xl text-gray-200 mb-3 block">receipt_long</span>
-          <p class="font-display font-bold text-gray-300">No hay pedidos completados</p>
+        <div class="text-center py-12 md:col-span-2">
+          <span class="material-symbols-outlined text-5xl text-gray-200 mb-3 block">${emptyIcon}</span>
+          <p class="font-display font-bold text-gray-300">${emptyMsg}</p>
         </div>`;
       return;
     }
 
     // Renderizar pedidos (más recientes primero)
-    historyList.innerHTML = completados.reverse().map(p => {
+    historyList.innerHTML = listaPedidos.reverse().map(p => {
       const dateObj = p.timestamp ? new Date(p.timestamp.toMillis()) : new Date();
       const hora = dateObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
       const fecha = currentFilter !== 'day' ? dateObj.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' }) + ', ' : '';
       const items = p.items || [];
       const itemsText = escaparHtml(items.map(i => `${i.cantidad}× ${i.nombre}`).join(', '));
       const ticketId = escaparHtml(p.id.slice(-4).toUpperCase());
+
+      if (p.estado === 'cancelado') {
+        const metodo = p.metodoPago === 'Efectivo' ? 'Sin cargo' : 'Reembolsado';
+        return `
+        <div class="bg-white rounded-[24px] shadow-card border border-red-100 overflow-hidden hover:shadow-float transition-shadow">
+          <div class="p-5 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="h-14 w-14 rounded-2xl bg-red-50 flex items-center justify-center">
+                <span class="material-symbols-outlined text-red-400 text-[28px]">cancel</span>
+              </div>
+              <div class="flex flex-col min-w-0">
+                <span class="font-display font-bold text-base text-gray-800">#${ticketId}</span>
+                <span class="text-xs text-gray-400 truncate max-w-[180px]">${itemsText}</span>
+                <span class="text-xs text-gray-300 mt-0.5">${fecha}${hora}</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="font-display font-bold text-lg text-gray-400 line-through">$${Number(p.total || 0).toFixed(2)}</span>
+              <p class="text-[10px] text-red-500 font-bold">CANCELADO</p>
+              <p class="text-[9px] text-red-400 font-medium">${metodo}</p>
+            </div>
+          </div>
+        </div>`;
+      }
 
       return `
         <div class="bg-white rounded-[24px] shadow-card border border-gray-100 overflow-hidden hover:shadow-float transition-shadow">

@@ -148,10 +148,10 @@
             Hoy
             <span class="h-1.5 w-1.5 rounded-full bg-primary"></span>
 </h2>
-<div class="flex items-center gap-1 text-[10px] font-bold text-gray-400 bg-white px-3 py-1.5 rounded-full border border-gray-100 shadow-sm">
-<span>MÁS RECIENTES</span>
-<span class="material-symbols-outlined text-[12px]">sort</span>
-</div>
+<button id="btn-toggle-history-type" class="flex items-center gap-1.5 text-[10px] font-bold bg-white px-3 py-1.5 rounded-full border border-gray-100 shadow-sm cursor-pointer hover:shadow-md hover:border-green-200 transition-all active:scale-95 select-none text-green-600">
+<span class="material-symbols-outlined text-[14px]" id="toggle-history-icon">check_circle</span>
+<span id="toggle-history-label">COMPLETADOS</span>
+</button>
 </div>
 <div class="space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0" id="history-order-list">
 <!-- Orders will be dynamically injected here. Replacing with skeleton loaders. -->
@@ -178,11 +178,7 @@
 </div>
 </div>
 </div>
-<div class="py-4 flex justify-center">
-<button class="bg-white border border-gray-200 text-gray-500 px-6 py-3 rounded-full font-bold text-xs uppercase tracking-wide hover:bg-gray-50 hover:text-gray-800 transition-colors shadow-sm w-full">
-            Cargar Turnos Anteriores
-        </button>
-</div>
+
 </main>
 <nav class="fixed bottom-0 left-0 right-0 max-w-lg md:max-w-4xl mx-auto bg-white border-t border-gray-100 shadow-nav z-50 pb-safe">
 <div class="flex items-center justify-between px-10 pt-3 pb-6 h-[88px] max-w-lg md:max-w-4xl mx-auto">
