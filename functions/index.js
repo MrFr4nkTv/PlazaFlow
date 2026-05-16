@@ -122,6 +122,39 @@ export const verifySession = withCors(async (req, res) => {
 });
 
 // ============================================================
+// Cloud Function: Reembolsar Sesión de Pago
+// ============================================================
+export const refundSession = withCors(async (req, res) => {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Método no permitido" });
+  }
+
+  try {
+    const stripe = getStripe();
+    const { session_id } = req.body;
+
+    if (!session_id) {
+      return res.status(400).json({ error: "Falta el session_id" });
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+
+    if (!session.payment_intent) {
+      return res.status(400).json({ error: "La sesión no tiene un pago capturado para reembolsar" });
+    }
+
+    const refund = await stripe.refunds.create({
+      payment_intent: session.payment_intent,
+    });
+
+    res.json({ success: true, refund });
+  } catch (error) {
+    console.error("Error reembolsando sesión:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================================
 // Cloud Function: Health Check
 // ============================================================
 export const health = onRequest({ region: "us-central1", invoker: "public" }, (req, res) => {

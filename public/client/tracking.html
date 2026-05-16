@@ -78,13 +78,13 @@
   </style>
 <style>
     body {
-      min-height: max(884px, 100dvh);
+      min-height: 100dvh;
     }
   </style>
   <script src="../../src/client/app.js" type="module"></script>
   </head>
-<body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased selection:bg-primary selection:text-white transition-colors duration-500 overflow-hidden relative">
-<div class="w-full max-w-md mx-auto flex-1 flex flex-col bg-background-light dark:bg-background-dark shadow-xl overflow-hidden relative" id="main-body">
+<body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased selection:bg-primary selection:text-white transition-colors duration-500 relative">
+<div class="w-full max-w-md mx-auto flex-1 flex flex-col bg-background-light dark:bg-background-dark shadow-xl relative" id="main-body">
 <header class="flex items-center justify-between p-6 z-10 relative">
 <button onclick="window.location.href='/menu'" class="w-12 h-12 rounded-full bg-white dark:bg-white/10 flex items-center justify-center shadow-sm text-plaza-text dark:text-white squishy-card hover:shadow-md transition-all">
 <span class="material-symbols-outlined">arrow_back</span>
@@ -96,7 +96,7 @@
 <span class="material-symbols-outlined">receipt_long</span>
 </button>
 </header>
-<main class="flex-1 flex flex-col items-center justify-center relative w-full max-w-md mx-auto px-6 z-10 -mt-8">
+<main class="flex-1 flex flex-col items-center justify-start relative w-full max-w-md mx-auto px-6 z-10 pb-8">
 <div class="relative w-64 h-64 mb-8 flex items-center justify-center">
 <div class="absolute inset-0 rounded-full bg-primary/5 dark:bg-primary/20 animate-pulse-slow blur-xl transform scale-125 transition-colors duration-500" id="pulse-ring-1"></div>
 <div class="absolute inset-4 rounded-full bg-primary/10 dark:bg-primary/30 animate-pulse blur-lg transition-colors duration-500" id="pulse-ring-2"></div>
