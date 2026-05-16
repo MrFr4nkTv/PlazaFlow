@@ -23,8 +23,7 @@ service cloud.firestore {
       allow update: if isAdmin() || (
         // Permitir a clientes decrementar exclusivamente el campo 'stock'
         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock']) &&
-        request.resource.data.stock >= 0 &&
-        request.resource.data.stock <= resource.data.stock
+        request.resource.data.stock >= 0
       );
     }
 
@@ -39,8 +38,14 @@ service cloud.firestore {
       // Clientes pueden leer su propio pedido (tracking) y Admins pueden leer todos
       allow read: if true;
       
-      // Solo el KDS/Administrador puede actualizar el estado de los pedidos
-      allow update, delete: if isAdmin();
+      // Solo el KDS/Administrador puede borrar o actualizar libremente,
+      // pero un cliente puede cancelar si el estado sigue en 'nuevo'.
+      allow update: if isAdmin() || (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado']) &&
+        request.resource.data.estado == 'cancelado' &&
+        resource.data.estado == 'nuevo'
+      );
+      allow delete: if isAdmin();
     }
   }
 }

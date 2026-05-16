@@ -1,4 +1,4 @@
-import { obtenerMenu, enviarPedido, escucharPedidoIndividual, escucharColaActiva, escaparHtml } from '../services/dbOperations.js';
+import { obtenerMenu, enviarPedido, escucharPedidoIndividual, escucharColaActiva, actualizarEstadoPedido, restaurarStockPedido, escaparHtml } from '../services/dbOperations.js';
 
 // ============================================================
 // CARRITO GLOBAL con localStorage
@@ -802,6 +802,7 @@ const TIEMPO_PROMEDIO_POR_PEDIDO = 3; // minutos estimados por pedido
 const CIRCUNFERENCIA = 283; // 2 * PI * 45 (radio del SVG circle)
 let progressInterval = null;
 let trackingEstado = null;
+let trackingPedidoCache = null;
 
 function inicializarTracking() {
   const statusTitle = document.getElementById('status-title');
@@ -826,14 +827,60 @@ function inicializarTracking() {
     const estado = pedido.estado || 'nuevo';
     const prevEstado = trackingEstado;
     trackingEstado = estado;
+    trackingPedidoCache = pedido;
 
     actualizarUITracking(estado, pedido);
+
+    const cancelContainer = document.getElementById('client-cancel-container');
+    if (cancelContainer) {
+      if (estado === 'nuevo') {
+        cancelContainer.classList.remove('hidden');
+      } else {
+        cancelContainer.classList.add('hidden');
+      }
+    }
 
     // Iniciar/reiniciar animación de progreso al cambiar de estado
     if (estado !== prevEstado) {
       iniciarProgresoAnimado(estado, pedido.timestamp);
     }
   });
+
+  const btnCancel = document.getElementById('btn-client-cancel');
+  if (btnCancel) {
+    btnCancel.onclick = async () => {
+      if (confirm('¿Estás seguro de cancelar tu pedido? Si usaste tarjeta, tu dinero será reembolsado.')) {
+        btnCancel.disabled = true;
+        const oldHtml = btnCancel.innerHTML;
+        btnCancel.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Cancelando...';
+        
+        try {
+          if (trackingPedidoCache && trackingPedidoCache.stripeSessionId && trackingPedidoCache.metodoPago !== 'Efectivo') {
+            try {
+              const refundUrl = import.meta.env.VITE_REFUND_URL || 'http://localhost:3005/refund-session';
+              const res = await fetch(refundUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ session_id: trackingPedidoCache.stripeSessionId })
+              });
+              if (!res.ok) console.warn('Problema contactando a Stripe para reembolso');
+            } catch (err) {
+              console.error('Servidor local apagado / error de red:', err);
+            }
+          }
+          await actualizarEstadoPedido(orderId, 'cancelado');
+          if (trackingPedidoCache && trackingPedidoCache.items) {
+             await restaurarStockPedido(trackingPedidoCache.items);
+          }
+        } catch (e) {
+          console.error(e);
+          alert('Hubo un error al cancelar. Actualiza la página.');
+        } finally {
+          btnCancel.innerHTML = oldHtml;
+        }
+      }
+    };
+  }
 }
 
 function actualizarCola(pedidosAntes) {
