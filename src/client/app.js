@@ -849,35 +849,52 @@ function inicializarTracking() {
   const btnCancel = document.getElementById('btn-client-cancel');
   if (btnCancel) {
     btnCancel.onclick = async () => {
-      if (confirm('¿Estás seguro de cancelar tu pedido? Si usaste tarjeta, tu dinero será reembolsado.')) {
-        btnCancel.disabled = true;
-        const oldHtml = btnCancel.innerHTML;
-        btnCancel.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Cancelando...';
+      if (!btnCancel.dataset.confirmado) {
+        btnCancel.dataset.confirmado = "true";
+        btnCancel.innerHTML = '<span class="material-symbols-outlined text-[18px]">warning</span> ¿Seguro? Clic para confirmar';
+        btnCancel.classList.remove('bg-red-50', 'text-red-600', 'dark:bg-red-900/20', 'dark:text-red-400');
+        btnCancel.classList.add('bg-red-600', 'text-white', 'shadow-md');
         
-        try {
-          if (trackingPedidoCache && trackingPedidoCache.stripeSessionId && trackingPedidoCache.metodoPago !== 'Efectivo') {
-            try {
-              const refundUrl = import.meta.env.VITE_REFUND_URL || 'http://localhost:3005/refund-session';
-              const res = await fetch(refundUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ session_id: trackingPedidoCache.stripeSessionId })
-              });
-              if (!res.ok) console.warn('Problema contactando a Stripe para reembolso');
-            } catch (err) {
-              console.error('Servidor local apagado / error de red:', err);
-            }
+        // Timeout para resetear si no hace el segundo clic
+        setTimeout(() => {
+          if (!btnCancel.disabled && btnCancel.dataset.confirmado) {
+            btnCancel.dataset.confirmado = "";
+            btnCancel.innerHTML = '<span class="material-symbols-outlined text-[18px]">cancel</span> Cancelar Pedido';
+            btnCancel.classList.add('bg-red-50', 'text-red-600', 'dark:bg-red-900/20', 'dark:text-red-400');
+            btnCancel.classList.remove('bg-red-600', 'text-white', 'shadow-md');
           }
-          await actualizarEstadoPedido(orderId, 'cancelado');
-          if (trackingPedidoCache && trackingPedidoCache.items) {
-             await restaurarStockPedido(trackingPedidoCache.items);
+        }, 3000);
+        return;
+      }
+
+      // Proceder con cancelación
+      btnCancel.disabled = true;
+      btnCancel.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Cancelando...';
+      
+      try {
+        if (trackingPedidoCache && trackingPedidoCache.stripeSessionId && trackingPedidoCache.metodoPago !== 'Efectivo') {
+          try {
+            const refundUrl = import.meta.env.VITE_REFUND_URL || 'http://localhost:3005/refund-session';
+            const res = await fetch(refundUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ session_id: trackingPedidoCache.stripeSessionId })
+            });
+            if (!res.ok) console.warn('Problema contactando a Stripe para reembolso');
+          } catch (err) {
+            console.error('Servidor local apagado / error de red:', err);
           }
-        } catch (e) {
-          console.error(e);
-          alert('Hubo un error al cancelar. Actualiza la página.');
-        } finally {
-          btnCancel.innerHTML = oldHtml;
         }
+        await actualizarEstadoPedido(orderId, 'cancelado');
+        if (trackingPedidoCache && trackingPedidoCache.items) {
+           await restaurarStockPedido(trackingPedidoCache.items);
+        }
+      } catch (e) {
+        console.error("Error cancelando:", e);
+        alert('Hubo un error al cancelar. Actualiza la página.');
+      } finally {
+        btnCancel.innerHTML = '<span class="material-symbols-outlined text-[18px]">cancel</span> Cancelado';
+        btnCancel.dataset.confirmado = "";
       }
     };
   }
