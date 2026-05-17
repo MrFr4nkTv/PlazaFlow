@@ -33,7 +33,9 @@ const withCors = (handler) => {
 };
 
 // ============================================================
-// Cloud Function: Crear Sesión de Checkout
+// Cloud Function: Crear Sesión de Checkout (Backend Seguro)
+// Esta función recibe el carrito y se comunica de servidor a servidor
+// con Stripe para generar un link de pago único y cifrado.
 // ============================================================
 export const createCheckoutSession = withCors(async (req, res) => {
   if (req.method !== "POST") {
@@ -93,7 +95,9 @@ export const createCheckoutSession = withCors(async (req, res) => {
 });
 
 // ============================================================
-// Cloud Function: Verificar Sesión de Pago
+// Cloud Function: Verificar Sesión de Pago (Seguridad / Idempotencia)
+// Verifica que el pago reportado en la URL del frontend sea legítimo
+// preguntándole directamente a la API privada de Stripe.
 // ============================================================
 export const verifySession = withCors(async (req, res) => {
   if (req.method !== "GET") {
@@ -122,7 +126,9 @@ export const verifySession = withCors(async (req, res) => {
 });
 
 // ============================================================
-// Cloud Function: Reembolsar Sesión de Pago
+// Cloud Function: Reembolsar Sesión de Pago (Refund Automático)
+// Si un cliente cancela un pedido pagado con tarjeta, esta función
+// solicita a Stripe la devolución automática del dinero a la tarjeta.
 // ============================================================
 export const refundSession = withCors(async (req, res) => {
   if (req.method !== "POST") {

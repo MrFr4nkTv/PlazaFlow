@@ -3,6 +3,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../services/firebaseInit.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // UI Elements
     const loadingState = document.getElementById('loading-state');
     const successState = document.getElementById('success-state');
     const errorState = document.getElementById('error-state');
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
+        // 1. Obtener parámetros de Stripe de la URL
         const params = new URLSearchParams(window.location.search);
         const sessionId = params.get('session_id');
 
@@ -30,7 +32,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Protección contra doble pedido: verificar si ya existe un pedido con este sessionId
+        // 2. Comprobación de IDEMPOTENCIA (Crucial para evitar pedidos duplicados)
+        // Buscamos en Firebase si este session_id ya fue procesado antes (ej. si el cliente recarga la página)
         const existingQuery = query(
             collection(db, 'pedidos'),
             where('stripeSessionId', '==', sessionId)
@@ -46,7 +49,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // 1. Verificar la sesión con nuestro backend
+        // 3. Verificación Segura con el Backend (Cloud Function)
+        // No confiamos solo en la URL, le preguntamos al servidor de Stripe si la sesión realmente se pagó.
         const verifyUrl = import.meta.env.VITE_VERIFY_URL || 'http://localhost:3005/verify-session';
         const response = await fetch(`${verifyUrl}?session_id=${sessionId}`);
         const data = await response.json();
@@ -69,7 +73,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // 3. Crear el pedido en Firebase usando dbOperations
+        // 4. Inserción en la Base de Datos (Firestore)
+        // Si el pago es legítimo, recuperamos el carrito de memoria y guardamos el pedido.
         const subtotal = carrito.reduce((a, i) => a + (i.precio * i.cantidad), 0);
         const totalPagado = (data.session.amount_total / 100);
         const propina = totalPagado - subtotal;
