@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>PlazaFlow - Finalizar Compra</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link rel="stylesheet" href="../css/style-client.css">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Nunito:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>PlazaFlow - Finalizar Compra</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../css/style-client.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&amp;family=Nunito:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -32,7 +40,7 @@
                     borderRadius: {
                         "card": "24px",
                         "pill": "9999px",
-                        "xl": "1.5rem", 
+                        "xl": "1.5rem",
                         "2xl": "1.75rem",
                         "3xl": "2rem",
                     },
@@ -45,12 +53,12 @@
             },
         }
     </script>
-<style>
+    <style>
         /* Custom slider styles for the 'Slide to Pay' functionality */
         .slide-track {
             background: linear-gradient(90deg, #FEE2E2 0%, #FFF9F5 100%);
         }
-        
+
         .slide-thumb {
             transition: transform 0.1s ease-out;
             cursor: grab;
@@ -65,127 +73,151 @@
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
+
         .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  <script src="../../src/client/app.js" type="module"></script>
-  </head>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <script src="../../src/client/app.js" type="module"></script>
+</head>
+
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased">
-<div class="w-full max-w-md mx-auto flex-1 flex flex-col bg-plaza-bg shadow-xl overflow-hidden relative">
-<!-- Header -->
-<header class="flex items-center justify-between px-6 pt-12 pb-4 bg-plaza-bg z-10">
-<button class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-soft text-plaza-text hover:bg-plaza-highlight transition-colors" id="btn-back-checkout">
-<span class="material-symbols-outlined text-[20px]">arrow_back</span>
-</button>
-<h1 class="font-heading font-bold text-2xl tracking-wide text-plaza-text">Caja</h1>
-<div class="w-10"></div> <!-- Spacer for optical centering -->
-</header>
-<!-- Main Content (Scrollable) -->
-<main class="flex-1 overflow-y-auto overflow-x-hidden pb-32 no-scrollbar">
-<!-- Section: Payment Method -->
-<section class="mt-4 px-6">
-<h2 class="font-heading font-semibold text-lg mb-4 text-plaza-text">¿Cómo deseas pagar?</h2>
-<div class="flex gap-4 overflow-x-auto no-scrollbar pb-6 -mx-6 px-6 snap-x" id="payment-methods-container">
-<!-- Card (Active by default) -->
-<div class="snap-center shrink-0 w-[160px] h-[100px] bg-white rounded-card p-4 flex flex-col justify-between shadow-soft border-2 border-primary cursor-pointer transition-transform hover:scale-[1.02] payment-method-card" data-method="Tarjeta">
-<div class="absolute top-2 right-2 text-primary check-icon">
-<span class="material-symbols-outlined text-[20px]">check_circle</span>
-</div>
-<div class="text-plaza-text font-bold text-lg flex items-center gap-2">
-<span class="material-symbols-outlined text-primary">credit_card</span> Tarjeta
-</div>
-<div class="text-plaza-muted text-xs">Débito o Crédito (Stripe)</div>
-</div>
-<!-- Cash -->
-<div class="snap-center shrink-0 w-[160px] h-[100px] bg-white rounded-card p-4 flex flex-col justify-between shadow-soft border-2 border-transparent hover:border-gray-100 cursor-pointer transition-transform hover:scale-[1.02] payment-method-card" data-method="Efectivo">
-<div class="absolute top-2 right-2 text-plaza-secondary check-icon hidden">
-<span class="material-symbols-outlined text-[20px]">check_circle</span>
-</div>
-<div class="text-plaza-text font-bold text-lg flex items-center gap-2">
-<span class="material-symbols-outlined text-plaza-secondary">payments</span> Efectivo
-</div>
-<div class="text-plaza-muted text-xs">Pagar en caja</div>
-</div>
-</div>
-</section>
-<!-- Section: Tip Selector -->
-<section class="mt-2 px-6">
-<h2 class="font-heading font-semibold text-lg mb-4 text-plaza-text flex items-center gap-2">
+    <div class="w-full max-w-md mx-auto flex-1 flex flex-col bg-plaza-bg shadow-xl overflow-hidden relative">
+        <!-- Header -->
+        <header class="flex items-center justify-between px-6 pt-12 pb-4 bg-plaza-bg z-10">
+            <button
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-soft text-plaza-text hover:bg-plaza-highlight transition-colors"
+                id="btn-back-checkout">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+            </button>
+            <h1 class="font-heading font-bold text-2xl tracking-wide text-plaza-text">Caja</h1>
+            <div class="w-10"></div> <!-- Spacer for optical centering -->
+        </header>
+        <!-- Main Content (Scrollable) -->
+        <main class="flex-1 overflow-y-auto overflow-x-hidden pb-32 no-scrollbar">
+            <!-- Section: Payment Method -->
+            <section class="mt-4 px-6">
+                <h2 class="font-heading font-semibold text-lg mb-4 text-plaza-text">¿Cómo deseas pagar?</h2>
+                <div class="flex gap-4 overflow-x-auto no-scrollbar pb-6 -mx-6 px-6 snap-x"
+                    id="payment-methods-container">
+                    <!-- Card (Active by default) -->
+                    <div class="snap-center shrink-0 w-[160px] h-[100px] bg-white rounded-card p-4 flex flex-col justify-between shadow-soft border-2 border-primary cursor-pointer transition-transform hover:scale-[1.02] payment-method-card"
+                        data-method="Tarjeta">
+                        <div class="absolute top-2 right-2 text-primary check-icon">
+                            <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                        </div>
+                        <div class="text-plaza-text font-bold text-lg flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">credit_card</span> Tarjeta
+                        </div>
+                        <div class="text-plaza-muted text-xs">Débito o Crédito (Stripe)</div>
+                    </div>
+                    <!-- Cash -->
+                    <div class="snap-center shrink-0 w-[160px] h-[100px] bg-white rounded-card p-4 flex flex-col justify-between shadow-soft border-2 border-transparent hover:border-gray-100 cursor-pointer transition-transform hover:scale-[1.02] payment-method-card"
+                        data-method="Efectivo">
+                        <div class="absolute top-2 right-2 text-plaza-secondary check-icon hidden">
+                            <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                        </div>
+                        <div class="text-plaza-text font-bold text-lg flex items-center gap-2">
+                            <span class="material-symbols-outlined text-plaza-secondary">payments</span> Efectivo
+                        </div>
+                        <div class="text-plaza-muted text-xs">Pagar en caja</div>
+                    </div>
+                </div>
+            </section>
+            <!-- Section: Tip Selector -->
+            <section class="mt-2 px-6">
+                <h2 class="font-heading font-semibold text-lg mb-4 text-plaza-text flex items-center gap-2">
                     ¡Añadir Propina! <span class="text-xl">❤️</span>
-</h2>
-<div class="grid grid-cols-4 gap-3">
-<!-- 10% -->
-<button class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
-<span class="text-2xl mb-1 group-hover:scale-110 transition-transform">😐</span>
-<span class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">10%</span>
-</button>
-<!-- 15% (Active) -->
-<button class="flex flex-col items-center justify-center h-20 bg-plaza-secondary rounded-2xl border-2 border-plaza-secondary shadow-md transform scale-105 transition-all relative">
-<div class="absolute -top-3 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">POPULAR</div>
-<span class="text-2xl mb-1">🙂</span>
-<span class="font-heading font-bold text-sm text-plaza-text">15%</span>
-</button>
-<!-- 20% -->
-<button class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
-<span class="text-2xl mb-1 group-hover:scale-110 transition-transform">🤩</span>
-<span class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">20%</span>
-</button>
-<!-- Other -->
-<button class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
-<span class="material-symbols-outlined text-plaza-muted mb-1 group-hover:text-plaza-text">edit</span>
-<span class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">Otra</span>
-</button>
-</div>
-</section>
-<!-- Section: Customer Name Field -->
-<section class="mt-6 px-6">
-<label class="font-heading font-semibold text-lg block mb-2 text-plaza-text flex items-center gap-2">
-    ¿A qué nombre pedimos? <span class="text-xl">🏷️</span>
-</label>
-<input type="text" id="checkout-customer-name" placeholder="Escribe tu nombre o apodo..." class="w-full h-14 px-4 bg-white border border-gray-200 rounded-2xl font-medium text-plaza-text placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-soft" required />
-</section>
-<!-- Section: Order Summary -->
-<section class="mt-8 px-6">
-<div class="bg-white rounded-card p-6 shadow-soft space-y-3">
-<div class="flex justify-between items-center text-plaza-muted text-sm font-medium">
-<span>Subtotal</span>
-<span id="checkout-subtotal">$0.00</span>
-</div>
-<div class="flex justify-between items-center text-plaza-text text-sm font-bold">
-<span class="flex items-center gap-1">Propina <span class="text-plaza-secondary" id="checkout-tip-emoji">🙂</span></span>
-<span id="checkout-tip">$0.00</span>
-</div>
-<div class="border-t border-dashed border-gray-200 my-4"></div>
-<div class="flex justify-between items-end">
-<span class="font-heading text-lg font-bold text-plaza-text">Total</span>
-<div class="text-right">
-<span class="block text-3xl font-heading font-bold text-plaza-text tracking-tight" id="checkout-total">$0.00</span>
-</div>
-</div>
-</div>
-</section>
-<!-- Terms Text -->
-<p class="text-center text-xs text-plaza-muted mt-6 px-10 leading-relaxed">
-                Al deslizar confirmas tu pedido. 
-                <br/>No hay devoluciones en comida ya preparada. 🌮
+                </h2>
+                <div class="grid grid-cols-4 gap-3">
+                    <!-- 10% -->
+                    <button
+                        class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
+                        <span class="text-2xl mb-1 group-hover:scale-110 transition-transform">😐</span>
+                        <span
+                            class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">10%</span>
+                    </button>
+                    <!-- 15% (Active) -->
+                    <button
+                        class="flex flex-col items-center justify-center h-20 bg-plaza-secondary rounded-2xl border-2 border-plaza-secondary shadow-md transform scale-105 transition-all relative">
+                        <div
+                            class="absolute -top-3 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                            POPULAR</div>
+                        <span class="text-2xl mb-1">🙂</span>
+                        <span class="font-heading font-bold text-sm text-plaza-text">15%</span>
+                    </button>
+                    <!-- 20% -->
+                    <button
+                        class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
+                        <span class="text-2xl mb-1 group-hover:scale-110 transition-transform">🤩</span>
+                        <span
+                            class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">20%</span>
+                    </button>
+                    <!-- Other -->
+                    <button
+                        class="flex flex-col items-center justify-center h-20 bg-white rounded-2xl border-2 border-transparent shadow-soft hover:bg-plaza-highlight/30 transition-all active:scale-95 group">
+                        <span
+                            class="material-symbols-outlined text-plaza-muted mb-1 group-hover:text-plaza-text">edit</span>
+                        <span
+                            class="font-heading font-bold text-sm text-plaza-muted group-hover:text-plaza-text">Otra</span>
+                    </button>
+                </div>
+            </section>
+            <!-- Section: Customer Name Field -->
+            <section class="mt-6 px-6">
+                <label class="font-heading font-semibold text-lg block mb-2 text-plaza-text flex items-center gap-2">
+                    ¿A qué nombre pedimos? <span class="text-xl">🏷️</span>
+                </label>
+                <input type="text" id="checkout-customer-name" placeholder="Escribe tu nombre o apodo..."
+                    class="w-full h-14 px-4 bg-white border border-gray-200 rounded-2xl font-medium text-plaza-text placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-soft"
+                    required />
+            </section>
+            <!-- Section: Order Summary -->
+            <section class="mt-8 px-6">
+                <div class="bg-white rounded-card p-6 shadow-soft space-y-3">
+                    <div class="flex justify-between items-center text-plaza-muted text-sm font-medium">
+                        <span>Subtotal</span>
+                        <span id="checkout-subtotal">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-plaza-text text-sm font-bold">
+                        <span class="flex items-center gap-1">Propina <span class="text-plaza-secondary"
+                                id="checkout-tip-emoji">🙂</span></span>
+                        <span id="checkout-tip">$0.00</span>
+                    </div>
+                    <div class="border-t border-dashed border-gray-200 my-4"></div>
+                    <div class="flex justify-between items-end">
+                        <span class="font-heading text-lg font-bold text-plaza-text">Total</span>
+                        <div class="text-right">
+                            <span class="block text-3xl font-heading font-bold text-plaza-text tracking-tight"
+                                id="checkout-total">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Terms Text -->
+            <p class="text-center text-xs text-plaza-muted mt-6 px-10 leading-relaxed">
+                Al deslizar confirmas tu pedido.
+                <br />No hay devoluciones en comida ya preparada. 🌮
             </p>
-</main>
-<!-- Sticky Bottom Bar -->
-<div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-plaza-bg via-plaza-bg to-transparent h-32 flex items-end justify-center pointer-events-none">
-<div class="w-full pointer-events-auto">
-<button class="w-full bg-primary hover:bg-primary-dark text-white font-display font-bold text-xl py-4 rounded-pill shadow-[0_8px_20px_rgba(255,107,107,0.4)] hover:shadow-[0_12px_24px_rgba(255,107,107,0.5)] transition-all transform active:scale-[0.98] flex items-center justify-center gap-2" id="btn-pay-checkout">
-    Confirmar Pedido 🌮
-</button>
-</div>
-</div>
-</div>
-</body></html>
+        </main>
+        <!-- Sticky Bottom Bar -->
+        <div
+            class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-plaza-bg via-plaza-bg to-transparent h-32 flex items-end justify-center pointer-events-none">
+            <div class="w-full pointer-events-auto">
+                <button
+                    class="w-full bg-primary hover:bg-primary-dark text-white font-display font-bold text-xl py-4 rounded-pill shadow-[0_8px_20px_rgba(255,107,107,0.4)] hover:shadow-[0_12px_24px_rgba(255,107,107,0.5)] transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"
+                    id="btn-pay-checkout">
+                    Confirmar Pedido 🌮
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
 
-
+</html>

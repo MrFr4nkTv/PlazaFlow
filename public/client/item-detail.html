@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>PlazaFlow - Detalle del Pedido</title>
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&amp;family=Nunito:wght@200..1000&amp;display=swap" rel="stylesheet"/>
-<!-- Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link rel="stylesheet" href="../css/style-client.css">
-<!-- Tailwind Configuration -->
-<script>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>PlazaFlow - Detalle del Pedido</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&amp;family=Nunito:wght@200..1000&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../css/style-client.css">
+    <!-- Tailwind Configuration -->
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -47,11 +55,12 @@
             },
         }
     </script>
-<style>
+    <style>
         /* Custom scrollbar hiding for clean UI */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
+
         .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -63,61 +72,74 @@
             border-color: #FF6B6B;
             background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
         }
-        
+
         /* Soft bounce animation for interactions */
         .active-bounce:active {
             transform: scale(0.95);
             transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  <script src="../../src/client/app.js" type="module"></script>
-  </head>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <script src="../../src/client/app.js" type="module"></script>
+</head>
+
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased">
-<div class="w-full max-w-md mx-auto flex-1 flex flex-col bg-plaza-cream shadow-xl overflow-hidden relative">
-<div class="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-300/50 rounded-full z-20"></div>
-<button class="absolute top-4 left-4 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-soft active-bounce z-50" id="btn-close-item-detail">
-<span class="material-symbols-outlined font-bold text-[20px]">arrow_back</span>
-</button>
-<div class="flex-1 overflow-y-auto no-scrollbar pb-32 relative">
-<!-- Hero Image -->
-<div class="relative h-[240px] w-full bg-gradient-to-br from-plaza-highlight to-plaza-cream rounded-b-[40px] flex items-center justify-center" id="item-detail-hero">
-<span class="text-gray-400 font-bold animate-pulse">Cargando...</span>
-</div>
-<!-- Content -->
-<div class="px-6 pt-6 flex flex-col gap-6">
-<div class="flex flex-col gap-2">
-<h1 class="font-heading font-bold text-2xl text-plaza-text leading-tight" id="item-detail-title">Cargando...</h1>
-<p class="text-gray-600 text-base leading-relaxed mb-4" id="item-detail-desc"></p>
-</div>
-<div class="h-px w-full bg-gray-100"></div>
-<!-- Options Container (dynamic) -->
-<div id="item-detail-options" class="flex flex-col gap-4"></div>
-</div>
-</div>
-<!-- Sticky Footer -->
-<div class="absolute bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-100 p-6 pb-8 z-30 rounded-t-3xl">
-<div class="flex items-center justify-between gap-4">
-<div class="flex items-center bg-gray-100 rounded-pill p-1.5 h-[56px] shadow-inner">
-<button class="w-12 h-full rounded-full bg-white text-plaza-text flex items-center justify-center shadow-sm active-bounce" id="item-detail-minus">
-<span class="material-symbols-outlined">remove</span>
-</button>
-<span class="w-10 text-center font-heading font-bold text-xl text-plaza-text" id="item-detail-qty">1</span>
-<button class="w-12 h-full rounded-full bg-plaza-coral text-white flex items-center justify-center shadow-md shadow-plaza-coral/30 active-bounce" id="item-detail-plus">
-<span class="material-symbols-outlined">add</span>
-</button>
-</div>
-<button class="flex-1 h-[56px] bg-plaza-coral hover:bg-red-500 text-white rounded-pill flex items-center justify-between px-6 shadow-primary active-bounce transition-colors" id="btn-confirm-add-item">
-<span class="font-heading font-bold text-lg">Añadir al Pedido</span>
-<span class="font-heading font-bold text-lg opacity-90" id="item-detail-price">$0.00</span>
-</button>
-</div>
-</div>
-</div>
-</body></html>
+    <div class="w-full max-w-md mx-auto flex-1 flex flex-col bg-plaza-cream shadow-xl overflow-hidden relative">
+        <div class="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-300/50 rounded-full z-20"></div>
+        <button
+            class="absolute top-4 left-4 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-soft active-bounce z-50"
+            id="btn-close-item-detail">
+            <span class="material-symbols-outlined font-bold text-[20px]">arrow_back</span>
+        </button>
+        <div class="flex-1 overflow-y-auto no-scrollbar pb-32 relative">
+            <!-- Hero Image -->
+            <div class="relative h-[240px] w-full bg-gradient-to-br from-plaza-highlight to-plaza-cream rounded-b-[40px] flex items-center justify-center"
+                id="item-detail-hero">
+                <span class="text-gray-400 font-bold animate-pulse">Cargando...</span>
+            </div>
+            <!-- Content -->
+            <div class="px-6 pt-6 flex flex-col gap-6">
+                <div class="flex flex-col gap-2">
+                    <h1 class="font-heading font-bold text-2xl text-plaza-text leading-tight" id="item-detail-title">
+                        Cargando...</h1>
+                    <p class="text-gray-600 text-base leading-relaxed mb-4" id="item-detail-desc"></p>
+                </div>
+                <div class="h-px w-full bg-gray-100"></div>
+                <!-- Options Container (dynamic) -->
+                <div id="item-detail-options" class="flex flex-col gap-4"></div>
+            </div>
+        </div>
+        <!-- Sticky Footer -->
+        <div
+            class="absolute bottom-0 left-0 w-full bg-white/80 backdrop-blur-md border-t border-gray-100 p-6 pb-8 z-30 rounded-t-3xl">
+            <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center bg-gray-100 rounded-pill p-1.5 h-[56px] shadow-inner">
+                    <button
+                        class="w-12 h-full rounded-full bg-white text-plaza-text flex items-center justify-center shadow-sm active-bounce"
+                        id="item-detail-minus">
+                        <span class="material-symbols-outlined">remove</span>
+                    </button>
+                    <span class="w-10 text-center font-heading font-bold text-xl text-plaza-text"
+                        id="item-detail-qty">1</span>
+                    <button
+                        class="w-12 h-full rounded-full bg-plaza-coral text-white flex items-center justify-center shadow-md shadow-plaza-coral/30 active-bounce"
+                        id="item-detail-plus">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                </div>
+                <button
+                    class="flex-1 h-[56px] bg-plaza-coral hover:bg-red-500 text-white rounded-pill flex items-center justify-between px-6 shadow-primary active-bounce transition-colors"
+                    id="btn-confirm-add-item">
+                    <span class="font-heading font-bold text-lg">Añadir al Pedido</span>
+                    <span class="font-heading font-bold text-lg opacity-90" id="item-detail-price">$0.00</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
 
-
+</html>

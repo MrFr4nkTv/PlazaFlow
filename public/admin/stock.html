@@ -1,275 +1,330 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Plazaflow Control Inventario</title>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link rel="stylesheet" href="../css/style-kds.css">
-<script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              "primary": "#FF6B6B",
-              "primary-dark": "#EE5A5A",
-              "surface-warm": "#FFF5F2",
-              "surface-card": "#FFFFFF",
-              "text-main": "#1F1F1F",
-              "text-muted": "#6B7280",
-              "accent-yellow": "#FFE066",
-              "alert-bg": "#FFE5E5",
-              "alert-text": "#D93025",
-            },
-            fontFamily: {
-              "display": ["Space Grotesk", "sans-serif"],
-              "body": ["Inter", "sans-serif"],
-            },
-            borderRadius: {
-              "xl": "16px",
-              "2xl": "24px",
-              "3xl": "32px",
-              "4xl": "40px",
-            },
-            boxShadow: {
-              "soft": "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
-              "floating": "0 8px 30px -4px rgba(0, 0, 0, 0.08)",
-              "button": "0 4px 12px rgba(255, 107, 107, 0.25)",
-              "nav": "0 -4px 20px rgba(0,0,0,0.05)",
-            }
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+  <title>Plazaflow Control Inventario</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="../css/style-kds.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#FF6B6B",
+            "primary-dark": "#EE5A5A",
+            "surface-warm": "#FFF5F2",
+            "surface-card": "#FFFFFF",
+            "text-main": "#1F1F1F",
+            "text-muted": "#6B7280",
+            "accent-yellow": "#FFE066",
+            "alert-bg": "#FFE5E5",
+            "alert-text": "#D93025",
           },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"],
+            "body": ["Inter", "sans-serif"],
+          },
+          borderRadius: {
+            "xl": "16px",
+            "2xl": "24px",
+            "3xl": "32px",
+            "4xl": "40px",
+          },
+          boxShadow: {
+            "soft": "0 4px 20px -2px rgba(0, 0, 0, 0.05)",
+            "floating": "0 8px 30px -4px rgba(0, 0, 0, 0.08)",
+            "button": "0 4px 12px rgba(255, 107, 107, 0.25)",
+            "nav": "0 -4px 20px rgba(0,0,0,0.05)",
+          }
         },
-      }
-    </script>
-<style>
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .counter-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 56px; height: 56px;
-            border-radius: 16px;
-            transition: transform 0.1s active, background-color 0.2s;
-        }
-        .counter-btn:active {
-            transform: scale(0.92);
-        }
-        .item-row {
-            min-height: 200px;
-        }
-        .item-row.is-out {
-            opacity: 1;
-            background-color: #FFF5F5;
-            border: 2px solid #FED7D7;
-        }
-        .item-row.is-out .counter-display {
-            color: #E53E3E;
-        }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            color: #9CA3AF;
-            transition: color 0.2s;
-            flex: 1;
-            padding-top: 12px;
-            padding-bottom: 12px;
-        }
-        .nav-item.active .material-symbols-outlined {
-            font-variation-settings: 'FILL' 1;
-        }
-        main::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
-<style>
+      },
+    }
+  </script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .counter-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      transition: transform 0.1s active, background-color 0.2s;
+    }
+
+    .counter-btn:active {
+      transform: scale(0.92);
+    }
+
+    .item-row {
+      min-height: 200px;
+    }
+
+    .item-row.is-out {
+      opacity: 1;
+      background-color: #FFF5F5;
+      border: 2px solid #FED7D7;
+    }
+
+    .item-row.is-out .counter-display {
+      color: #E53E3E;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #9CA3AF;
+      transition: color 0.2s;
+      flex: 1;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    .nav-item.active .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1;
+    }
+
+    main::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+  <style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
   <script src="../../src/admin/admin.js" type="module"></script>
 </head>
+
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased">
-<div class="w-full max-w-lg md:max-w-4xl mx-auto flex-1 flex flex-col bg-surface-warm shadow-xl overflow-hidden relative">
-<div class="sticky top-0 z-40 bg-surface-warm/95 backdrop-blur-sm pb-2">
-<header class="h-auto py-3 flex items-center justify-between px-6 shrink-0 pt-4">
-<div class="flex items-center gap-3">
-<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden">
-<span class="material-symbols-outlined text-white text-[28px] z-10">restaurant</span>
-<div class="absolute inset-0 border-[3px] border-white/20 rounded-full scale-75"></div>
-</div>
-<div>
-<h1 class="text-xl font-display font-bold text-text-main leading-tight">Plazaflow</h1>
-<p class="text-sm font-medium text-text-muted leading-tight">Control Inventario</p>
-</div>
-</div>
-    <div class="flex items-center gap-2">
-      <button class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-md shadow-primary/30 hover:scale-105 active:scale-95 transition-all" id="btn-open-add-modal" title="Agregar Producto">
-        <span class="material-symbols-outlined font-bold text-xl">add</span>
-      </button>
-      <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-red-50 hover:text-red-500 transition-colors text-gray-400 cursor-pointer" id="btn-logout" title="Cerrar sesión">
-        <span class="material-symbols-outlined">logout</span>
-      </div>
-    </div>
-</header>
-
-
-<div class="px-6 pb-2">
-<div class="relative group mt-2">
-<span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
-<span class="material-symbols-outlined text-2xl">search</span>
-</span>
-<input aria-label="Search items" class="w-full h-14 pl-12 pr-6 bg-white border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 text-lg placeholder-gray-400 font-medium transition-all text-text-main" placeholder="Buscar productos..." type="text" id="stock-search-input"/>
-</div>
-<div class="flex sm:flex-wrap overflow-x-auto no-scrollbar gap-2 mt-4 pb-1" id="stock-category-filters">
-<button class="cat-btn active shrink-0 h-10 px-6 bg-text-main text-white font-bold text-sm rounded-full shadow-md transition-transform active:scale-95" data-cat="Todo">
-                    Todo
-                </button>
-<button class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95" data-cat="Platos Fuertes">
-                    Platos Fuertes
-                </button>
-<button class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95" data-cat="Sabritas">
-                    Sabritas
-                </button>
-<button class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95" data-cat="Bebidas">
-                    Bebidas
-                </button>
-<button class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95" data-cat="Postres">
-                    Postres
-                </button>
-<button class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95" data-cat="Especialidades">
-                    Especialidades
-                </button>
-</div>
-</div>
-</div>
-<main class="flex-1 px-6 pt-2 pb-32 space-y-6 overflow-y-auto w-full" id="admin-stock-list">
-<section class="animate-pulse">
-<div class="flex items-center justify-between mb-4 mt-2">
-<div class="h-6 bg-gray-200 rounded w-32"></div>
-<div class="h-4 bg-gray-200 rounded w-16"></div>
-</div>
-<div class="flex flex-col gap-4">
-<div class="bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-[150px] gap-4">
-<div class="h-5 bg-gray-200 rounded w-3/4 mb-1"></div>
-<div class="h-3 bg-gray-200 rounded w-1/2"></div>
-</div>
-</div>
-</section>
-<section class="animate-pulse">
-<div class="flex items-center justify-between mb-4 mt-2">
-<div class="h-6 bg-gray-200 rounded w-32"></div>
-<div class="h-4 bg-gray-200 rounded w-16"></div>
-</div>
-<div class="flex flex-col gap-4">
-<div class="bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-[150px] gap-4">
-<div class="h-5 bg-gray-200 rounded w-3/4 mb-1"></div>
-<div class="h-3 bg-gray-200 rounded w-1/2"></div>
-</div>
-</div>
-</section>
-<div class="h-8"></div>
-</main>
-<nav class="fixed bottom-0 left-0 right-0 max-w-lg md:max-w-4xl mx-auto bg-white border-t border-gray-100 px-8 py-3 flex justify-between items-end z-50 safe-area-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
-<button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-active-orders">
-<span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">dashboard</span>
-<span class="text-[10px] font-bold tracking-wide">Tablero</span>
-</button>
-<button class="nav-item active group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-stock">
-<div class="relative">
-<span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">inventory_2</span>
-<span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white"></span>
-</div>
-<span class="text-[10px] font-bold tracking-wide">Inventario</span>
-</button>
-<button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-history">
-<span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">history</span>
-<span class="text-[10px] font-bold tracking-wide">Historial</span>
-</button>
-</nav>
-</div>
-
-<!-- Modal Premium de Agregar Producto (Nivel Raíz del Body) -->
-<div id="modal-add-product" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 p-4">
-  <div class="bg-white w-full max-w-lg rounded-[32px] p-6 shadow-floating max-h-[85vh] overflow-y-auto flex flex-col gap-4 transform scale-95 transition-transform duration-300">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-          <span class="material-symbols-outlined font-bold">add_circle</span>
-        </div>
-        <h3 id="modal-product-title" class="font-display font-bold text-lg text-text-main">Nuevo Producto</h3>
-      </div>
-      <button id="btn-close-add-modal" class="w-8 h-8 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-gray-200 transition-colors">
-        <span class="material-symbols-outlined text-sm font-bold">close</span>
-      </button>
-    </div>
-
-    <!-- Formulario -->
-    <form id="form-add-product" class="flex flex-col gap-4 mt-2" onsubmit="return false;">
-      <div>
-        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Nombre del Producto</label>
-        <input type="text" id="add-nombre" required placeholder="Ej. Tacos de Birria (Orden)" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Precio ($)</label>
-          <input type="number" step="0.5" id="add-precio" required placeholder="0.00" min="0" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
-        </div>
-        <div>
-          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Stock Inicial</label>
-          <input type="number" id="add-stock" required placeholder="10" min="0" value="10" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
-        </div>
-      </div>
-
-      <div>
-        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Categoría</label>
-        <select id="add-categoria" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
-          <option value="Tacos">Tacos</option>
-          <option value="Refrescos 600ml">Refrescos 600ml</option>
-          <option value="Sabritas">Sabritas</option>
-          <option value="Otros Líquidos">Otros Líquidos</option>
-          <option value="Especialidades">Especialidades</option>
-          <option value="Postres">Postres</option>
-          <option value="Platos Fuertes">Platos Fuertes</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Opciones / Variantes (Separadas por coma)</label>
-        <input type="text" id="add-opciones" placeholder="Ej. Maíz, Harina (Opcional)" class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"/>
-      </div>
-
-      <!-- Sección de Subida de Imagen -->
-      <div>
-        <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Fotografía del Producto</label>
-        <div class="relative flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 hover:bg-gray-100/50 transition-colors cursor-pointer overflow-hidden group" id="upload-zone">
-          <input type="file" id="add-imagen" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10"/>
-          <div id="upload-placeholder" class="flex flex-col items-center pointer-events-none">
-            <span class="material-symbols-outlined text-3xl text-gray-400 group-hover:scale-110 transition-transform">add_a_photo</span>
-            <span class="text-xs font-bold text-gray-500 mt-2">Tomar foto o subir imagen</span>
-            <span class="text-[10px] text-gray-400">Formatos: JPG, PNG, WEBP</span>
+  <div
+    class="w-full max-w-lg md:max-w-4xl mx-auto flex-1 flex flex-col bg-surface-warm shadow-xl overflow-hidden relative">
+    <div class="sticky top-0 z-40 bg-surface-warm/95 backdrop-blur-sm pb-2">
+      <header class="h-auto py-3 flex items-center justify-between px-6 shrink-0 pt-4">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-12 h-12 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden">
+            <span class="material-symbols-outlined text-white text-[28px] z-10">restaurant</span>
+            <div class="absolute inset-0 border-[3px] border-white/20 rounded-full scale-75"></div>
           </div>
-          <img id="upload-preview" class="absolute inset-0 w-full h-full object-cover hidden" alt="Previsualización"/>
+          <div>
+            <h1 class="text-xl font-display font-bold text-text-main leading-tight">Plazaflow</h1>
+            <p class="text-sm font-medium text-text-muted leading-tight">Control Inventario</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-md shadow-primary/30 hover:scale-105 active:scale-95 transition-all"
+            id="btn-open-add-modal" title="Agregar Producto">
+            <span class="material-symbols-outlined font-bold text-xl">add</span>
+          </button>
+          <div
+            class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-red-50 hover:text-red-500 transition-colors text-gray-400 cursor-pointer"
+            id="btn-logout" title="Cerrar sesión">
+            <span class="material-symbols-outlined">logout</span>
+          </div>
+        </div>
+      </header>
+
+
+      <div class="px-6 pb-2">
+        <div class="relative group mt-2">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
+            <span class="material-symbols-outlined text-2xl">search</span>
+          </span>
+          <input aria-label="Search items"
+            class="w-full h-14 pl-12 pr-6 bg-white border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 text-lg placeholder-gray-400 font-medium transition-all text-text-main"
+            placeholder="Buscar productos..." type="text" id="stock-search-input" />
+        </div>
+        <div class="flex sm:flex-wrap overflow-x-auto no-scrollbar gap-2 mt-4 pb-1" id="stock-category-filters">
+          <button
+            class="cat-btn active shrink-0 h-10 px-6 bg-text-main text-white font-bold text-sm rounded-full shadow-md transition-transform active:scale-95"
+            data-cat="Todo">
+            Todo
+          </button>
+          <button
+            class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95"
+            data-cat="Platos Fuertes">
+            Platos Fuertes
+          </button>
+          <button
+            class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95"
+            data-cat="Sabritas">
+            Sabritas
+          </button>
+          <button
+            class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95"
+            data-cat="Bebidas">
+            Bebidas
+          </button>
+          <button
+            class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95"
+            data-cat="Postres">
+            Postres
+          </button>
+          <button
+            class="cat-btn shrink-0 h-10 px-6 bg-white text-gray-600 font-bold text-sm rounded-full shadow-sm border border-gray-100 transition-transform active:scale-95"
+            data-cat="Especialidades">
+            Especialidades
+          </button>
         </div>
       </div>
-
-      <button type="button" id="btn-submit-product" class="w-full h-12 mt-2 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl shadow-button flex items-center justify-center gap-2 active:scale-95 transition-all">
-        <span class="material-symbols-outlined text-lg">check</span> Guardar en Menú
+    </div>
+    <main class="flex-1 px-6 pt-2 pb-32 space-y-6 overflow-y-auto w-full" id="admin-stock-list">
+      <section class="animate-pulse">
+        <div class="flex items-center justify-between mb-4 mt-2">
+          <div class="h-6 bg-gray-200 rounded w-32"></div>
+          <div class="h-4 bg-gray-200 rounded w-16"></div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div class="bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-[150px] gap-4">
+            <div class="h-5 bg-gray-200 rounded w-3/4 mb-1"></div>
+            <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        </div>
+      </section>
+      <section class="animate-pulse">
+        <div class="flex items-center justify-between mb-4 mt-2">
+          <div class="h-6 bg-gray-200 rounded w-32"></div>
+          <div class="h-4 bg-gray-200 rounded w-16"></div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div class="bg-white p-5 rounded-3xl shadow-soft flex flex-col justify-between h-[150px] gap-4">
+            <div class="h-5 bg-gray-200 rounded w-3/4 mb-1"></div>
+            <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        </div>
+      </section>
+      <div class="h-8"></div>
+    </main>
+    <nav
+      class="fixed bottom-0 left-0 right-0 max-w-lg md:max-w-4xl mx-auto bg-white border-t border-gray-100 px-8 py-3 flex justify-between items-end z-50 safe-area-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
+      <button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-active-orders">
+        <span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">dashboard</span>
+        <span class="text-[10px] font-bold tracking-wide">Tablero</span>
       </button>
-    </form>
+      <button class="nav-item active group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-stock">
+        <div class="relative">
+          <span
+            class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">inventory_2</span>
+          <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white"></span>
+        </div>
+        <span class="text-[10px] font-bold tracking-wide">Inventario</span>
+      </button>
+      <button class="nav-item group flex flex-col items-center gap-1.5 w-16 !p-0" id="nav-history">
+        <span class="material-symbols-outlined text-[26px] group-hover:scale-110 transition-transform">history</span>
+        <span class="text-[10px] font-bold tracking-wide">Historial</span>
+      </button>
+    </nav>
   </div>
-</div>
-</body></html>
 
+  <!-- Modal Premium de Agregar Producto (Nivel Raíz del Body) -->
+  <div id="modal-add-product"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 p-4">
+    <div
+      class="bg-white w-full max-w-lg rounded-[32px] p-6 shadow-floating max-h-[85vh] overflow-y-auto flex flex-col gap-4 transform scale-95 transition-transform duration-300">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+            <span class="material-symbols-outlined font-bold">add_circle</span>
+          </div>
+          <h3 id="modal-product-title" class="font-display font-bold text-lg text-text-main">Nuevo Producto</h3>
+        </div>
+        <button id="btn-close-add-modal"
+          class="w-8 h-8 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center hover:bg-gray-200 transition-colors">
+          <span class="material-symbols-outlined text-sm font-bold">close</span>
+        </button>
+      </div>
 
+      <!-- Formulario -->
+      <form id="form-add-product" class="flex flex-col gap-4 mt-2" onsubmit="return false;">
+        <div>
+          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Nombre del
+            Producto</label>
+          <input type="text" id="add-nombre" required placeholder="Ej. Tacos de Birria (Orden)"
+            class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Precio ($)</label>
+            <input type="number" step="0.5" id="add-precio" required placeholder="0.00" min="0"
+              class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
+          </div>
+          <div>
+            <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Stock Inicial</label>
+            <input type="number" id="add-stock" required placeholder="10" min="0" value="10"
+              class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Categoría</label>
+          <select id="add-categoria"
+            class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+            <option value="Tacos">Tacos</option>
+            <option value="Refrescos 600ml">Refrescos 600ml</option>
+            <option value="Sabritas">Sabritas</option>
+            <option value="Otros Líquidos">Otros Líquidos</option>
+            <option value="Especialidades">Especialidades</option>
+            <option value="Postres">Postres</option>
+            <option value="Platos Fuertes">Platos Fuertes</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Opciones / Variantes
+            (Separadas por coma)</label>
+          <input type="text" id="add-opciones" placeholder="Ej. Maíz, Harina (Opcional)"
+            class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl font-medium text-text-main placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
+        </div>
+
+        <!-- Sección de Subida de Imagen -->
+        <div>
+          <label class="text-xs font-bold text-text-muted uppercase tracking-wider block mb-1">Fotografía del
+            Producto</label>
+          <div
+            class="relative flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 hover:bg-gray-100/50 transition-colors cursor-pointer overflow-hidden group"
+            id="upload-zone">
+            <input type="file" id="add-imagen" accept="image/*"
+              class="absolute inset-0 opacity-0 cursor-pointer z-10" />
+            <div id="upload-placeholder" class="flex flex-col items-center pointer-events-none">
+              <span
+                class="material-symbols-outlined text-3xl text-gray-400 group-hover:scale-110 transition-transform">add_a_photo</span>
+              <span class="text-xs font-bold text-gray-500 mt-2">Tomar foto o subir imagen</span>
+              <span class="text-[10px] text-gray-400">Formatos: JPG, PNG, WEBP</span>
+            </div>
+            <img id="upload-preview" class="absolute inset-0 w-full h-full object-cover hidden"
+              alt="Previsualización" />
+          </div>
+        </div>
+
+        <button type="button" id="btn-submit-product"
+          class="w-full h-12 mt-2 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl shadow-button flex items-center justify-center gap-2 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-lg">check</span> Guardar en Menú
+        </button>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

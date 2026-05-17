@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Plazaflow Detalle de Pedido</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link rel="stylesheet" href="../css/style-kds.css">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>Plazaflow Detalle de Pedido</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="../css/style-kds.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -16,7 +22,7 @@
                         "primary": "#FF7F50", // Coral
                         "primary-dark": "#E66A3C", // Darker Coral for active states
                         "primary-light": "#FFF0EB", // Very light coral background
-                        "success": "#00C853", 
+                        "success": "#00C853",
                         "success-light": "#E0F2F1",
                         "background-light": "#FDFBF7", // Warmer paper white
                         "background-dark": "#221510",
@@ -46,160 +52,192 @@
             },
         }
     </script>
-<style>
+    <style>
         .scroller::-webkit-scrollbar {
             width: 6px;
         }
+
         .scroller::-webkit-scrollbar-track {
             background: transparent;
         }
+
         .scroller::-webkit-scrollbar-thumb {
             background: #e5e7eb;
             border-radius: 10px;
         }
+
         .scroller::-webkit-scrollbar-thumb:hover {
             background: #d1d5db;
         }
+
         body {
             height: 100vh;
             height: 100dvh;
         }
+
         .app-container {
             height: 100vh;
             height: 100dvh;
         }
+
         .pb-safe {
             padding-bottom: env(safe-area-inset-bottom);
         }
     </style>
-<style>
+    <style>
 
-  </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  <script src="../../src/admin/admin.js" type="module"></script>
-  </head>
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <script src="../../src/admin/admin.js" type="module"></script>
+</head>
+
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-ink font-body antialiased">
-<div class="w-full max-w-7xl mx-auto flex-1 flex flex-col bg-background-light shadow-xl overflow-hidden relative">
-<div class="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"></div>
-<div class="shrink-0 border-b border-black/5 bg-paper px-6 py-4 relative z-10">
-<div class="flex items-center gap-3 mb-4 pb-4 border-b border-black/5">
-<button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center shrink-0 hover:bg-gray-200 transition-colors" onclick="window.location.href='/cocina'">
-<span class="material-symbols-outlined text-[22px] text-gray-600">arrow_back</span>
-</button>
-<div>
-<span class="font-display font-bold text-xl tracking-tight text-ink">Plazaflow</span>
-<div class="text-xs font-medium text-muted">Detalle de Pedido</div>
-</div>
-<div class="ml-auto">
-<button class="w-9 h-9 rounded-full bg-gray-100 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors text-gray-400" id="btn-logout" title="Cerrar sesión">
-<span class="material-symbols-outlined text-[20px]">logout</span>
-</button>
-</div>
-</div>
-<div class="flex items-start justify-between mb-4">
-<div class="flex flex-col gap-1">
-<div class="flex items-center gap-2">
-<span class="bg-ink text-white font-mono text-sm font-bold px-3 py-1 rounded-lg" id="detail-order-id">PEDIDO #----</span>
-<span class="bg-primary-light text-primary-dark font-mono text-xs font-bold px-2 py-1 rounded-md uppercase">Web</span>
-</div>
-<div class="flex items-center gap-2 mt-2">
-<span class="font-body text-muted text-sm font-medium" id="detail-order-time">--:--</span>
-<span class="w-1 h-1 rounded-full bg-muted"></span>
-<span class="font-body text-ink text-sm font-bold" id="detail-order-status">Nuevo</span>
-</div>
-</div>
-<div class="flex flex-col items-end gap-1">
-<div class="payment-status-badge flex items-center gap-1.5 bg-success-light text-success-dark px-3 py-1.5 rounded-lg" data-status="PAID">
-<span class="material-symbols-outlined text-lg filled font-bold text-success">qr_code_2</span>
-<span class="font-mono text-sm font-bold text-success uppercase tracking-wide">PAGADO</span>
-</div>
-</div>
-</div>
-<div class="flex gap-2 overflow-x-auto pb-1 scroller no-scrollbar">
-<span class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70">Mesa 4</span>
-<span class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70" id="detail-item-count">-- Artículos</span>
-</div>
-</div>
-<div class="flex-1 overflow-y-auto scroller bg-background-light/30 flex flex-col">
-<div class="p-4 space-y-3 pb-24" id="admin-detail-list">
-<div class="bg-paper rounded-2xl p-4 shadow-soft group border border-black/5 animate-pulse">
-<div class="flex justify-between items-start mb-3">
-<div class="flex items-center gap-3 w-full">
-<div class="h-10 w-10 bg-gray-200 rounded-xl"></div>
-<div class="h-5 bg-gray-200 rounded w-1/2"></div>
-</div>
-</div>
-<div class="h-4 bg-gray-200 rounded w-1/3 mt-2 ml-14"></div>
-</div>
-<div class="bg-paper rounded-2xl p-4 shadow-soft group border border-black/5 animate-pulse">
-<div class="flex justify-between items-start mb-3">
-<div class="flex items-center gap-3 w-full">
-<div class="h-10 w-10 bg-gray-200 rounded-xl"></div>
-<div class="h-5 bg-gray-200 rounded w-1/2"></div>
-</div>
-</div>
-<div class="h-4 bg-gray-200 rounded w-1/3 mt-2 ml-14"></div>
-</div>
-<div class="px-4 py-4 mt-4 bg-white rounded-2xl border border-black/5 shadow-soft">
-<div class="flex justify-between items-center text-sm font-medium text-muted mb-1">
-<span>Subtotal</span>
-<span class="h-3 w-10 bg-gray-200 rounded"></span>
-</div>
-<div class="flex justify-between items-center text-sm font-medium text-muted mb-3">
-<span>Impuestos</span>
-<span class="h-3 w-10 bg-gray-200 rounded"></span>
-</div>
-<div class="border-t border-dashed border-gray-200 my-2"></div>
-<div class="flex justify-between items-center font-display font-bold text-2xl text-ink mt-2">
-<span>Total</span>
-<span class="h-5 w-16 bg-gray-200 rounded"></span>
-</div>
-</div>
-</div>
-</div>
-<div class="shrink-0 bg-paper p-4 z-20 shadow-[0_-4px_20px_-2px_rgba(0,0,0,0.05)] border-t border-black/5">
-<div class="grid grid-cols-3 gap-2">
-<button class="h-14 flex flex-col items-center justify-center gap-1 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 active:scale-[0.98] transition-all group border border-red-100" id="btn-admin-cancel-order">
-<span class="material-symbols-outlined text-xl font-bold">cancel</span>
-<span class="font-display font-bold text-[11px] uppercase leading-none text-center">Cancelar</span>
-</button>
-<button class="h-14 flex flex-col items-center justify-center gap-1 bg-background-light text-ink rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all group" id="btn-admin-process-order">
-<span class="material-symbols-outlined text-xl font-bold text-ink/40 group-hover:text-ink/60 transition-colors">timelapse</span>
-<span class="font-display font-bold text-[11px] uppercase leading-none text-center">En Proceso</span>
-</button>
-<button class="h-14 flex flex-col items-center justify-center gap-1 bg-primary text-white rounded-xl hover:bg-primary-dark active:scale-[0.98] transition-all shadow-lg shadow-primary/30" id="btn-admin-complete-order">
-<span class="material-symbols-outlined text-xl font-bold">check_circle</span>
-<span class="font-display font-bold text-[11px] uppercase leading-none text-center">Completar</span>
-</button>
-</div>
-</div>
-<div class="shrink-0 bg-paper z-30 pb-safe border-t border-black/5">
-<nav class="flex justify-between items-stretch h-16 sm:h-20 px-6">
-<button class="flex-1 flex flex-col items-center justify-center gap-1 text-primary relative group" id="nav-active-orders">
-<div class="bg-primary/10 p-1.5 rounded-xl group-hover:bg-primary/20 transition-colors">
-<span class="material-symbols-outlined text-[24px] font-bold">receipt_long</span>
-</div>
-<span class="text-[10px] font-bold font-mono tracking-wider uppercase">Tablero</span>
-</button>
-<button class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group" id="nav-stock">
-<div class="group-hover:bg-primary/5 p-1.5 rounded-xl transition-colors">
-<span class="material-symbols-outlined text-[24px] font-medium">inventory_2</span>
-</div>
-<span class="text-[10px] font-bold font-mono tracking-wider uppercase">Inventario</span>
-</button>
-<button class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group" id="nav-history">
-<div class="group-hover:bg-primary/5 p-1.5 rounded-xl transition-colors">
-<span class="material-symbols-outlined text-[24px] font-medium">history</span>
-</div>
-<span class="text-[10px] font-bold font-mono tracking-wider uppercase">Historial</span>
-</button>
-</nav>
-</div>
-</div>
-</body></html>
+    <div class="w-full max-w-7xl mx-auto flex-1 flex flex-col bg-background-light shadow-xl overflow-hidden relative">
+        <div class="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
+            style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 24px 24px;"></div>
+        <div class="shrink-0 border-b border-black/5 bg-paper px-6 py-4 relative z-10">
+            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-black/5">
+                <button
+                    class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center shrink-0 hover:bg-gray-200 transition-colors"
+                    onclick="window.location.href='/cocina'">
+                    <span class="material-symbols-outlined text-[22px] text-gray-600">arrow_back</span>
+                </button>
+                <div>
+                    <span class="font-display font-bold text-xl tracking-tight text-ink">Plazaflow</span>
+                    <div class="text-xs font-medium text-muted">Detalle de Pedido</div>
+                </div>
+                <div class="ml-auto">
+                    <button
+                        class="w-9 h-9 rounded-full bg-gray-100 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors text-gray-400"
+                        id="btn-logout" title="Cerrar sesión">
+                        <span class="material-symbols-outlined text-[20px]">logout</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex flex-col gap-1">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-ink text-white font-mono text-sm font-bold px-3 py-1 rounded-lg"
+                            id="detail-order-id">PEDIDO #----</span>
+                        <span
+                            class="bg-primary-light text-primary-dark font-mono text-xs font-bold px-2 py-1 rounded-md uppercase">Web</span>
+                    </div>
+                    <div class="flex items-center gap-2 mt-2">
+                        <span class="font-body text-muted text-sm font-medium" id="detail-order-time">--:--</span>
+                        <span class="w-1 h-1 rounded-full bg-muted"></span>
+                        <span class="font-body text-ink text-sm font-bold" id="detail-order-status">Nuevo</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end gap-1">
+                    <div class="payment-status-badge flex items-center gap-1.5 bg-success-light text-success-dark px-3 py-1.5 rounded-lg"
+                        data-status="PAID">
+                        <span class="material-symbols-outlined text-lg filled font-bold text-success">qr_code_2</span>
+                        <span class="font-mono text-sm font-bold text-success uppercase tracking-wide">PAGADO</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-2 overflow-x-auto pb-1 scroller no-scrollbar">
+                <span
+                    class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70">Mesa
+                    4</span>
+                <span
+                    class="whitespace-nowrap bg-background-light px-3 py-1 rounded-lg text-xs font-mono font-medium text-ink/70"
+                    id="detail-item-count">-- Artículos</span>
+            </div>
+        </div>
+        <div class="flex-1 overflow-y-auto scroller bg-background-light/30 flex flex-col">
+            <div class="p-4 space-y-3 pb-24" id="admin-detail-list">
+                <div class="bg-paper rounded-2xl p-4 shadow-soft group border border-black/5 animate-pulse">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-3 w-full">
+                            <div class="h-10 w-10 bg-gray-200 rounded-xl"></div>
+                            <div class="h-5 bg-gray-200 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                    <div class="h-4 bg-gray-200 rounded w-1/3 mt-2 ml-14"></div>
+                </div>
+                <div class="bg-paper rounded-2xl p-4 shadow-soft group border border-black/5 animate-pulse">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex items-center gap-3 w-full">
+                            <div class="h-10 w-10 bg-gray-200 rounded-xl"></div>
+                            <div class="h-5 bg-gray-200 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                    <div class="h-4 bg-gray-200 rounded w-1/3 mt-2 ml-14"></div>
+                </div>
+                <div class="px-4 py-4 mt-4 bg-white rounded-2xl border border-black/5 shadow-soft">
+                    <div class="flex justify-between items-center text-sm font-medium text-muted mb-1">
+                        <span>Subtotal</span>
+                        <span class="h-3 w-10 bg-gray-200 rounded"></span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm font-medium text-muted mb-3">
+                        <span>Impuestos</span>
+                        <span class="h-3 w-10 bg-gray-200 rounded"></span>
+                    </div>
+                    <div class="border-t border-dashed border-gray-200 my-2"></div>
+                    <div class="flex justify-between items-center font-display font-bold text-2xl text-ink mt-2">
+                        <span>Total</span>
+                        <span class="h-5 w-16 bg-gray-200 rounded"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shrink-0 bg-paper p-4 z-20 shadow-[0_-4px_20px_-2px_rgba(0,0,0,0.05)] border-t border-black/5">
+            <div class="grid grid-cols-3 gap-2">
+                <button
+                    class="h-14 flex flex-col items-center justify-center gap-1 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 active:scale-[0.98] transition-all group border border-red-100"
+                    id="btn-admin-cancel-order">
+                    <span class="material-symbols-outlined text-xl font-bold">cancel</span>
+                    <span class="font-display font-bold text-[11px] uppercase leading-none text-center">Cancelar</span>
+                </button>
+                <button
+                    class="h-14 flex flex-col items-center justify-center gap-1 bg-background-light text-ink rounded-xl hover:bg-gray-100 active:scale-[0.98] transition-all group"
+                    id="btn-admin-process-order">
+                    <span
+                        class="material-symbols-outlined text-xl font-bold text-ink/40 group-hover:text-ink/60 transition-colors">timelapse</span>
+                    <span class="font-display font-bold text-[11px] uppercase leading-none text-center">En
+                        Proceso</span>
+                </button>
+                <button
+                    class="h-14 flex flex-col items-center justify-center gap-1 bg-primary text-white rounded-xl hover:bg-primary-dark active:scale-[0.98] transition-all shadow-lg shadow-primary/30"
+                    id="btn-admin-complete-order">
+                    <span class="material-symbols-outlined text-xl font-bold">check_circle</span>
+                    <span class="font-display font-bold text-[11px] uppercase leading-none text-center">Completar</span>
+                </button>
+            </div>
+        </div>
+        <div class="shrink-0 bg-paper z-30 pb-safe border-t border-black/5">
+            <nav class="flex justify-between items-stretch h-16 sm:h-20 px-6">
+                <button class="flex-1 flex flex-col items-center justify-center gap-1 text-primary relative group"
+                    id="nav-active-orders">
+                    <div class="bg-primary/10 p-1.5 rounded-xl group-hover:bg-primary/20 transition-colors">
+                        <span class="material-symbols-outlined text-[24px] font-bold">receipt_long</span>
+                    </div>
+                    <span class="text-[10px] font-bold font-mono tracking-wider uppercase">Tablero</span>
+                </button>
+                <button
+                    class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group"
+                    id="nav-stock">
+                    <div class="group-hover:bg-primary/5 p-1.5 rounded-xl transition-colors">
+                        <span class="material-symbols-outlined text-[24px] font-medium">inventory_2</span>
+                    </div>
+                    <span class="text-[10px] font-bold font-mono tracking-wider uppercase">Inventario</span>
+                </button>
+                <button
+                    class="flex-1 flex flex-col items-center justify-center gap-1 text-ink/40 hover:text-primary transition-colors group"
+                    id="nav-history">
+                    <div class="group-hover:bg-primary/5 p-1.5 rounded-xl transition-colors">
+                        <span class="material-symbols-outlined text-[24px] font-medium">history</span>
+                    </div>
+                    <span class="text-[10px] font-bold font-mono tracking-wider uppercase">Historial</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+</body>
 
-
+</html>

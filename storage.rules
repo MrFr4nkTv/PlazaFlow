@@ -3,7 +3,9 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     
-    // Función para verificar si el usuario es administrador
+    // Verifica que el usuario está autenticado.
+    // NOTA: Si habilitas sign-up público en Firebase Auth, considera usar
+    // Custom Claims (request.auth.token.admin == true) para mayor seguridad.
     function isAdmin() {
       return request.auth != null;
     }

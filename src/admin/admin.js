@@ -172,7 +172,7 @@ function inicializarModalAgregarProducto() {
     cerrarModal();
     modoEdicionId = producto.id;
     imagenPreviaUrl = producto.imagen || null;
-    
+
     // Poblar campos
     const nombreInput = document.getElementById('add-nombre');
     const precioInput = document.getElementById('add-precio');
@@ -269,7 +269,7 @@ function inicializarModalAgregarProducto() {
         if (archivoSeleccionado) {
           btnSubmit.innerHTML = '<span class="material-symbols-outlined animate-spin text-lg">sync</span> Subiendo foto...';
           const ext = archivoSeleccionado.name.split('.').pop();
-          const fileName = `prod_${Date.now()}_${Math.floor(Math.random()*1000)}.${ext}`;
+          const fileName = `prod_${Date.now()}_${Math.floor(Math.random() * 1000)}.${ext}`;
           const storageRef = ref(storage, `productos/${fileName}`);
           await uploadBytes(storageRef, archivoSeleccionado);
           imageUrl = await getDownloadURL(storageRef);
@@ -298,7 +298,7 @@ function inicializarModalAgregarProducto() {
         } else {
           await manualCleanCacheAndAdd(datosProducto);
         }
-        
+
         // Recargar inventario para mostrar los cambios
         await cargarProductosStock();
         cerrarModal();
@@ -336,7 +336,7 @@ async function cargarProductosStock() {
         });
         btn.classList.remove('bg-white', 'text-gray-600');
         btn.classList.add('bg-text-main', 'text-white');
-        
+
         stockFiltroCat = btn.dataset.cat;
         renderizarStockVisual();
       });
@@ -362,7 +362,7 @@ async function cargarProductosStock() {
 
   } catch (error) {
     console.error('Error cargando stock:', error);
-    if(stockList) stockList.innerHTML = '<div class="text-center py-12"><p class="text-gray-400">Error cargando productos</p></div>';
+    if (stockList) stockList.innerHTML = '<div class="text-center py-12"><p class="text-gray-400">Error cargando productos</p></div>';
   }
 }
 
@@ -386,7 +386,7 @@ function renderizarStockVisual() {
     });
   }
   if (term) {
-    filtrados = filtrados.filter(p => (p.nombre||'').toLowerCase().includes(term) || (p.categoria||'').toLowerCase().includes(term));
+    filtrados = filtrados.filter(p => (p.nombre || '').toLowerCase().includes(term) || (p.categoria || '').toLowerCase().includes(term));
   }
 
   if (filtrados.length === 0) {
@@ -493,7 +493,7 @@ function renderizarStockVisual() {
 function crearFilaStock(producto) {
   // Inicializamos a 10 si no existe y si antes estaba disponible (o default 10)
   let stock = producto.stock !== undefined ? producto.stock : (producto.disponible !== false ? 10 : 0);
-  
+
   const nombreSanitizado = escaparHtml(producto.nombre || 'Producto');
   const catSanitizada = escaparHtml(producto.categoria || 'General');
 
@@ -502,7 +502,7 @@ function crearFilaStock(producto) {
     'Otros Líquidos': '🧃', 'Bebidas': '🥤', 'General': '🍽️'
   }[producto.categoria] || '🍽️';
 
-  const vistaPreviaArticulo = producto.imagen ? 
+  const vistaPreviaArticulo = producto.imagen ?
     `<img src="${escaparHtml(producto.imagen)}" class="w-14 h-14 rounded-2xl object-cover shrink-0 shadow-sm" alt="${nombreSanitizado}" loading="lazy"/>` :
     `<div class="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-2xl shrink-0">${emoji}</div>`;
 
@@ -566,13 +566,13 @@ function inicializarHistorial() {
 
   function updateActiveFilterButton() {
     [btnDay, btnWeek, btnMonth].forEach(b => {
-      if(b) b.classList.replace('bg-white', 'bg-transparent');
-      if(b) b.classList.replace('text-primary', 'text-gray-400');
-      if(b) b.classList.remove('shadow-sm', 'border-gray-100');
+      if (b) b.classList.replace('bg-white', 'bg-transparent');
+      if (b) b.classList.replace('text-primary', 'text-gray-400');
+      if (b) b.classList.remove('shadow-sm', 'border-gray-100');
     });
     if (currentFilter !== 'custom') {
       const activeBtn = currentFilter === 'day' ? btnDay : (currentFilter === 'week' ? btnWeek : btnMonth);
-      if(activeBtn) {
+      if (activeBtn) {
         activeBtn.classList.replace('bg-transparent', 'bg-white');
         activeBtn.classList.replace('text-gray-400', 'text-primary');
         activeBtn.classList.add('shadow-sm', 'border-gray-100');
@@ -588,7 +588,7 @@ function inicializarHistorial() {
   function filterOrders(pedidos) {
     const now = new Date();
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    
+
     let filtered = [];
     let startLabel = '';
     let endLabel = formatDateShort(now);
@@ -648,7 +648,7 @@ function inicializarHistorial() {
   if (btnDay) btnDay.addEventListener('click', () => { currentFilter = 'day'; updateActiveFilterButton(); renderHistory(); });
   if (btnWeek) btnWeek.addEventListener('click', () => { currentFilter = 'week'; updateActiveFilterButton(); renderHistory(); });
   if (btnMonth) btnMonth.addEventListener('click', () => { currentFilter = 'month'; updateActiveFilterButton(); renderHistory(); });
-  
+
   if (dateStartEl && dateEndEl) {
     const today = new Date();
     const tzoffset = today.getTimezoneOffset() * 60000;
@@ -656,20 +656,20 @@ function inicializarHistorial() {
     dateStartEl.max = todayStr;
     dateEndEl.max = todayStr;
 
-    dateStartEl.addEventListener('change', () => { 
-      currentFilter = 'custom'; 
+    dateStartEl.addEventListener('change', () => {
+      currentFilter = 'custom';
       if (dateStartEl.value) {
         dateEndEl.min = dateStartEl.value;
         if (dateEndEl.value && dateEndEl.value < dateStartEl.value) {
           dateEndEl.value = dateStartEl.value;
         }
       }
-      updateActiveFilterButton(); 
-      renderHistory(); 
+      updateActiveFilterButton();
+      renderHistory();
     });
-    
-    dateEndEl.addEventListener('change', () => { 
-      currentFilter = 'custom'; 
+
+    dateEndEl.addEventListener('change', () => {
+      currentFilter = 'custom';
       if (dateEndEl.value) {
         dateStartEl.max = dateEndEl.value;
         if (dateStartEl.value && dateStartEl.value > dateEndEl.value) {
@@ -678,8 +678,8 @@ function inicializarHistorial() {
       } else {
         dateStartEl.max = todayStr;
       }
-      updateActiveFilterButton(); 
-      renderHistory(); 
+      updateActiveFilterButton();
+      renderHistory();
     });
   }
 
@@ -839,7 +839,7 @@ function inicializarAdminDetail() {
     if (orderTimeEl && pedido.timestamp) {
       orderTimeEl.textContent = new Date(pedido.timestamp.toMillis()).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
     }
-    
+
     if (orderStatusEl) {
       orderStatusEl.textContent = pedido.estado.charAt(0).toUpperCase() + pedido.estado.slice(1);
       orderStatusEl.className = `font-body text-sm font-bold ${pedido.estado === 'listo' ? 'text-green-500' : pedido.estado === 'preparando' ? 'text-orange-500' : pedido.estado === 'cancelado' ? 'text-red-500' : 'text-ink'}`;
@@ -923,7 +923,7 @@ function inicializarAdminDetail() {
             btnCancel.disabled = true;
             const originalHtml = btnCancel.innerHTML;
             btnCancel.innerHTML = '<span class="material-symbols-outlined animate-spin text-xl font-bold">sync</span><span class="font-display font-bold text-[11px] uppercase leading-none text-center">Cancelando</span>';
-            
+
             try {
               if (pedido.stripeSessionId && pedido.metodoPago !== 'Efectivo') {
                 try {
@@ -933,7 +933,7 @@ function inicializarAdminDetail() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ session_id: pedido.stripeSessionId })
                   });
-                  
+
                   if (!res.ok) {
                     console.warn(`Servidor de reembolso respondió con estado ${res.status}`);
                   } else {

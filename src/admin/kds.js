@@ -32,9 +32,9 @@ let filtroActual = 'nuevo';
 let todosLosPedidos = [];
 
 const estadoConfig = {
-  nuevo:      { label: 'Nuevo',      color: 'bg-red-500',    icon: 'notifications_active', next: 'preparando' },
-  preparando: { label: 'Preparando', color: 'bg-orange-500', icon: 'skillet',               next: 'listo' },
-  listo:      { label: 'Listo',      color: 'bg-green-500',  icon: 'check_circle',          next: null },
+  nuevo: { label: 'Nuevo', color: 'bg-red-500', icon: 'notifications_active', next: 'preparando' },
+  preparando: { label: 'Preparando', color: 'bg-orange-500', icon: 'skillet', next: 'listo' },
+  listo: { label: 'Listo', color: 'bg-green-500', icon: 'check_circle', next: null },
 };
 
 function tiempoTranscurrido(timestamp) {
@@ -243,14 +243,14 @@ document.addEventListener('DOMContentLoaded', () => {
     todosLosPedidos = pedidos;
     actualizarContadores();
     renderizarPedidos();
-    
+
     // Play sound if there are more new orders than before
     const currentNewCount = pedidos.filter(p => p.estado === 'nuevo').length;
     if (previousNewCount !== -1 && currentNewCount > previousNewCount) {
       reproducirSonidoNuevoPedido();
     }
     previousNewCount = currentNewCount;
-    
+
     console.log(`\ud83d\udd04 KDS: ${pedidos.length} pedidos actualizados`);
   });
 

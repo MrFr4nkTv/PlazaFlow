@@ -1,15 +1,15 @@
-import { 
-  collection, 
-  addDoc, 
+import {
+  collection,
+  addDoc,
   updateDoc,
   setDoc,
-  doc, 
+  doc,
   getDoc,
   getDocs,
   deleteDoc,
-  onSnapshot, 
-  query, 
-  orderBy, 
+  onSnapshot,
+  query,
+  orderBy,
   where,
   serverTimestamp,
   increment
@@ -34,7 +34,7 @@ export const escaparHtml = (str) => {
 /**
  * Tarea 2.0: Obtener todos los productos del menú
  * Lee la colección 'productos' completa desde Firestore.
- * @returns {Promise<Array<Object>>} - Array de productos con su ID de documento
+ * @returns {Promise<Array<Object>>} - Arreglo de productos con su ID de documento
  */
 export const obtenerMenu = async () => {
   try {
@@ -44,7 +44,7 @@ export const obtenerMenu = async () => {
       id: doc.id,
       ...doc.data()
     }));
-    console.log(`✔️ Menú obtenido: ${productos.length} productos`);
+
     return productos;
   } catch (error) {
     console.error("Error obteniendo el menú: ", error);
@@ -54,8 +54,8 @@ export const obtenerMenu = async () => {
 
 /**
  * Tarea 2.1: Enviar un nuevo pedido
- * @param {Object} datosPedido - Data specific to the order (items, total, metodoPago)
- * @returns {Promise<string>} - Returns the ID of the newly created order document
+ * @param {Object} datosPedido - Datos específicos del pedido (items, total, metodoPago)
+ * @returns {Promise<string>} - Retorna el ID del documento del pedido recién creado
  */
 export const enviarPedido = async (datosPedido) => {
   try {
@@ -64,7 +64,6 @@ export const enviarPedido = async (datosPedido) => {
       estado: datosPedido.estado || "nuevo", // Respetar estado proporcionado o usar 'nuevo' por defecto
       timestamp: serverTimestamp() // Tiempo de creación proporcionado por Firebase
     });
-    console.log("Pedido creado con ID: ", docRef.id);
 
     // Decrementar stock
     if (datosPedido.items && datosPedido.items.length > 0) {
@@ -93,8 +92,8 @@ export const enviarPedido = async (datosPedido) => {
 
 /**
  * Tarea 2.2: Escuchar pedidos en tiempo real para el KDS
- * @param {Function} callback - Function to execute when data updates
- * @returns {Function} - Unsubscribe function to stop listening when no longer needed
+ * @param {Function} callback - Función a ejecutar cuando los datos se actualicen
+ * @returns {Function} - Función para detener la escucha cuando ya no sea necesaria
  */
 export const escucharPedidos = (callback) => {
   const q = query(collection(db, "pedidos"), orderBy("timestamp", "asc"));
@@ -111,8 +110,8 @@ export const escucharPedidos = (callback) => {
 
 /**
  * Tarea 2.3: Actualizar el estado de un pedido (ej. de 'Nuevo' a 'Preparando')
- * @param {string} id - ID of the order in Firestore
- * @param {string} nuevoEstado - The new status
+ * @param {string} id - ID del pedido en Firestore
+ * @param {string} nuevoEstado - El nuevo estado a asignar
  */
 export const actualizarEstadoPedido = async (id, nuevoEstado) => {
   try {
@@ -120,7 +119,7 @@ export const actualizarEstadoPedido = async (id, nuevoEstado) => {
     await updateDoc(pedidoRef, {
       estado: nuevoEstado
     });
-    console.log(`Estado del pedido ${id} actualizado a ${nuevoEstado}`);
+
   } catch (error) {
     console.error("Error actualizando estado del pedido: ", error);
     throw error;
@@ -142,7 +141,7 @@ export const restaurarStockPedido = async (items) => {
           const currentStock = prodSnap.data().stock !== undefined ? prodSnap.data().stock : (prodSnap.data().disponible !== false ? 10 : 0);
           const newStock = currentStock + item.cantidad;
           await setDoc(productoRef, { stock: newStock }, { merge: true });
-          console.log(`✔️ Stock restaurado para ${item.nombre}: +${item.cantidad}`);
+
         }
       } catch (err) {
         console.error(`❌ Error restaurando stock de ${item.id}`, err);
@@ -156,7 +155,7 @@ export const restaurarStockPedido = async (items) => {
 
 /**
  * Tarea 2.4: Cambiar el stock numérico de un producto
- * @param {string} idProducto - ID of the product in Firestore
+ * @param {string} idProducto - ID del producto en Firestore
  * @param {number} cantidad - Nueva cantidad exacta de stock
  */
 export const actualizarStock = async (idProducto, cantidad) => {
@@ -166,7 +165,7 @@ export const actualizarStock = async (idProducto, cantidad) => {
     await setDoc(productoRef, {
       stock: cantidad
     }, { merge: true });
-    console.log(`Stock del producto ${idProducto} cambiado a ${cantidad}`);
+
   } catch (error) {
     console.error("Error actualizando el stock del producto: ", error);
     if (error.code === 'permission-denied') {
@@ -227,7 +226,7 @@ export const agregarProducto = async (datosProducto) => {
       ...datosProducto,
       timestamp: serverTimestamp()
     });
-    console.log("Producto agregado exitosamente con ID: ", docRef.id);
+
     return docRef.id;
   } catch (error) {
     console.error("Error al agregar el producto: ", error);
@@ -244,7 +243,7 @@ export const actualizarProducto = async (id, camposActualizados) => {
   try {
     const productoRef = doc(db, "productos", id);
     await updateDoc(productoRef, camposActualizados);
-    console.log("Producto actualizado exitosamente con ID: ", id);
+
   } catch (error) {
     console.error("Error al actualizar el producto: ", error);
     throw error;
@@ -258,7 +257,7 @@ export const actualizarProducto = async (id, camposActualizados) => {
 export const eliminarProducto = async (id) => {
   try {
     await deleteDoc(doc(db, "productos", id));
-    console.log("Producto eliminado definitivamente con ID: ", id);
+
   } catch (error) {
     console.error("Error al eliminar el producto: ", error);
     throw error;

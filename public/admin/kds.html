@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Plazaflow - Tablero KDS</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>Plazaflow - Tablero KDS</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#FF6B6B",      
-                        "primary-soft": "#FFF0F0", 
+                        "primary": "#FF6B6B",
+                        "primary-soft": "#FFF0F0",
                         "primary-dark": "#E05A5A",
-                        "background": "#FFF9F5",   
+                        "background": "#FFF9F5",
                         "surface": "#FFFFFF",
-                        "ink": "#2D3436",          
-                        "ink-light": "#636E72",    
-                        "success": "#2ECC71",      
+                        "ink": "#2D3436",
+                        "ink-light": "#636E72",
+                        "success": "#2ECC71",
                         "success-light": "#E8F8F5",
-                        "warning": "#FF9F43",      
+                        "warning": "#FF9F43",
                         "warning-light": "#FFF3E0",
                         "card-border": "#E2E8F0",
                         "process": "#FF9F43", // Orange for In Process
@@ -47,7 +51,7 @@
             },
         }
     </script>
-<style type="text/tailwindcss">
+    <style type="text/tailwindcss">
         @layer utilities {
             .safe-bottom {
                 padding-bottom: env(safe-area-inset-bottom);
@@ -62,84 +66,99 @@
         }
     </style>
 
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  <script src="../../src/admin/kds.js" type="module"></script>
-  </head>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <script src="../../src/admin/kds.js" type="module"></script>
+</head>
+
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-ink font-body antialiased">
-<div class="w-full max-w-lg md:max-w-7xl mx-auto flex-1 flex flex-col bg-background shadow-xl overflow-hidden relative">
-<header class="flex-none h-[60px] px-4 flex items-center justify-between z-50 bg-background/95 backdrop-blur-sm sticky top-0 border-b border-gray-100/50">
-<div class="flex items-center gap-2">
-<div class="w-8 h-8 bg-primary rounded-full text-white flex items-center justify-center shadow-md shadow-primary/20 shrink-0">
-<span class="material-symbols-outlined text-[18px]">restaurant</span>
-</div>
-<div class="flex flex-col justify-center">
-<h1 class="font-display font-bold text-lg tracking-tight text-ink leading-tight">Plazaflow</h1>
-</div>
-</div>
-<button class="w-9 h-9 rounded-full bg-gray-100 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors text-gray-400" id="btn-logout" title="Cerrar sesión">
-<span class="material-symbols-outlined text-[20px]">logout</span>
-</button>
-</header>
-<div class="flex-none px-4 py-3 w-full">
-<div class="flex gap-2 bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100 w-full" id="kds-tabs-container">
-<!-- Tabs are injected dynamically by kds.js -->
-</div>
-</div>
-<main class="flex-1 overflow-y-auto px-4 pb-24 no-scrollbar">
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 auto-rows-min" id="kds-order-list">
-<!-- Orders will be dynamically injected here. Replacing with skeleton loaders. -->
-<article class="bg-surface rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[180px] relative animate-pulse w-full">
-<div class="bg-gray-100 px-3 py-2 border-b border-gray-200 flex justify-between items-start">
-<div class="flex flex-col gap-1 w-1/3">
-<div class="h-5 bg-gray-200 rounded w-full"></div>
-<div class="h-3 bg-gray-200 rounded w-3/4"></div>
-</div>
-</div>
-<div class="p-4 flex-1">
-<div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
-<div class="h-3 bg-gray-200 rounded w-5/6"></div>
-</div>
-</article>
-<!-- Skeleton 2 -->
-<article class="bg-surface rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[180px] relative animate-pulse w-full">
-<div class="bg-gray-100 px-3 py-2 border-b border-gray-200 flex justify-between items-start">
-<div class="flex flex-col gap-1 w-1/3">
-<div class="h-5 bg-gray-200 rounded w-full"></div>
-<div class="h-3 bg-gray-200 rounded w-3/4"></div>
-</div>
-</div>
-<div class="p-4 flex-1">
-<div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
-<div class="h-3 bg-gray-200 rounded w-5/6"></div>
-</div>
-</article>
-</div>
-</main>
-<nav class="flex-none bg-white border-t border-gray-100 h-[70px] flex px-4 justify-around items-center z-50 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)] safe-bottom pb-2 fixed bottom-0 left-0 right-0 max-w-lg md:max-w-7xl mx-auto">
-<button class="flex flex-col items-center justify-center gap-0.5 text-primary group w-16" id="nav-active-orders">
-<div class="bg-primary-soft p-1.5 rounded-xl group-hover:scale-110 transition-transform">
-<span class="material-symbols-outlined text-[20px]">grid_view</span>
-</div>
-<span class="text-[10px] font-bold font-display">Tablero</span>
-</button>
-<button class="flex flex-col items-center justify-center gap-0.5 text-ink-light/50 hover:text-primary group w-16 transition-colors" id="nav-stock">
-<div class="p-1.5 rounded-xl group-hover:bg-primary-soft transition-colors">
-<span class="material-symbols-outlined text-[20px]">inventory_2</span>
-</div>
-<span class="text-[10px] font-bold font-display">Inventario</span>
-</button>
-<button class="flex flex-col items-center justify-center gap-0.5 text-ink-light/50 hover:text-primary group w-16 transition-colors" id="nav-history">
-<div class="p-1.5 rounded-xl group-hover:bg-primary-soft transition-colors">
-<span class="material-symbols-outlined text-[20px]">history</span>
-</div>
-<span class="text-[10px] font-bold font-display">Historial</span>
-</button>
-</nav>
-</div>
-</body></html>
+    <div
+        class="w-full max-w-lg md:max-w-7xl mx-auto flex-1 flex flex-col bg-background shadow-xl overflow-hidden relative">
+        <header
+            class="flex-none h-[60px] px-4 flex items-center justify-between z-50 bg-background/95 backdrop-blur-sm sticky top-0 border-b border-gray-100/50">
+            <div class="flex items-center gap-2">
+                <div
+                    class="w-8 h-8 bg-primary rounded-full text-white flex items-center justify-center shadow-md shadow-primary/20 shrink-0">
+                    <span class="material-symbols-outlined text-[18px]">restaurant</span>
+                </div>
+                <div class="flex flex-col justify-center">
+                    <h1 class="font-display font-bold text-lg tracking-tight text-ink leading-tight">Plazaflow</h1>
+                </div>
+            </div>
+            <button
+                class="w-9 h-9 rounded-full bg-gray-100 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition-colors text-gray-400"
+                id="btn-logout" title="Cerrar sesión">
+                <span class="material-symbols-outlined text-[20px]">logout</span>
+            </button>
+        </header>
+        <div class="flex-none px-4 py-3 w-full">
+            <div class="flex gap-2 bg-white p-1.5 rounded-2xl shadow-sm border border-gray-100 w-full"
+                id="kds-tabs-container">
+                <!-- Tabs are injected dynamically by kds.js -->
+            </div>
+        </div>
+        <main class="flex-1 overflow-y-auto px-4 pb-24 no-scrollbar">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 auto-rows-min" id="kds-order-list">
+                <!-- Orders will be dynamically injected here. Replacing with skeleton loaders. -->
+                <article
+                    class="bg-surface rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[180px] relative animate-pulse w-full">
+                    <div class="bg-gray-100 px-3 py-2 border-b border-gray-200 flex justify-between items-start">
+                        <div class="flex flex-col gap-1 w-1/3">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-3 bg-gray-200 rounded w-3/4"></div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1">
+                        <div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-3 bg-gray-200 rounded w-5/6"></div>
+                    </div>
+                </article>
+                <!-- Skeleton 2 -->
+                <article
+                    class="bg-surface rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[180px] relative animate-pulse w-full">
+                    <div class="bg-gray-100 px-3 py-2 border-b border-gray-200 flex justify-between items-start">
+                        <div class="flex flex-col gap-1 w-1/3">
+                            <div class="h-5 bg-gray-200 rounded w-full"></div>
+                            <div class="h-3 bg-gray-200 rounded w-3/4"></div>
+                        </div>
+                    </div>
+                    <div class="p-4 flex-1">
+                        <div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-3 bg-gray-200 rounded w-5/6"></div>
+                    </div>
+                </article>
+            </div>
+        </main>
+        <nav
+            class="flex-none bg-white border-t border-gray-100 h-[70px] flex px-4 justify-around items-center z-50 shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)] safe-bottom pb-2 fixed bottom-0 left-0 right-0 max-w-lg md:max-w-7xl mx-auto">
+            <button class="flex flex-col items-center justify-center gap-0.5 text-primary group w-16"
+                id="nav-active-orders">
+                <div class="bg-primary-soft p-1.5 rounded-xl group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                </div>
+                <span class="text-[10px] font-bold font-display">Tablero</span>
+            </button>
+            <button
+                class="flex flex-col items-center justify-center gap-0.5 text-ink-light/50 hover:text-primary group w-16 transition-colors"
+                id="nav-stock">
+                <div class="p-1.5 rounded-xl group-hover:bg-primary-soft transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">inventory_2</span>
+                </div>
+                <span class="text-[10px] font-bold font-display">Inventario</span>
+            </button>
+            <button
+                class="flex flex-col items-center justify-center gap-0.5 text-ink-light/50 hover:text-primary group w-16 transition-colors"
+                id="nav-history">
+                <div class="p-1.5 rounded-xl group-hover:bg-primary-soft transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">history</span>
+                </div>
+                <span class="text-[10px] font-bold font-display">Historial</span>
+            </button>
+        </nav>
+    </div>
+</body>
 
-
+</html>

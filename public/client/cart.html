@@ -1,110 +1,129 @@
 <!DOCTYPE html>
 
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>PlazaFlow - Bandeja de Pedido</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link rel="stylesheet" href="../css/style-client.css">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Nunito:wght@400;500;600;700&amp;family=Fredoka:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#FF6B6B", // Overriding to match PRD "Coral Red" despite the prompt template defaults, as per "Soft & Squishy" instructions
-                        "primary-dark": "#e55b5b",
-                        "background-light": "#FFF9F5", // Cream
-                        "background-dark": "#2D232E", // Deep Plum for dark mode
-                        "surface-light": "#FFFFFF",
-                        "surface-dark": "#3D313F",
-                        "text-main": "#2D232E", // Deep Plum
-                        "text-muted": "#9CA3AF",
-                        "accent-yellow": "#FFD93D",
-                        "accent-green": "#6BCB77",
-                    },
-                    fontFamily: {
-                        "display": ["Fredoka", "Manrope", "sans-serif"], // Headings
-                        "body": ["Nunito", "sans-serif"], // Body text
-                    },
-                    borderRadius: {
-                        "DEFAULT": "1rem",
-                        "lg": "1.5rem", // 24px
-                        "xl": "2rem", 
-                        "pill": "9999px",
-                    },
-                    boxShadow: {
-                        "soft": "0 10px 40px -10px rgba(255, 107, 107, 0.15)",
-                        "inner-light": "inset 0 2px 4px 0 rgba(255, 255, 255, 0.5)",
-                    }
-                },
-            },
-        }
-    </script>
-<style>
-        /* Custom scrollbar hiding */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
-<style>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+  <title>PlazaFlow - Bandeja de Pedido</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="../css/style-client.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Nunito:wght@400;500;600;700&amp;family=Fredoka:wght@400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#FF6B6B", // Overriding to match PRD "Coral Red" despite the prompt template defaults, as per "Soft & Squishy" instructions
+            "primary-dark": "#e55b5b",
+            "background-light": "#FFF9F5", // Cream
+            "background-dark": "#2D232E", // Deep Plum for dark mode
+            "surface-light": "#FFFFFF",
+            "surface-dark": "#3D313F",
+            "text-main": "#2D232E", // Deep Plum
+            "text-muted": "#9CA3AF",
+            "accent-yellow": "#FFD93D",
+            "accent-green": "#6BCB77",
+          },
+          fontFamily: {
+            "display": ["Fredoka", "Manrope", "sans-serif"], // Headings
+            "body": ["Nunito", "sans-serif"], // Body text
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "1.5rem", // 24px
+            "xl": "2rem",
+            "pill": "9999px",
+          },
+          boxShadow: {
+            "soft": "0 10px 40px -10px rgba(255, 107, 107, 0.15)",
+            "inner-light": "inset 0 2px 4px 0 rgba(255, 255, 255, 0.5)",
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    /* Custom scrollbar hiding */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+  <style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
   <script src="../../src/client/app.js" type="module"></script>
-  </head>
+</head>
+
 <body class="min-h-screen flex flex-col items-center bg-gray-50 text-text-main font-body antialiased">
-<div class="w-full max-w-md mx-auto flex-1 flex flex-col bg-background-light dark:bg-background-dark shadow-xl overflow-hidden relative">
+  <div
+    class="w-full max-w-md mx-auto flex-1 flex flex-col bg-background-light dark:bg-background-dark shadow-xl overflow-hidden relative">
 
-<!-- Main Content Area - Scrollable -->
-<div class="flex-1 overflow-y-auto no-scrollbar pt-14 pb-32">
-<!-- Header -->
-<div class="flex items-center justify-between px-6 py-4 sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
-  <div class="flex items-center gap-4">
-    <button class="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-surface-dark shadow-soft text-text-main dark:text-white hover:scale-105 transition-transform active:scale-95 shrink-0" id="btn-back-cart">
-      <span class="material-symbols-outlined">arrow_back</span>
-    </button>
-    <h1 class="font-display font-bold text-3xl text-text-main dark:text-white tracking-tight">Tu Bandeja</h1>
+    <!-- Main Content Area - Scrollable -->
+    <div class="flex-1 overflow-y-auto no-scrollbar pt-14 pb-32">
+      <!-- Header -->
+      <div
+        class="flex items-center justify-between px-6 py-4 sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm">
+        <div class="flex items-center gap-4">
+          <button
+            class="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-surface-dark shadow-soft text-text-main dark:text-white hover:scale-105 transition-transform active:scale-95 shrink-0"
+            id="btn-back-cart">
+            <span class="material-symbols-outlined">arrow_back</span>
+          </button>
+          <h1 class="font-display font-bold text-3xl text-text-main dark:text-white tracking-tight">Tu Bandeja</h1>
+        </div>
+        <button id="btn-empty-cart"
+          class="w-10 h-10 rounded-full flex items-center justify-center bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-500 transition-colors shadow-sm active:scale-95"
+          title="Vaciar bandeja">
+          <span class="material-symbols-outlined">delete_sweep</span>
+        </button>
+      </div>
+      <!-- Cart Items List (Dynamic) -->
+      <div class="px-5 space-y-4 mt-2" id="cart-items-list">
+        <div class="text-center py-8 text-gray-400 animate-pulse">Cargando bandeja...</div>
+      </div>
+      <!-- Bill Breakdown -->
+      <div class="px-6 mt-6 space-y-3 mb-8">
+        <div class="flex justify-between items-center text-sm text-text-muted">
+          <span>Subtotal</span>
+          <span class="font-medium text-text-main dark:text-gray-200" id="cart-drawer-subtotal">$0.00</span>
+        </div>
+        <div class="flex justify-between items-center pt-1">
+          <span class="font-display font-bold text-lg text-text-main dark:text-white">Total</span>
+          <span class="font-display font-extrabold text-2xl text-text-main dark:text-white cart-total-big">$0.00</span>
+        </div>
+      </div>
+    </div>
+    <!-- Sticky Footer CTA -->
+    <div
+      class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-background-light via-background-light to-transparent dark:from-background-dark dark:via-background-dark pt-12 z-30">
+      <button
+        class="w-full bg-primary hover:bg-primary-dark text-white font-display font-bold text-lg py-4 rounded-pill shadow-[0_8px_20px_rgba(255,107,107,0.4)] hover:shadow-[0_12px_24px_rgba(255,107,107,0.5)] transition-all transform active:scale-[0.98] flex items-center justify-between px-6 group"
+        id="btn-checkout-cart">
+        <span class="flex items-center gap-2">
+          Finalizar Compra
+          <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </span>
+        <span class="bg-white/20 px-3 py-1 rounded-full text-base backdrop-blur-sm" id="cart-drawer-total">$86.40</span>
+      </button>
+    </div>
   </div>
-  <button id="btn-empty-cart" class="w-10 h-10 rounded-full flex items-center justify-center bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-500 transition-colors shadow-sm active:scale-95" title="Vaciar bandeja">
-    <span class="material-symbols-outlined">delete_sweep</span>
-  </button>
-</div>
-<!-- Cart Items List (Dynamic) -->
-<div class="px-5 space-y-4 mt-2" id="cart-items-list">
-<div class="text-center py-8 text-gray-400 animate-pulse">Cargando bandeja...</div>
-</div>
-<!-- Bill Breakdown -->
-<div class="px-6 mt-6 space-y-3 mb-8">
-<div class="flex justify-between items-center text-sm text-text-muted">
-<span>Subtotal</span>
-<span class="font-medium text-text-main dark:text-gray-200" id="cart-drawer-subtotal">$0.00</span>
-</div>
-<div class="flex justify-between items-center pt-1">
-<span class="font-display font-bold text-lg text-text-main dark:text-white">Total</span>
-<span class="font-display font-extrabold text-2xl text-text-main dark:text-white cart-total-big">$0.00</span>
-</div>
-</div>
-</div>
-<!-- Sticky Footer CTA -->
-<div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-background-light via-background-light to-transparent dark:from-background-dark dark:via-background-dark pt-12 z-30">
-<button class="w-full bg-primary hover:bg-primary-dark text-white font-display font-bold text-lg py-4 rounded-pill shadow-[0_8px_20px_rgba(255,107,107,0.4)] hover:shadow-[0_12px_24px_rgba(255,107,107,0.5)] transition-all transform active:scale-[0.98] flex items-center justify-between px-6 group" id="btn-checkout-cart">
-<span class="flex items-center gap-2">
-                    Finalizar Compra 
-                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-</span>
-<span class="bg-white/20 px-3 py-1 rounded-full text-base backdrop-blur-sm" id="cart-drawer-total">$86.40</span>
-</button>
-</div>
-</div>
-</body></html>
+</body>
 
-
+</html>
