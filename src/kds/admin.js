@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         pedidos.forEach(pedido => {
-            if (pedido.estado === 'nuevo') grouped = agrupados.nuevo;
+            if (pedido.estado === 'nuevo' || pedido.estado === 'pago_pendiente') grouped = agrupados.nuevo;
             else if (pedido.estado === 'En Preparación') grouped = agrupados.preparacion;
             else if (pedido.estado === 'Listos') grouped = agrupados.listo;
             else return;
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${pedido.items ? pedido.items.map(item => `<p>1x - ${item.nombre}</p>`).join('') : '<p>Sin articulos detallados</p>'}
                     </div>
                     <div class="flex gap-2">
-                        ${pedido.estado === 'nuevo' 
+                        ${(pedido.estado === 'nuevo' || pedido.estado === 'pago_pendiente') 
                             ? `<button class="btn-admin-process-order flex-1 bg-ink text-surface py-2 rounded-lg font-semibold text-sm hover:bg-ink-light transition-colors" data-id="${pedido.id}">Preparar</button>`
                             : ''
                         }

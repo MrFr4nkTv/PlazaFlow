@@ -201,7 +201,7 @@ export const escucharPedidoIndividual = (pedidoId, callback) => {
 export const escucharColaActiva = (callback) => {
   const q = query(
     collection(db, "pedidos"),
-    where("estado", "in", ["nuevo", "preparando"]),
+    where("estado", "in", ["nuevo", "preparando", "pago_pendiente"]),
     orderBy("timestamp", "asc")
   );
   return onSnapshot(q, (snapshot) => {

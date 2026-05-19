@@ -966,9 +966,8 @@ function inicializarAdminDetail() {
         btnCancel.classList.add('opacity-50', 'pointer-events-none');
       }
     }
-
     if (btnProcess) {
-      if (pedido.estado === 'nuevo') {
+      if (pedido.estado === 'nuevo' || pedido.estado === 'pago_pendiente') {
         btnProcess.classList.remove('opacity-50', 'pointer-events-none');
         btnProcess.querySelector('span:last-child').textContent = 'Empezar Preparación';
         btnProcess.onclick = () => actualizarEstadoPedido(orderId, 'preparando');
@@ -976,7 +975,6 @@ function inicializarAdminDetail() {
         btnProcess.classList.add('opacity-50', 'pointer-events-none');
       }
     }
-
     if (btnComplete) {
       if (pedido.estado !== 'listo' && pedido.estado !== 'cancelado') {
         btnComplete.classList.remove('opacity-50', 'pointer-events-none');

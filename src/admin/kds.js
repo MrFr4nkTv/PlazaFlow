@@ -92,7 +92,10 @@ function renderizarPedidos() {
   const grid = document.getElementById('kds-order-list');
   if (!grid) return;
 
-  const filtrados = todosLosPedidos.filter(p => p.estado === filtroActual);
+  const filtrados = todosLosPedidos.filter(p => {
+    const est = p.estado === 'pago_pendiente' ? 'nuevo' : p.estado;
+    return est === filtroActual;
+  });
 
   if (filtrados.length === 0) {
     grid.innerHTML = `
@@ -156,7 +159,10 @@ function renderizarPedidos() {
 
 function actualizarContadores() {
   const counts = { nuevo: 0, preparando: 0, listo: 0 };
-  todosLosPedidos.forEach(p => { if (counts[p.estado] !== undefined) counts[p.estado]++; });
+  todosLosPedidos.forEach(p => {
+    const est = p.estado === 'pago_pendiente' ? 'nuevo' : p.estado;
+    if (counts[est] !== undefined) counts[est]++;
+  });
 
   const tabs = document.querySelectorAll('.kds-tab');
   tabs.forEach(tab => {
@@ -245,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarPedidos();
 
     // Play sound if there are more new orders than before
-    const currentNewCount = pedidos.filter(p => p.estado === 'nuevo').length;
+    const currentNewCount = pedidos.filter(p => p.estado === 'nuevo' || p.estado === 'pago_pendiente').length;
     if (previousNewCount !== -1 && currentNewCount > previousNewCount) {
       reproducirSonidoNuevoPedido();
     }
